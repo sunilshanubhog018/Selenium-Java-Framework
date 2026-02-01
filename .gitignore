@@ -1,0 +1,34 @@
+# Compiled class files
+*.class
+target/
+out/
+build/
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+.settings/
+.classpath
+.project
+*.swp
+*.swo
+
+# Test reports
+test-output/
+screenshots/
+logs/
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+*.tmp
+
+# Maven
+dependency-reduced-pom.xml
+
+# Sensitive data - NEVER commit these
+*config.properties
+*.env
+credentials.txt
