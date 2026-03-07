@@ -3,29 +3,9 @@
 
 <suite name="Selenium-Java-Framework Suite" verbose="1">
 
-    <test name="Locators Practice">
-        <classes>
-            <class name="LocatorsPractice.YourClassName"/>
-        </classes>
-    </test>
-
-    <test name="TestNG Basics">
-        <classes>
-            <class name="testng_basics.YourClassName"/>
-        </classes>
-    </test>
-
-    <test name="WebDriver">
-        <classes>
-            <class name="webdriver.YourClassName"/>
-        </classes>
-    </test>
-
     <test name="Week2 - Selenium Core">
         <classes>
             <class name="week2.seleniumcore.Week2_DropdownCheckboxRadioTests"/>
-            <class name="week2.seleniumcore.WaitsDemo"/>
-            <class name="week2.seleniumcore.FluentWaitDemo"/>
         </classes>
     </test>
 
