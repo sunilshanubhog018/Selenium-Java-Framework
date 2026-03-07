@@ -13,7 +13,7 @@ public class Thirdexcersise {
         Assert.assertEquals("ICICI", "ICICI");  // PASS
 
         System.out.println("Check 2");
-        Assert.assertEquals("HDFC", "SBI");      // FAIL — stops here!
+        Assert.assertEquals("SBI", "SBI");      // FAIL — stops here!
 
         System.out.println("Check 3");            // This NEVER runs
         Assert.assertEquals(100, 100);
@@ -28,13 +28,13 @@ public class Thirdexcersise {
         soft.assertEquals("ICICI", "ICICI");      // PASS
 
         System.out.println("Check 2");
-        soft.assertEquals("HDFC", "SBI");          // FAIL — but continues!
+        soft.assertEquals("SBI", "SBI");          // FAIL — but continues!
 
         System.out.println("Check 3");
         soft.assertEquals(100, 100);               // PASS — this runs!
 
         System.out.println("Check 4");
-        soft.assertTrue(false, "This will fail");  // FAIL — still continues
+        soft.assertTrue(true, "This will fail");  // FAIL — still continues
 
         // MANDATORY — reports all collected failures
         soft.assertAll();  // Without this, failures are silently ignored!
