@@ -13,6 +13,7 @@ import org.testng.annotations.*;
 
 import java.time.Duration;
 import java.util.List;
+import org.openqa.selenium.TimeoutException;
 
 public class Week2_DropdownCheckboxRadioTests {
 
