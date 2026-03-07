@@ -165,7 +165,7 @@ public class Week2_DropdownCheckboxRadioTests {
     }
 
     // ─────────────────────────────────────────────
-    // TEST 4 — passing, no changes
+    // TEST 4 — passing, no changes for this
     // ─────────────────────────────────────────────
     @Test(description = "Verify radio button group behaviour")
     public void test4_RadioButtons_GroupBehaviour() {
