@@ -1,8 +1,6 @@
 package week2.seleniumcore;
 
 import base.BaseTest;
-
-import java.time.Duration;
 import java.util.List;
 
 import org.openqa.selenium.By;

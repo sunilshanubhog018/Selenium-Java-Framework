@@ -34,7 +34,14 @@
         <artifactId>webdrivermanager</artifactId>
         <version>5.7.0</version>
     </dependency>
-   </dependencies>
+    
+    <!-- In <dependencies> section -->
+<dependency>
+    <groupId>io.qameta.allure</groupId>
+    <artifactId>allure-testng</artifactId>
+    <version>2.28.0</version>
+</dependency>
+  </dependencies>
    <build>
     <plugins>
         <plugin>
@@ -47,6 +54,12 @@
                 </suiteXmlFiles>
             </configuration>
         </plugin>
+        
+        <plugin>
+    <groupId>io.qameta.allure</groupId>
+    <artifactId>allure-maven</artifactId>
+    <version>2.13.0</version>
+</plugin>
     </plugins>
 </build>    
 </project>
