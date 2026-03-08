@@ -43,6 +43,7 @@ public class AllTestCasesCombined extends BaseTest {
         driver.findElement(By.cssSelector("input#password")).sendKeys("wrongpass");
         driver.findElement(By.cssSelector("button.radius")).click();
 
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("#flash.error")));
         String error = driver.findElement(By.cssSelector("#flash.error")).getText();
         Assert.assertTrue(error.contains("Your username is invalid!"));
     }
