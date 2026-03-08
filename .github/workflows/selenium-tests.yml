@@ -46,3 +46,15 @@ jobs:
           path: |
             target/surefire-reports/
             test-output/
+            
+            # Generate Allure Report
+      - name: Generate Allure Report
+        run: mvn allure:report
+
+      # Upload Allure Report
+      - name: Upload Allure Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Allure-Report
+          path: target/site/allure-maven-plugin/
