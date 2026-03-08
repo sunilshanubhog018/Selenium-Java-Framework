@@ -33,6 +33,13 @@
             <version>${testng.version}</version>
             <scope>test</scope>
         </dependency>
+        
+        <!-- WebDriverManager - Auto manage browser drivers -->
+	<dependency>
+    <groupId>io.github.bonigarcia</groupId>
+    <artifactId>webdrivermanager</artifactId>
+    <version>5.7.0</version>
+	</dependency>
 
         <!-- Allure TestNG Adapter - CRITICAL -->
         <dependency>
