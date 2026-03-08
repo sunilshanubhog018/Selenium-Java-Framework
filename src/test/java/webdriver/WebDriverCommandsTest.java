@@ -7,7 +7,6 @@ import org.testng.Assert;
 import org.testng.annotations.*;
 
 import base.BaseTest;
-import io.github.bonigarcia.wdm.WebDriverManager;
 
 import java.time.Duration;
 import java.util.Set;
@@ -132,6 +131,8 @@ public class WebDriverCommandsTest extends BaseTest {
                 break;
             }
         }
+        
+        wait.until(ExpectedConditions.titleIs("New Window"));
         Assert.assertEquals(driver.getTitle(), "New Window", "New window title mismatch");
         driver.close();
         driver.switchTo().window(mainHandle);
