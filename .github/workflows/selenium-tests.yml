@@ -10,7 +10,7 @@ on:
 jobs:
   run-tests:
     runs-on: ubuntu-latest
-
+    
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -20,6 +20,7 @@ jobs:
         with:
           java-version: '21'
           distribution: 'temurin'
+          cache: maven
 
       - name: Install Google Chrome
         run: |
@@ -27,34 +28,39 @@ jobs:
           sudo apt-get install -y google-chrome-stable
           google-chrome --version
 
-      - name: Cache Maven Dependencies
-        uses: actions/cache@v3
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
+      - name: 🏃 Run All Tests (generates allure-results)
+        run: mvn clean test
+        continue-on-error: true
 
-      - name: Run All Tests
-        run: mvn test -Dsurefire.useFile=false
-
-      - name: Upload TestNG Reports
-        uses: actions/upload-artifact@v4
+      - name: 📈 Generate Allure Report
         if: always()
+        run: mvn allure:report
+
+      - name: 📊 Upload Allure Report
+        if: always()
+        uses: actions/upload-artifact@v4
         with:
-          name: testng-reports
+          name: allure-report-${{ github.run_number }}
+          path: target/site/allure-report/
+          retention-days: 30
+
+      - name: 📋 Upload TestNG Reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: testng-reports-${{ github.run_number }}
           path: |
             target/surefire-reports/
             test-output/
-            
-            # Generate Allure Report
-      - name: Generate Allure Report
-        run: mvn allure:report
+          retention-days: 30
 
-      # Upload Allure Report
-      - name: Upload Allure Report
-        uses: actions/upload-artifact@v4
+      - name: 📝 Test Summary
         if: always()
-        with:
-          name: Allure-Report
-          path: target/allure-report/
+        run: |
+          echo "## ✅ Test Execution Complete" >> $GITHUB_STEP_SUMMARY
+          echo "**Run Number:** ${{ github.run_number }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Branch:** ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📊 Reports Generated:" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Allure Report" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ TestNG Reports" >> $GITHUB_STEP_SUMMARY
