@@ -3,6 +3,11 @@
 
 <suite name="Selenium-Java-Framework Suite" verbose="1">
 
+<!-- Register Allure listener -->
+    <listeners>
+        <listener class-name="io.qameta.allure.testng.AllureTestNg"/>
+    </listeners>
+
     <test name="Locators Practice">
         <packages>
             <package name="LocatorsPractice"/>
