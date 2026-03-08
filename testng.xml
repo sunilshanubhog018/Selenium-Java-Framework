@@ -4,41 +4,27 @@
 <suite name="Selenium-Java-Framework Suite" verbose="1">
 
     <test name="Locators Practice">
-        <classes>
-            <class name="LocatorsPractice.AllTestCasesCombined"/>
-            <class name="LocatorsPractice.ByNameByCSS"/>
-            <class name="LocatorsPractice.Byxpath"/>
-            <class name="LocatorsPractice.CountElementst"/>
-            <class name="LocatorsPractice.LocatorTests"/>
-            <class name="LocatorsPractice.NavigationTest"/>
-            <class name="LocatorsPractice.PartialLinkText"/>
-            <class name="LocatorsPractice.TestInvalidLogin"/>
-            <class name="LocatorsPractice.VerfiyElemetEnabled"/>
-            <class name="LocatorsPractice.Xpathaxes"/>
-        </classes>
+        <packages>
+            <package name="LocatorsPractice"/>
+        </packages>
     </test>
 
     <test name="TestNG Basics">
-        <classes>
-            <class name="testng_basics.AnnotationOrderDemo"/>
-            <class name="testng_basics.FirstSeleniumTest"/>
-            <class name="testng_basics.Sedondexcersie"/>
-            <class name="testng_basics.Thirdexcersise"/>
-        </classes>
+        <packages>
+            <package name="testng_basics"/>
+        </packages>
     </test>
 
     <test name="WebDriver">
-        <classes>
-            <class name="webdriver.WebDriverCommandsTest"/>
-        </classes>
+        <packages>
+            <package name="webdriver"/>
+        </packages>
     </test>
 
     <test name="Week2 - Selenium Core">
-        <classes>
-            <class name="week2.seleniumcore.FluentWaitDemo"/>
-            <class name="week2.seleniumcore.WaitsDemo"/>
-            <class name="week2.seleniumcore.Week2_DropdownCheckboxRadioTests"/>
-        </classes>
+        <packages>
+            <package name="week2.seleniumcore"/>
+        </packages>
     </test>
 
 </suite>
