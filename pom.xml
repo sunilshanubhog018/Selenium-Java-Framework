@@ -88,7 +88,7 @@
                     <!-- Tell Allure where to write results -->
                     <properties>
                         <property>
-                            <n>listener</n>
+                            <name>listener</name>
                             <value>io.qameta.allure.testng.AllureTestNg</value>
                         </property>
                     </properties>
