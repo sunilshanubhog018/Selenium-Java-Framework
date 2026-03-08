@@ -6,22 +6,13 @@ import org.openqa.selenium.support.ui.*;
 import org.testng.Assert;
 import org.testng.annotations.*;
 
+import base.BaseTest;
 import io.github.bonigarcia.wdm.WebDriverManager;
 
 import java.time.Duration;
 import java.util.Set;
 
-public class WebDriverCommandsTest {
-
-    WebDriver driver;
-
-    @BeforeMethod
-    public void setup() {
-        WebDriverManager.chromedriver().setup();
-        driver = new ChromeDriver();
-        driver.manage().window().maximize();
-    }
-
+public class WebDriverCommandsTest extends BaseTest {
     // ── gap helper ────────────────────────────────────────────────────
     public void pause() {
         try {

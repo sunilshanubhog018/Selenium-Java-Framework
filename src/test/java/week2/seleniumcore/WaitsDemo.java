@@ -8,30 +8,12 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.*;
+
+import base.BaseTest;
+
 import java.time.Duration;
 
-public class WaitsDemo {
-
-    WebDriver driver;
-    WebDriverWait wait;
-
-    @BeforeMethod
-    public void setup() {
-
-        // Step 1: Initialize ChromeDriver
-        // ChromeDriver launches a real Chrome browser instance
-        // WebDriver interface holds the reference to control the browser
-        driver = new ChromeDriver();
-
-        // Step 2: Maximize the browser window
-        // Ensures all elements are visible and not hidden due to smaller viewport
-        driver.manage().window().maximize();
-
-        // Step 3: Create an Explicit Wait with 15 seconds max timeout
-        // WebDriverWait will keep checking the condition every 500ms (default polling)
-        // until the condition is true OR 15 seconds is exceeded
-        wait = new WebDriverWait(driver, Duration.ofSeconds(15));
-    }
+public class WaitsDemo extends BaseTest  {
 
     @Test
     public void testDynamicLoading() {
@@ -76,14 +58,5 @@ public class WaitsDemo {
 
         // Step 10: Print confirmation to console for visual feedback during execution
         System.out.println("✅ Text verified: " + resultText.getText());
-    }
-
-    @AfterMethod
-    public void teardown() {
-
-        // Step 11: Quit the browser after each test method
-        // driver.quit() closes all browser windows and ends the WebDriver session
-        // Null check prevents NullPointerException if setup() failed before driver was created
-        if (driver != null) driver.quit();
     }
 }

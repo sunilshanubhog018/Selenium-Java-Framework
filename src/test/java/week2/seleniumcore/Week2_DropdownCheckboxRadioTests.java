@@ -1,48 +1,21 @@
 package week2.seleniumcore;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
-import org.openqa.selenium.*;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.Assert;
-import org.testng.annotations.*;
+import base.BaseTest;
 
 import java.time.Duration;
 import java.util.List;
-import org.openqa.selenium.TimeoutException;
 
-public class Week2_DropdownCheckboxRadioTests {
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.annotations.Test;
+import org.testng.Assert;
+import org.openqa.selenium.JavascriptExecutor;
 
-    WebDriver driver;
-    WebDriverWait wait;
-    JavascriptExecutor js;
-    Actions actions;
-
-    @BeforeMethod
-    public void setup() {
-        WebDriverManager.chromedriver().setup();
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--headless");
-        options.addArguments("--no-sandbox");
-        options.addArguments("--disable-dev-shm-usage");
-        options.addArguments("--window-size=1920,1080");
-        options.addArguments("--disable-blink-features=AutomationControlled");
-        driver = new ChromeDriver(options);
-        wait    = new WebDriverWait(driver, Duration.ofSeconds(15));
-        js      = (JavascriptExecutor) driver;
-        actions = new Actions(driver);
-        driver.manage().window().maximize();
-        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(30));
-    }
-
-    @AfterMethod
-    public void teardown() {
-        if (driver != null) driver.quit();
-    }
+public class Week2_DropdownCheckboxRadioTests extends BaseTest {
 
     // ─────────────────────────────────────────────
     // TEST 1 — passing, no changes
@@ -53,6 +26,7 @@ public class Week2_DropdownCheckboxRadioTests {
 
         WebElement el = wait.until(ExpectedConditions
             .elementToBeClickable(By.id("oldSelectMenu")));
+        JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("arguments[0].scrollIntoView(true);", el);
         Select select = new Select(el);
 
@@ -82,6 +56,7 @@ public class Week2_DropdownCheckboxRadioTests {
 
         WebElement el = wait.until(ExpectedConditions
             .presenceOfElementLocated(By.id("cars")));
+        JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("arguments[0].scrollIntoView(true);", el);
         Select ms = new Select(el);
 
@@ -124,6 +99,8 @@ public class Week2_DropdownCheckboxRadioTests {
         WebElement homeCheckbox = wait.until(ExpectedConditions
             .presenceOfElementLocated(
                 By.cssSelector("span.rc-tree-checkbox[aria-label='Select Home']")));
+        
+        JavascriptExecutor js = (JavascriptExecutor) driver;
 
         js.executeScript("arguments[0].scrollIntoView({block:'center'});", homeCheckbox);
 

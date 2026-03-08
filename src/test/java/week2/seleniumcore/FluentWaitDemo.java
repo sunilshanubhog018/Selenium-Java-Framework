@@ -9,23 +9,12 @@ import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
 import org.testng.Assert;
 import org.testng.annotations.*;
+
+import base.BaseTest;
+
 import java.time.Duration;
 
-public class FluentWaitDemo {
-
-    WebDriver driver;
-
-    @BeforeMethod
-    public void setup() {
-
-        // Step 1: Initialize ChromeDriver
-        // Launches a Chrome browser and assigns it to the WebDriver reference
-        driver = new ChromeDriver();
-
-        // Step 2: Maximize the browser window
-        // Prevents layout issues where elements may be off-screen in smaller viewports
-        driver.manage().window().maximize();
-    }
+public class FluentWaitDemo extends BaseTest  {
 
     @Test
     public void testWithFluentWait() {
@@ -79,13 +68,6 @@ public class FluentWaitDemo {
 
         // Step 8: Print confirmation to console
         System.out.println("✅ Fluent Wait verified: " + result.getText());
-    }
-
-    @AfterMethod
-    public void teardown() {
-
-        // Step 9: Close the browser and end the WebDriver session
-        // Always placed in @AfterMethod to guarantee cleanup even if the test fails
-        if (driver != null) driver.quit();
+    
     }
 }

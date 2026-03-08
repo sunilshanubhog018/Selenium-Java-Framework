@@ -1,35 +1,20 @@
 package LocatorsPractice;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.Assert;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import base.BaseTest;
 
 import java.time.Duration;
 import java.util.List;
 
-public class AllTestCasesCombined {
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.annotations.Test;
+import org.testng.Assert;
 
-    WebDriver driver;
-
-    @BeforeMethod
-    public void setUp() {
-        driver = new ChromeDriver();
-        driver.manage().window().maximize();
-    }
-
-    @AfterMethod
-    public void tearDown() {
-        driver.quit();
-    }
-
+public class AllTestCasesCombined extends BaseTest {
     // Test 1: By.id
     @Test
     public void testValidLogin() {

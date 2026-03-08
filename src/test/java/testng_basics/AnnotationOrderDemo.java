@@ -19,24 +19,14 @@ public class AnnotationOrderDemo {
         System.out.println("3. @BeforeClass - Class-level setup");
     }
 
-    @BeforeMethod
-    public void beforeMethod() {
-        System.out.println("   4. @BeforeMethod - Runs before each test");
-    }
-
     @Test(priority = 1)
     public void testOne() {
-        System.out.println("      5. @Test - testOne executing");
+        System.out.println("5. @Test - testOne executing");
     }
 
     @Test(priority = 2)
     public void testTwo() {
-        System.out.println("      5. @Test - testTwo executing");
-    }
-
-    @AfterMethod
-    public void afterMethod() {
-        System.out.println("   6. @AfterMethod - Runs after each test");
+        System.out.println("5. @Test - testTwo executing");
     }
 
     @AfterClass
