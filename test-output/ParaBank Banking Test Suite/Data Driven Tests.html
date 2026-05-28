@@ -1,0 +1,140 @@
+<html>
+<head>
+<title>TestNG:  Data Driven Tests</title>
+<link href="../testng.css" rel="stylesheet" type="text/css" />
+<link href="../my-testng.css" rel="stylesheet" type="text/css" />
+
+<style type="text/css">
+.log { display: none;} 
+.stack-trace { display: none;} 
+</style>
+<script type="text/javascript">
+<!--
+function flip(e) {
+  current = e.style.display;
+  if (current == 'block') {
+    e.style.display = 'none';
+    return 0;
+  }
+  else {
+    e.style.display = 'block';
+    return 1;
+  }
+}
+
+function toggleBox(szDivId, elem, msg1, msg2)
+{
+  var res = -1;  if (document.getElementById) {
+    res = flip(document.getElementById(szDivId));
+  }
+  else if (document.all) {
+    // this is the way old msie versions work
+    res = flip(document.all[szDivId]);
+  }
+  if(elem) {
+    if(res == 0) elem.innerHTML = msg1; else elem.innerHTML = msg2;
+  }
+
+}
+
+function toggleAllBoxes() {
+  if (document.getElementsByTagName) {
+    d = document.getElementsByTagName('div');
+    for (i = 0; i < d.length; i++) {
+      if (d[i].className == 'log') {
+        flip(d[i]);
+      }
+    }
+  }
+}
+
+// -->
+</script>
+
+</head>
+<body>
+<h2 align='center'>Data Driven Tests</h2><table border='1' align="center">
+<tr>
+<td>Tests passed/Failed/Skipped:</td><td>12/0/0</td>
+</tr><tr>
+<td>Started on:</td><td>Thu May 28 21:05:55 IST 2026</td>
+</tr>
+<tr><td>Total time:</td><td>202 seconds (202902 ms)</td>
+</tr><tr>
+<td>Included groups:</td><td></td>
+</tr><tr>
+<td>Excluded groups:</td><td></td>
+</tr>
+</table><p/>
+<small><i>(Hover the method name to see the test class name)</i></small><p/>
+<table width='100%' border='1' class='invocation-passed'>
+<tr><td colspan='4' align='center'><b>PASSED TESTS</b></td></tr>
+<tr><td><b>Test method</b></td>
+<td><b>Attribute(s)</b></td>
+<td width="30%"><b>Exception</b></td>
+<td width="10%"><b>Time (seconds)</b></td>
+<td><b>Instance</b></td>
+</tr>
+<tr>
+<td title='tests.DataDrivenLoginTest.testLoginFromExcel()'><b>testLoginFromExcel</b><br>Test class: tests.DataDrivenLoginTest<br>Test method: Data-driven login test from Excel<br>Parameters: TC012, Negative - Empty, Both fields with only spaces, , , fail</td>
+<td></td>
+<td>3</td>
+<td>tests.DataDrivenLoginTest@1f760b47</td></tr>
+<tr>
+<td title='tests.DataDrivenLoginTest.testLoginFromExcel()'><b>testLoginFromExcel</b><br>Test class: tests.DataDrivenLoginTest<br>Test method: Data-driven login test from Excel<br>Parameters: TC005, Positive - E2E, Login and navigate to transfer funds, REGISTER_NEW, Test@1234, pass_transfer</td>
+<td></td>
+<td>24</td>
+<td>tests.DataDrivenLoginTest@1f760b47</td></tr>
+<tr>
+<td title='tests.DataDrivenLoginTest.testLoginFromExcel()'><b>testLoginFromExcel</b><br>Test class: tests.DataDrivenLoginTest<br>Test method: Data-driven login test from Excel<br>Parameters: TC009, Negative - Empty, Empty password only, testuser123, , fail</td>
+<td></td>
+<td>5</td>
+<td>tests.DataDrivenLoginTest@1f760b47</td></tr>
+<tr>
+<td title='tests.DataDrivenLoginTest.testLoginFromExcel()'><b>testLoginFromExcel</b><br>Test class: tests.DataDrivenLoginTest<br>Test method: Data-driven login test from Excel<br>Parameters: TC003, Positive - E2E, Login then verify accounts page, REGISTER_NEW, Test@1234, pass_verify_accounts</td>
+<td></td>
+<td>15</td>
+<td>tests.DataDrivenLoginTest@1f760b47</td></tr>
+<tr>
+<td title='tests.DataDrivenLoginTest.testLoginFromExcel()'><b>testLoginFromExcel</b><br>Test class: tests.DataDrivenLoginTest<br>Test method: Data-driven login test from Excel<br>Parameters: TC006, Positive - E2E, Login and navigate to bill pay, REGISTER_NEW, Test@1234, pass_billpay</td>
+<td></td>
+<td>25</td>
+<td>tests.DataDrivenLoginTest@1f760b47</td></tr>
+<tr>
+<td title='tests.DataDrivenLoginTest.testLoginFromExcel()'><b>testLoginFromExcel</b><br>Test class: tests.DataDrivenLoginTest<br>Test method: Data-driven login test from Excel<br>Parameters: TC004, Positive - E2E, Login then logout then login again, REGISTER_NEW, Test@1234, pass_relogin</td>
+<td></td>
+<td>24</td>
+<td>tests.DataDrivenLoginTest@1f760b47</td></tr>
+<tr>
+<td title='tests.DataDrivenLoginTest.testLoginFromExcel()'><b>testLoginFromExcel</b><br>Test class: tests.DataDrivenLoginTest<br>Test method: Data-driven login test from Excel<br>Parameters: TC001, Positive - E2E, Valid login with config credentials, CONFIG_USERNAME, CONFIG_PASSWORD, pass</td>
+<td></td>
+<td>5</td>
+<td>tests.DataDrivenLoginTest@1f760b47</td></tr>
+<tr>
+<td title='tests.DataDrivenLoginTest.testLoginFromExcel()'><b>testLoginFromExcel</b><br>Test class: tests.DataDrivenLoginTest<br>Test method: Data-driven login test from Excel<br>Parameters: TC002, Positive - E2E, Login with newly registered user, REGISTER_NEW, Test@1234, pass</td>
+<td></td>
+<td>18</td>
+<td>tests.DataDrivenLoginTest@1f760b47</td></tr>
+<tr>
+<td title='tests.DataDrivenLoginTest.testLoginFromExcel()'><b>testLoginFromExcel</b><br>Test class: tests.DataDrivenLoginTest<br>Test method: Data-driven login test from Excel<br>Parameters: TC007, Negative - Empty, Both fields empty, , , fail</td>
+<td></td>
+<td>4</td>
+<td>tests.DataDrivenLoginTest@1f760b47</td></tr>
+<tr>
+<td title='tests.DataDrivenLoginTest.testLoginFromExcel()'><b>testLoginFromExcel</b><br>Test class: tests.DataDrivenLoginTest<br>Test method: Data-driven login test from Excel<br>Parameters: TC010, Negative - Empty, Username with only spaces, , Test@1234, fail</td>
+<td></td>
+<td>4</td>
+<td>tests.DataDrivenLoginTest@1f760b47</td></tr>
+<tr>
+<td title='tests.DataDrivenLoginTest.testLoginFromExcel()'><b>testLoginFromExcel</b><br>Test class: tests.DataDrivenLoginTest<br>Test method: Data-driven login test from Excel<br>Parameters: TC008, Negative - Empty, Empty username only, , Test@1234, fail</td>
+<td></td>
+<td>4</td>
+<td>tests.DataDrivenLoginTest@1f760b47</td></tr>
+<tr>
+<td title='tests.DataDrivenLoginTest.testLoginFromExcel()'><b>testLoginFromExcel</b><br>Test class: tests.DataDrivenLoginTest<br>Test method: Data-driven login test from Excel<br>Parameters: TC011, Negative - Empty, Password with only spaces, testuser123, , fail</td>
+<td></td>
+<td>3</td>
+<td>tests.DataDrivenLoginTest@1f760b47</td></tr>
+</table><p>
+</body>
+</html>
