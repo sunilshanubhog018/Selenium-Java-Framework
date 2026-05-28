@@ -1,8 +1,8 @@
-<<<<<<< HEAD
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
-         http://maven.apache.org/xsd/maven-4.0.0.xsd">
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.banking.automation</groupId>
@@ -12,92 +12,44 @@
 
     <name>ParaBank Banking Automation Framework</name>
     <description>POM-based Selenium framework for ParaBank banking application</description>
-=======
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
-                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-
-    <groupId>com.banking</groupId>
-    <artifactId>TestNGPractice</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
->>>>>>> 127ff655b82e19ddd7b71c2cd816b0ebf70f9581
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <selenium.version>4.27.0</selenium.version>
-<<<<<<< HEAD
-        <testng.version>7.9.0</testng.version>
-        <webdrivermanager.version>5.9.2</webdrivermanager.version>
-=======
         <testng.version>7.10.1</testng.version>
+        <webdrivermanager.version>5.9.2</webdrivermanager.version>
         <allure.version>2.28.0</allure.version>
         <aspectj.version>1.9.21</aspectj.version>
->>>>>>> 127ff655b82e19ddd7b71c2cd816b0ebf70f9581
     </properties>
 
     <dependencies>
-        <!-- Selenium WebDriver -->
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
             <version>${selenium.version}</version>
         </dependency>
 
-<<<<<<< HEAD
-        <!-- TestNG -->
-=======
-        <!-- TestNG Framework -->
->>>>>>> 127ff655b82e19ddd7b71c2cd816b0ebf70f9581
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
             <version>${testng.version}</version>
             <scope>test</scope>
         </dependency>
-<<<<<<< HEAD
 
-=======
-        
->>>>>>> 127ff655b82e19ddd7b71c2cd816b0ebf70f9581
-        <!-- WebDriverManager -->
         <dependency>
             <groupId>io.github.bonigarcia</groupId>
             <artifactId>webdrivermanager</artifactId>
-<<<<<<< HEAD
             <version>${webdrivermanager.version}</version>
         </dependency>
 
-        <!-- Apache POI - for Excel test data reading -->
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
             <version>5.2.5</version>
         </dependency>
 
-        <!-- Allure TestNG for reporting -->
-        <dependency>
-            <groupId>io.qameta.allure</groupId>
-            <artifactId>allure-testng</artifactId>
-            <version>2.25.0</version>
-            <scope>test</scope>
-        </dependency>
-        
-	        <dependency>
-	    <groupId>com.aventstack</groupId>
-	    <artifactId>extentreports</artifactId>
-	    <version>5.1.1</version>
-			</dependency>
-        
-=======
-            <version>5.7.0</version>
-        </dependency>
-
-        <!-- Allure TestNG Adapter -->
         <dependency>
             <groupId>io.qameta.allure</groupId>
             <artifactId>allure-testng</artifactId>
@@ -105,7 +57,12 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- AspectJ Weaver -->
+        <dependency>
+            <groupId>com.aventstack</groupId>
+            <artifactId>extentreports</artifactId>
+            <version>5.1.1</version>
+        </dependency>
+
         <dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjweaver</artifactId>
@@ -113,43 +70,26 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- SLF4J Logging -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
             <version>2.0.11</version>
             <scope>test</scope>
         </dependency>
->>>>>>> 127ff655b82e19ddd7b71c2cd816b0ebf70f9581
     </dependencies>
 
     <build>
         <plugins>
-<<<<<<< HEAD
-            <!-- Compiler Plugin -->
-=======
-            <!-- Maven Compiler Plugin -->
->>>>>>> 127ff655b82e19ddd7b71c2cd816b0ebf70f9581
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.13.0</version>
                 <configuration>
-<<<<<<< HEAD
-                    <source>21</source>
-                    <target>21</target>
-                </configuration>
-            </plugin>
-
-            <!-- Surefire Plugin - runs TestNG tests -->
-=======
                     <source>${maven.compiler.source}</source>
                     <target>${maven.compiler.target}</target>
                 </configuration>
             </plugin>
 
-            <!-- Maven Surefire Plugin -->
->>>>>>> 127ff655b82e19ddd7b71c2cd816b0ebf70f9581
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -158,32 +98,20 @@
                     <suiteXmlFiles>
                         <suiteXmlFile>testng.xml</suiteXmlFile>
                     </suiteXmlFiles>
-<<<<<<< HEAD
-                    <!-- Retry failed tests once (handles CI flakiness) -->
                     <rerunFailingTestsCount>1</rerunFailingTestsCount>
                 </configuration>
             </plugin>
-        </plugins>
-    </build>
-</project>
-=======
-                    <!-- No argLine needed, Allure listener is in testng.xml -->
+
+            <plugin>
+                <groupId>io.qameta.allure</groupId>
+                <artifactId>allure-maven</artifactId>
+                <version>2.13.0</version>
+                <configuration>
+                    <reportVersion>2.30.0</reportVersion>
+                    <resultsDirectory>${project.build.directory}/allure-results</resultsDirectory>
+                    <reportDirectory>${project.build.directory}/site/allure-report</reportDirectory>
                 </configuration>
             </plugin>
-
-            <!-- Allure Maven Plugin -->
-            <plugin>
-			    <groupId>io.qameta.allure</groupId>
-			    <artifactId>allure-maven</artifactId>
-			    <version>2.13.0</version>
-			    <configuration>
-			        <reportVersion>2.30.0</reportVersion>
-			        <!-- Use Maven property instead of hardcoding -->
-			        <resultsDirectory>${project.build.directory}/allure-results</resultsDirectory>
-			        <reportDirectory>${project.build.directory}/site/allure-report</reportDirectory>
-			    </configuration>
-			</plugin>
         </plugins>
     </build>
 </project>
->>>>>>> 127ff655b82e19ddd7b71c2cd816b0ebf70f9581
