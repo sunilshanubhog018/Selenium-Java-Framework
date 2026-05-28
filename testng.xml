@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 
+<<<<<<< HEAD
 <!-- parallel="methods" = multiple test methods run simultaneously -->
 <!-- thread-count="3" = 3 tests run at the same time -->
 <suite name="ParaBank Banking Test Suite">
@@ -40,5 +41,37 @@
 	        <class name="tests.EndToEndTest"/>
 	    </classes>
 	</test>
+=======
+<suite name="Selenium-Java-Framework Suite" verbose="1">
+
+<!-- Register Allure listener -->
+    <listeners>
+        <listener class-name="io.qameta.allure.testng.AllureTestNg"/>
+    </listeners>
+
+    <test name="Locators Practice">
+        <packages>
+            <package name="LocatorsPractice"/>
+        </packages>
+    </test>
+
+    <test name="TestNG Basics">
+        <packages>
+            <package name="testng_basics"/>
+        </packages>
+    </test>
+
+    <test name="WebDriver">
+        <packages>
+            <package name="webdriver"/>
+        </packages>
+    </test>
+
+    <test name="Week2 - Selenium Core">
+        <packages>
+            <package name="week2.seleniumcore"/>
+        </packages>
+    </test>
+>>>>>>> 127ff655b82e19ddd7b71c2cd816b0ebf70f9581
 
 </suite>

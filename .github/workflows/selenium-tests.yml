@@ -1,0 +1,66 @@
+name: Selenium-Java-Framework CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Install Google Chrome
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y google-chrome-stable
+          google-chrome --version
+
+      - name: 🏃 Run All Tests (generates allure-results)
+        run: mvn clean test
+        continue-on-error: true
+
+      - name: 📈 Generate Allure Report
+        if: always()
+        run: mvn allure:report
+
+      - name: 📊 Upload Allure Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-report-${{ github.run_number }}
+          path: target/site/allure-report/
+          retention-days: 30
+
+      - name: 📋 Upload TestNG Reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: testng-reports-${{ github.run_number }}
+          path: |
+            target/surefire-reports/
+            test-output/
+          retention-days: 30
+
+      - name: 📝 Test Summary
+        if: always()
+        run: |
+          echo "## ✅ Test Execution Complete" >> $GITHUB_STEP_SUMMARY
+          echo "**Run Number:** ${{ github.run_number }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Branch:** ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📊 Reports Generated:" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Allure Report" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ TestNG Reports" >> $GITHUB_STEP_SUMMARY
