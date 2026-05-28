@@ -10,7 +10,7 @@ on:
 jobs:
   run-tests:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -22,21 +22,21 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-       - name: Install Google Chrome
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y google-chrome-stable
-          google-chrome --version
+      # ✅ Better way to setup Chrome for Selenium
+      - name: Setup Chrome
+        uses: browser-actions/setup-chrome@v1
+        with:
+          chrome-version: stable
 
-      - name: 🏃 Run All Tests (generates allure-results)
+      - name: Run All Tests
         run: mvn clean test
         continue-on-error: true
 
-      - name: 📈 Generate Allure Report
+      - name: Generate Allure Report
         if: always()
         run: mvn allure:report
 
-      - name: 📊 Upload Allure Report
+      - name: Upload Allure Report
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -44,7 +44,7 @@ jobs:
           path: target/site/allure-report/
           retention-days: 30
 
-      - name: 📋 Upload TestNG Reports
+      - name: Upload TestNG Reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -54,7 +54,7 @@ jobs:
             test-output/
           retention-days: 30
 
-      - name: 📝 Test Summary
+      - name: Test Summary
         if: always()
         run: |
           echo "## ✅ Test Execution Complete" >> $GITHUB_STEP_SUMMARY
