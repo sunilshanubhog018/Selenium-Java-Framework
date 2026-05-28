@@ -40,36 +40,3 @@
 	        <class name="tests.EndToEndTest"/>
 	    </classes>
 	</test>
-=======
-<suite name="Selenium-Java-Framework Suite" verbose="1">
-
-<!-- Register Allure listener -->
-    <listeners>
-        <listener class-name="io.qameta.allure.testng.AllureTestNg"/>
-    </listeners>
-
-    <test name="Locators Practice">
-        <packages>
-            <package name="LocatorsPractice"/>
-        </packages>
-    </test>
-
-    <test name="TestNG Basics">
-        <packages>
-            <package name="testng_basics"/>
-        </packages>
-    </test>
-
-    <test name="WebDriver">
-        <packages>
-            <package name="webdriver"/>
-        </packages>
-    </test>
-
-    <test name="Week2 - Selenium Core">
-        <packages>
-            <package name="week2.seleniumcore"/>
-        </packages>
-    </test>
-
-</suite>
