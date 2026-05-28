@@ -40,3 +40,5 @@
 	        <class name="tests.EndToEndTest"/>
 	    </classes>
 	</test>
+	
+</suite>
