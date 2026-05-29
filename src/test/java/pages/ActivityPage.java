@@ -33,6 +33,11 @@ public class ActivityPage extends BasePage {
 
     public boolean isOnActivityPage() {
         try {
+            // Check URL contains 'activity' OR page title contains 'Account Activity'
+            String currentUrl = driver.getCurrentUrl();
+            if (currentUrl.contains("activity")) {
+                return true;
+            }
             return getText(pageTitle).contains("Account Activity");
         } catch (Exception e) {
             return false;

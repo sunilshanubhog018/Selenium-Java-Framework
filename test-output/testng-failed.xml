@@ -5,13 +5,10 @@
     <classes>
       <class name="tests.EndToEndTest">
         <methods>
-          <include name="initializeDatabase"/>
           <include name="setUp"/>
+          <include name="initializeDatabase"/>
           <include name="tearDown"/>
-          <include name="testBillPaymentFlow"/>
-          <include name="testNewCustomerOnboarding"/>
           <include name="testCompleteBankingSession"/>
-          <include name="testFundTransferFlow"/>
         </methods>
       </class> <!-- tests.EndToEndTest -->
     </classes>

@@ -1,277 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testng-results ignored="0" total="4" passed="0" failed="4" skipped="0">
+<testng-results ignored="0" total="4" passed="4" failed="0" skipped="0">
   <reporter-output>
   </reporter-output>
-  <suite started-at="2026-05-28T21:39:01 IST" name="Default suite" finished-at="2026-05-28T21:41:30 IST" duration-ms="149305">
+  <suite started-at="2026-05-29T14:04:55 IST" name="Default suite" finished-at="2026-05-29T14:08:28 IST" duration-ms="212685">
     <groups>
     </groups>
-    <test started-at="2026-05-28T21:39:01 IST" name="Default test" finished-at="2026-05-28T21:41:30 IST" duration-ms="149305">
+    <test started-at="2026-05-29T14:04:55 IST" name="Default test" finished-at="2026-05-29T14:08:28 IST" duration-ms="212685">
       <class name="tests.EndToEndTest">
-        <test-method is-config="true" signature="initializeDatabase()[pri:0, instance:tests.EndToEndTest@6a4f1a55]" started-at="2026-05-28T21:38:47 IST" name="initializeDatabase" finished-at="2026-05-28T21:39:01 IST" duration-ms="14027" status="PASS">
+        <test-method is-config="true" signature="initializeDatabase()[pri:0, instance:tests.EndToEndTest@10289886]" started-at="2026-05-29T14:04:30 IST" name="initializeDatabase" finished-at="2026-05-29T14:04:55 IST" duration-ms="25375" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- initializeDatabase -->
-        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.EndToEndTest@6a4f1a55]" started-at="2026-05-28T21:39:01 IST" name="setUp" finished-at="2026-05-28T21:39:03 IST" duration-ms="2020" status="PASS">
+        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.EndToEndTest@10289886]" started-at="2026-05-29T14:04:55 IST" name="setUp" finished-at="2026-05-29T14:04:58 IST" duration-ms="2382" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- setUp -->
-        <test-method signature="testNewCustomerOnboarding()[pri:1, instance:tests.EndToEndTest@6a4f1a55]" started-at="2026-05-28T21:39:03 IST" name="testNewCustomerOnboarding" description="E2E: New customer onboarding flow" finished-at="2026-05-28T21:39:29 IST" duration-ms="25950" status="FAIL">
-          <exception class="org.openqa.selenium.NoSuchElementException">
-            <message>
-              <![CDATA[no such element: Unable to locate element: {"method":"link text","selector":"Log Out"}
-  (Session info: chrome=145.0.7632.76)
-For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#no-such-element-exception
-Build info: version: '4.27.0', revision: 'd6e718d134'
-System info: os.name: 'Windows 11', os.arch: 'amd64', os.version: '10.0', java.version: '21.0.6'
-Driver info: org.openqa.selenium.chrome.ChromeDriver
-Command: [99106eeb11d76b0dbc8e1b248475b45b, findElement {value=Log Out, using=link text}]
-Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 145.0.7632.76, chrome: {chromedriverVersion: 145.0.7632.117 (de4e5d6e13b..., userDataDir: C:\Users\sunil\AppData\Loca...}, fedcm:accounts: true, goog:chromeOptions: {debuggerAddress: localhost:62600}, goog:processID: 29600, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: windows, proxy: Proxy(), se:cdp: ws://localhost:62600/devtoo..., se:cdpVersion: 145.0.7632.76, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:extension:minPinLength: true, webauthn:extension:prf: true, webauthn:virtualAuthenticators: true}
-Session ID: 99106eeb11d76b0dbc8e1b248475b45b]]>
-            </message>
-            <full-stacktrace>
-              <![CDATA[org.openqa.selenium.NoSuchElementException: no such element: Unable to locate element: {"method":"link text","selector":"Log Out"}
-  (Session info: chrome=145.0.7632.76)
-For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#no-such-element-exception
-Build info: version: '4.27.0', revision: 'd6e718d134'
-System info: os.name: 'Windows 11', os.arch: 'amd64', os.version: '10.0', java.version: '21.0.6'
-Driver info: org.openqa.selenium.chrome.ChromeDriver
-Command: [99106eeb11d76b0dbc8e1b248475b45b, findElement {value=Log Out, using=link text}]
-Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 145.0.7632.76, chrome: {chromedriverVersion: 145.0.7632.117 (de4e5d6e13b..., userDataDir: C:\Users\sunil\AppData\Loca...}, fedcm:accounts: true, goog:chromeOptions: {debuggerAddress: localhost:62600}, goog:processID: 29600, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: windows, proxy: Proxy(), se:cdp: ws://localhost:62600/devtoo..., se:cdpVersion: 145.0.7632.76, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:extension:minPinLength: true, webauthn:extension:prf: true, webauthn:virtualAuthenticators: true}
-Session ID: 99106eeb11d76b0dbc8e1b248475b45b
-at java.base/jdk.internal.reflect.DirectConstructorHandleAccessor.newInstance(DirectConstructorHandleAccessor.java:62)
-at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:502)
-at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:486)
-at org.openqa.selenium.remote.ErrorCodec.decode(ErrorCodec.java:167)
-at org.openqa.selenium.remote.codec.w3c.W3CHttpResponseCodec.decode(W3CHttpResponseCodec.java:138)
-at org.openqa.selenium.remote.codec.w3c.W3CHttpResponseCodec.decode(W3CHttpResponseCodec.java:50)
-at org.openqa.selenium.remote.HttpCommandExecutor.execute(HttpCommandExecutor.java:190)
-at org.openqa.selenium.remote.service.DriverCommandExecutor.invokeExecute(DriverCommandExecutor.java:216)
-at org.openqa.selenium.remote.service.DriverCommandExecutor.execute(DriverCommandExecutor.java:174)
-at org.openqa.selenium.remote.RemoteWebDriver.execute(RemoteWebDriver.java:545)
-at org.openqa.selenium.remote.ElementLocation$ElementFinder$2.findElement(ElementLocation.java:165)
-at org.openqa.selenium.remote.ElementLocation.findElement(ElementLocation.java:59)
-at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:368)
-at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:362)
-at tests.EndToEndTest.testNewCustomerOnboarding(EndToEndTest.java:67)
-at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
-at java.base/java.lang.reflect.Method.invoke(Method.java:580)
-at org.testng.internal.invokers.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:139)
-at org.testng.internal.invokers.TestInvoker.invokeMethod(TestInvoker.java:664)
-at org.testng.internal.invokers.TestInvoker.invokeTestMethod(TestInvoker.java:228)
-at org.testng.internal.invokers.MethodRunner.runInSequence(MethodRunner.java:63)
-at org.testng.internal.invokers.TestInvoker$MethodInvocationAgent.invoke(TestInvoker.java:961)
-at org.testng.internal.invokers.TestInvoker.invokeTestMethods(TestInvoker.java:201)
-at org.testng.internal.invokers.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:148)
-at org.testng.internal.invokers.TestMethodWorker.run(TestMethodWorker.java:128)
-at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
-at org.testng.TestRunner.privateRun(TestRunner.java:819)
-at org.testng.TestRunner.run(TestRunner.java:619)
-at org.testng.SuiteRunner.runTest(SuiteRunner.java:443)
-at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:437)
-at org.testng.SuiteRunner.privateRun(SuiteRunner.java:397)
-at org.testng.SuiteRunner.run(SuiteRunner.java:336)
-at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52)
-at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:95)
-at org.testng.TestNG.runSuitesSequentially(TestNG.java:1301)
-at org.testng.TestNG.runSuitesLocally(TestNG.java:1228)
-at org.testng.TestNG.runSuites(TestNG.java:1134)
-at org.testng.TestNG.run(TestNG.java:1101)
-at org.testng.remote.AbstractRemoteTestNG.run(AbstractRemoteTestNG.java:115)
-at org.testng.remote.RemoteTestNG.initAndRun(RemoteTestNG.java:293)
-at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:91)
-]]>
-            </full-stacktrace>
-          </exception> <!-- org.openqa.selenium.NoSuchElementException -->
+        <test-method signature="testNewCustomerOnboarding()[pri:1, instance:tests.EndToEndTest@10289886]" started-at="2026-05-29T14:04:58 IST" name="testNewCustomerOnboarding" description="E2E: New customer onboarding flow" finished-at="2026-05-29T14:05:36 IST" duration-ms="38210" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- testNewCustomerOnboarding -->
-        <test-method is-config="true" signature="tearDown()[pri:0, instance:tests.EndToEndTest@6a4f1a55]" started-at="2026-05-28T21:39:29 IST" name="tearDown" finished-at="2026-05-28T21:39:30 IST" duration-ms="423" status="PASS">
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:tests.EndToEndTest@10289886]" started-at="2026-05-29T14:05:36 IST" name="tearDown" finished-at="2026-05-29T14:05:37 IST" duration-ms="652" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- tearDown -->
-        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.EndToEndTest@6a4f1a55]" started-at="2026-05-28T21:39:30 IST" name="setUp" finished-at="2026-05-28T21:39:32 IST" duration-ms="2525" status="PASS">
+        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.EndToEndTest@10289886]" started-at="2026-05-29T14:05:37 IST" name="setUp" finished-at="2026-05-29T14:05:40 IST" duration-ms="3079" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- setUp -->
-        <test-method signature="testFundTransferFlow()[pri:2, instance:tests.EndToEndTest@6a4f1a55]" started-at="2026-05-28T21:39:32 IST" name="testFundTransferFlow" description="E2E: Fund transfer with transaction verification" finished-at="2026-05-28T21:40:11 IST" duration-ms="38928" status="FAIL">
-          <exception class="org.openqa.selenium.TimeoutException">
-            <message>
-              <![CDATA[Expected condition failed: waiting for element to be clickable: By.linkText: Accounts Overview (tried for 15 second(s) with 500 milliseconds interval)
-Build info: version: '4.27.0', revision: 'd6e718d134'
-System info: os.name: 'Windows 11', os.arch: 'amd64', os.version: '10.0', java.version: '21.0.6'
-Driver info: org.openqa.selenium.chrome.ChromeDriver
-Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 145.0.7632.76, chrome: {chromedriverVersion: 145.0.7632.117 (de4e5d6e13b..., userDataDir: C:\Users\sunil\AppData\Loca...}, fedcm:accounts: true, goog:chromeOptions: {debuggerAddress: localhost:61876}, goog:processID: 1064, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: windows, proxy: Proxy(), se:cdp: ws://localhost:61876/devtoo..., se:cdpVersion: 145.0.7632.76, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:extension:minPinLength: true, webauthn:extension:prf: true, webauthn:virtualAuthenticators: true}
-Session ID: 307623334439ec3e01aee62a214561c1]]>
-            </message>
-            <full-stacktrace>
-              <![CDATA[org.openqa.selenium.TimeoutException: Expected condition failed: waiting for element to be clickable: By.linkText: Accounts Overview (tried for 15 second(s) with 500 milliseconds interval)
-Build info: version: '4.27.0', revision: 'd6e718d134'
-System info: os.name: 'Windows 11', os.arch: 'amd64', os.version: '10.0', java.version: '21.0.6'
-Driver info: org.openqa.selenium.chrome.ChromeDriver
-Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 145.0.7632.76, chrome: {chromedriverVersion: 145.0.7632.117 (de4e5d6e13b..., userDataDir: C:\Users\sunil\AppData\Loca...}, fedcm:accounts: true, goog:chromeOptions: {debuggerAddress: localhost:61876}, goog:processID: 1064, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: windows, proxy: Proxy(), se:cdp: ws://localhost:61876/devtoo..., se:cdpVersion: 145.0.7632.76, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:extension:minPinLength: true, webauthn:extension:prf: true, webauthn:virtualAuthenticators: true}
-Session ID: 307623334439ec3e01aee62a214561c1
-at org.openqa.selenium.support.ui.WebDriverWait.timeoutException(WebDriverWait.java:84)
-at org.openqa.selenium.support.ui.FluentWait.until(FluentWait.java:228)
-at base.BasePage.click(BasePage.java:34)
-at pages.AccountsOverviewPage.clickAccountsOverview(AccountsOverviewPage.java:110)
-at tests.EndToEndTest.testFundTransferFlow(EndToEndTest.java:140)
-at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
-at java.base/java.lang.reflect.Method.invoke(Method.java:580)
-at org.testng.internal.invokers.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:139)
-at org.testng.internal.invokers.TestInvoker.invokeMethod(TestInvoker.java:664)
-at org.testng.internal.invokers.TestInvoker.invokeTestMethod(TestInvoker.java:228)
-at org.testng.internal.invokers.MethodRunner.runInSequence(MethodRunner.java:63)
-at org.testng.internal.invokers.TestInvoker$MethodInvocationAgent.invoke(TestInvoker.java:961)
-at org.testng.internal.invokers.TestInvoker.invokeTestMethods(TestInvoker.java:201)
-at org.testng.internal.invokers.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:148)
-at org.testng.internal.invokers.TestMethodWorker.run(TestMethodWorker.java:128)
-at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
-at org.testng.TestRunner.privateRun(TestRunner.java:819)
-at org.testng.TestRunner.run(TestRunner.java:619)
-at org.testng.SuiteRunner.runTest(SuiteRunner.java:443)
-at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:437)
-at org.testng.SuiteRunner.privateRun(SuiteRunner.java:397)
-at org.testng.SuiteRunner.run(SuiteRunner.java:336)
-at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52)
-at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:95)
-at org.testng.TestNG.runSuitesSequentially(TestNG.java:1301)
-at org.testng.TestNG.runSuitesLocally(TestNG.java:1228)
-at org.testng.TestNG.runSuites(TestNG.java:1134)
-at org.testng.TestNG.run(TestNG.java:1101)
-at org.testng.remote.AbstractRemoteTestNG.run(AbstractRemoteTestNG.java:115)
-at org.testng.remote.RemoteTestNG.initAndRun(RemoteTestNG.java:293)
-at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:91)
-]]>
-            </full-stacktrace>
-          </exception> <!-- org.openqa.selenium.TimeoutException -->
+        <test-method signature="testFundTransferFlow()[pri:2, instance:tests.EndToEndTest@10289886]" started-at="2026-05-29T14:05:40 IST" name="testFundTransferFlow" description="E2E: Fund transfer with transaction verification" finished-at="2026-05-29T14:06:21 IST" duration-ms="40761" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- testFundTransferFlow -->
-        <test-method is-config="true" signature="tearDown()[pri:0, instance:tests.EndToEndTest@6a4f1a55]" started-at="2026-05-28T21:40:11 IST" name="tearDown" finished-at="2026-05-28T21:40:12 IST" duration-ms="452" status="PASS">
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:tests.EndToEndTest@10289886]" started-at="2026-05-29T14:06:21 IST" name="tearDown" finished-at="2026-05-29T14:06:21 IST" duration-ms="618" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- tearDown -->
-        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.EndToEndTest@6a4f1a55]" started-at="2026-05-28T21:40:12 IST" name="setUp" finished-at="2026-05-28T21:40:14 IST" duration-ms="2199" status="PASS">
+        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.EndToEndTest@10289886]" started-at="2026-05-29T14:06:21 IST" name="setUp" finished-at="2026-05-29T14:06:24 IST" duration-ms="2460" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- setUp -->
-        <test-method signature="testBillPaymentFlow()[pri:3, instance:tests.EndToEndTest@6a4f1a55]" started-at="2026-05-28T21:40:14 IST" name="testBillPaymentFlow" description="E2E: Bill payment with transaction verification" finished-at="2026-05-28T21:40:47 IST" duration-ms="33466" status="FAIL">
-          <exception class="org.openqa.selenium.TimeoutException">
-            <message>
-              <![CDATA[Expected condition failed: waiting for element to be clickable: By.linkText: Accounts Overview (tried for 15 second(s) with 500 milliseconds interval)
-Build info: version: '4.27.0', revision: 'd6e718d134'
-System info: os.name: 'Windows 11', os.arch: 'amd64', os.version: '10.0', java.version: '21.0.6'
-Driver info: org.openqa.selenium.chrome.ChromeDriver
-Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 145.0.7632.76, chrome: {chromedriverVersion: 145.0.7632.117 (de4e5d6e13b..., userDataDir: C:\Users\sunil\AppData\Loca...}, fedcm:accounts: true, goog:chromeOptions: {debuggerAddress: localhost:57226}, goog:processID: 34612, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: windows, proxy: Proxy(), se:cdp: ws://localhost:57226/devtoo..., se:cdpVersion: 145.0.7632.76, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:extension:minPinLength: true, webauthn:extension:prf: true, webauthn:virtualAuthenticators: true}
-Session ID: 6bc1c6b8af1e780c8d29f41a2a8d4427]]>
-            </message>
-            <full-stacktrace>
-              <![CDATA[org.openqa.selenium.TimeoutException: Expected condition failed: waiting for element to be clickable: By.linkText: Accounts Overview (tried for 15 second(s) with 500 milliseconds interval)
-Build info: version: '4.27.0', revision: 'd6e718d134'
-System info: os.name: 'Windows 11', os.arch: 'amd64', os.version: '10.0', java.version: '21.0.6'
-Driver info: org.openqa.selenium.chrome.ChromeDriver
-Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 145.0.7632.76, chrome: {chromedriverVersion: 145.0.7632.117 (de4e5d6e13b..., userDataDir: C:\Users\sunil\AppData\Loca...}, fedcm:accounts: true, goog:chromeOptions: {debuggerAddress: localhost:57226}, goog:processID: 34612, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: windows, proxy: Proxy(), se:cdp: ws://localhost:57226/devtoo..., se:cdpVersion: 145.0.7632.76, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:extension:minPinLength: true, webauthn:extension:prf: true, webauthn:virtualAuthenticators: true}
-Session ID: 6bc1c6b8af1e780c8d29f41a2a8d4427
-at org.openqa.selenium.support.ui.WebDriverWait.timeoutException(WebDriverWait.java:84)
-at org.openqa.selenium.support.ui.FluentWait.until(FluentWait.java:228)
-at base.BasePage.click(BasePage.java:34)
-at pages.AccountsOverviewPage.clickAccountsOverview(AccountsOverviewPage.java:110)
-at tests.EndToEndTest.testBillPaymentFlow(EndToEndTest.java:222)
-at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
-at java.base/java.lang.reflect.Method.invoke(Method.java:580)
-at org.testng.internal.invokers.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:139)
-at org.testng.internal.invokers.TestInvoker.invokeMethod(TestInvoker.java:664)
-at org.testng.internal.invokers.TestInvoker.invokeTestMethod(TestInvoker.java:228)
-at org.testng.internal.invokers.MethodRunner.runInSequence(MethodRunner.java:63)
-at org.testng.internal.invokers.TestInvoker$MethodInvocationAgent.invoke(TestInvoker.java:961)
-at org.testng.internal.invokers.TestInvoker.invokeTestMethods(TestInvoker.java:201)
-at org.testng.internal.invokers.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:148)
-at org.testng.internal.invokers.TestMethodWorker.run(TestMethodWorker.java:128)
-at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
-at org.testng.TestRunner.privateRun(TestRunner.java:819)
-at org.testng.TestRunner.run(TestRunner.java:619)
-at org.testng.SuiteRunner.runTest(SuiteRunner.java:443)
-at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:437)
-at org.testng.SuiteRunner.privateRun(SuiteRunner.java:397)
-at org.testng.SuiteRunner.run(SuiteRunner.java:336)
-at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52)
-at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:95)
-at org.testng.TestNG.runSuitesSequentially(TestNG.java:1301)
-at org.testng.TestNG.runSuitesLocally(TestNG.java:1228)
-at org.testng.TestNG.runSuites(TestNG.java:1134)
-at org.testng.TestNG.run(TestNG.java:1101)
-at org.testng.remote.AbstractRemoteTestNG.run(AbstractRemoteTestNG.java:115)
-at org.testng.remote.RemoteTestNG.initAndRun(RemoteTestNG.java:293)
-at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:91)
-]]>
-            </full-stacktrace>
-          </exception> <!-- org.openqa.selenium.TimeoutException -->
+        <test-method signature="testBillPaymentFlow()[pri:3, instance:tests.EndToEndTest@10289886]" started-at="2026-05-29T14:06:24 IST" name="testBillPaymentFlow" description="E2E: Bill payment with transaction verification" finished-at="2026-05-29T14:07:24 IST" duration-ms="60267" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- testBillPaymentFlow -->
-        <test-method is-config="true" signature="tearDown()[pri:0, instance:tests.EndToEndTest@6a4f1a55]" started-at="2026-05-28T21:40:47 IST" name="tearDown" finished-at="2026-05-28T21:40:48 IST" duration-ms="498" status="PASS">
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:tests.EndToEndTest@10289886]" started-at="2026-05-29T14:07:24 IST" name="tearDown" finished-at="2026-05-29T14:07:25 IST" duration-ms="710" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- tearDown -->
-        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.EndToEndTest@6a4f1a55]" started-at="2026-05-28T21:40:48 IST" name="setUp" finished-at="2026-05-28T21:40:51 IST" duration-ms="3142" status="PASS">
+        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.EndToEndTest@10289886]" started-at="2026-05-29T14:07:25 IST" name="setUp" finished-at="2026-05-29T14:07:27 IST" duration-ms="2540" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- setUp -->
-        <test-method signature="testCompleteBankingSession()[pri:4, instance:tests.EndToEndTest@6a4f1a55]" started-at="2026-05-28T21:40:51 IST" name="testCompleteBankingSession" description="E2E: Complete banking session with full verification" finished-at="2026-05-28T21:41:27 IST" duration-ms="35762" status="FAIL">
-          <exception class="org.openqa.selenium.TimeoutException">
-            <message>
-              <![CDATA[Expected condition failed: waiting for element to be clickable: By.linkText: Accounts Overview (tried for 15 second(s) with 500 milliseconds interval)
-Build info: version: '4.27.0', revision: 'd6e718d134'
-System info: os.name: 'Windows 11', os.arch: 'amd64', os.version: '10.0', java.version: '21.0.6'
-Driver info: org.openqa.selenium.chrome.ChromeDriver
-Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 145.0.7632.76, chrome: {chromedriverVersion: 145.0.7632.117 (de4e5d6e13b..., userDataDir: C:\Users\sunil\AppData\Loca...}, fedcm:accounts: true, goog:chromeOptions: {debuggerAddress: localhost:54103}, goog:processID: 16108, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: windows, proxy: Proxy(), se:cdp: ws://localhost:54103/devtoo..., se:cdpVersion: 145.0.7632.76, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:extension:minPinLength: true, webauthn:extension:prf: true, webauthn:virtualAuthenticators: true}
-Session ID: fb3e8dafb389b32e24135ec2f6ff718a]]>
-            </message>
-            <full-stacktrace>
-              <![CDATA[org.openqa.selenium.TimeoutException: Expected condition failed: waiting for element to be clickable: By.linkText: Accounts Overview (tried for 15 second(s) with 500 milliseconds interval)
-Build info: version: '4.27.0', revision: 'd6e718d134'
-System info: os.name: 'Windows 11', os.arch: 'amd64', os.version: '10.0', java.version: '21.0.6'
-Driver info: org.openqa.selenium.chrome.ChromeDriver
-Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 145.0.7632.76, chrome: {chromedriverVersion: 145.0.7632.117 (de4e5d6e13b..., userDataDir: C:\Users\sunil\AppData\Loca...}, fedcm:accounts: true, goog:chromeOptions: {debuggerAddress: localhost:54103}, goog:processID: 16108, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: windows, proxy: Proxy(), se:cdp: ws://localhost:54103/devtoo..., se:cdpVersion: 145.0.7632.76, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:extension:minPinLength: true, webauthn:extension:prf: true, webauthn:virtualAuthenticators: true}
-Session ID: fb3e8dafb389b32e24135ec2f6ff718a
-at org.openqa.selenium.support.ui.WebDriverWait.timeoutException(WebDriverWait.java:84)
-at org.openqa.selenium.support.ui.FluentWait.until(FluentWait.java:228)
-at base.BasePage.click(BasePage.java:34)
-at pages.AccountsOverviewPage.clickAccountsOverview(AccountsOverviewPage.java:110)
-at tests.EndToEndTest.testCompleteBankingSession(EndToEndTest.java:302)
-at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
-at java.base/java.lang.reflect.Method.invoke(Method.java:580)
-at org.testng.internal.invokers.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:139)
-at org.testng.internal.invokers.TestInvoker.invokeMethod(TestInvoker.java:664)
-at org.testng.internal.invokers.TestInvoker.invokeTestMethod(TestInvoker.java:228)
-at org.testng.internal.invokers.MethodRunner.runInSequence(MethodRunner.java:63)
-at org.testng.internal.invokers.TestInvoker$MethodInvocationAgent.invoke(TestInvoker.java:961)
-at org.testng.internal.invokers.TestInvoker.invokeTestMethods(TestInvoker.java:201)
-at org.testng.internal.invokers.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:148)
-at org.testng.internal.invokers.TestMethodWorker.run(TestMethodWorker.java:128)
-at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
-at org.testng.TestRunner.privateRun(TestRunner.java:819)
-at org.testng.TestRunner.run(TestRunner.java:619)
-at org.testng.SuiteRunner.runTest(SuiteRunner.java:443)
-at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:437)
-at org.testng.SuiteRunner.privateRun(SuiteRunner.java:397)
-at org.testng.SuiteRunner.run(SuiteRunner.java:336)
-at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52)
-at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:95)
-at org.testng.TestNG.runSuitesSequentially(TestNG.java:1301)
-at org.testng.TestNG.runSuitesLocally(TestNG.java:1228)
-at org.testng.TestNG.runSuites(TestNG.java:1134)
-at org.testng.TestNG.run(TestNG.java:1101)
-at org.testng.remote.AbstractRemoteTestNG.run(AbstractRemoteTestNG.java:115)
-at org.testng.remote.RemoteTestNG.initAndRun(RemoteTestNG.java:293)
-at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:91)
-]]>
-            </full-stacktrace>
-          </exception> <!-- org.openqa.selenium.TimeoutException -->
+        <test-method signature="testCompleteBankingSession()[pri:4, instance:tests.EndToEndTest@10289886]" started-at="2026-05-29T14:07:27 IST" name="testCompleteBankingSession" description="E2E: Complete banking session with full verification" finished-at="2026-05-29T14:08:27 IST" duration-ms="59888" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- testCompleteBankingSession -->
-        <test-method is-config="true" signature="tearDown()[pri:0, instance:tests.EndToEndTest@6a4f1a55]" started-at="2026-05-28T21:41:27 IST" name="tearDown" finished-at="2026-05-28T21:41:30 IST" duration-ms="3427" status="PASS">
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:tests.EndToEndTest@10289886]" started-at="2026-05-29T14:08:27 IST" name="tearDown" finished-at="2026-05-29T14:08:28 IST" duration-ms="644" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- tearDown -->

@@ -100,6 +100,10 @@ public class BillPayPage extends BasePage {
         click(sendPaymentButton);
     }
 
+    public void selectFromAccount(String accountId) {
+        selectByValue(fromAccountDropdown, accountId);
+    }
+
     // ================================================================
     //  CONVENIENCE METHOD — fill entire form and submit
     // ================================================================
@@ -107,6 +111,10 @@ public class BillPayPage extends BasePage {
     public void payBill(String payeeName, String address, String city,
                         String state, String zipCode, String phone,
                         String accountNumber, String amount) {
+        try {
+            Thread.sleep(1000);  // Wait for form to fully render
+        } catch (InterruptedException e) {}
+        
         enterPayeeName(payeeName);
         enterAddress(address);
         enterCity(city);
@@ -116,6 +124,11 @@ public class BillPayPage extends BasePage {
         enterAccountNumber(accountNumber);
         enterVerifyAccount(accountNumber);  // Same account number
         enterAmount(amount);
+        try {
+            selectFromAccount("12345");  // Select first account
+        } catch (Exception e) {
+            System.out.println("Warning: Could not select account from dropdown: " + e.getMessage());
+        }
         clickSendPayment();
     }
 
