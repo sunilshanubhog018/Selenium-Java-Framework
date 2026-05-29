@@ -42,6 +42,7 @@ public class BaseTest {
     // ================================================================
     @BeforeSuite
     public void initializeDatabase() {
+    	
         WebDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--headless=new", "--no-sandbox", "--disable-dev-shm-usage");
@@ -67,22 +68,26 @@ public class BaseTest {
     @BeforeMethod
     public void setUp() {
         String browser = ConfigReader.get("browser");
-        boolean headless = Boolean.parseBoolean(ConfigReader.get("headless"));
+        boolean headless = Boolean.parseBoolean(ConfigReader.get("headless"))
+        || Boolean.parseBoolean(System.getenv("CI"));
 
         WebDriver webDriver;
 
         switch (browser.toLowerCase()) {
-            case "chrome":
-                WebDriverManager.chromedriver().setup();
-                ChromeOptions chromeOptions = new ChromeOptions();
-                chromeOptions.addArguments("--no-sandbox");
-                chromeOptions.addArguments("--disable-dev-shm-usage");
-                chromeOptions.addArguments("--window-size=1920,1080");
-                if (headless) {
-                    chromeOptions.addArguments("--headless=new");
-                }
-                webDriver = new ChromeDriver(chromeOptions);
-                break;
+        case "chrome":
+            WebDriverManager.chromedriver().setup();
+            ChromeOptions chromeOptions = new ChromeOptions();
+            chromeOptions.addArguments("--no-sandbox");
+            chromeOptions.addArguments("--disable-dev-shm-usage");
+            chromeOptions.addArguments("--window-size=1920,1080");
+            chromeOptions.addArguments("--disable-gpu");            // ← NEW
+            chromeOptions.addArguments("--remote-debugging-port=0"); // ← NEW
+            chromeOptions.addArguments("--disable-extensions");     // ← NEW
+            if (headless) {
+                chromeOptions.addArguments("--headless=new");
+            }
+            webDriver = new ChromeDriver(chromeOptions);
+            break;
 
             case "firefox":
                 WebDriverManager.firefoxdriver().setup();
