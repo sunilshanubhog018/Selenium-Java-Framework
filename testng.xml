@@ -43,7 +43,7 @@
 	
 	<test name="E2E Data Driven Tests">
 	    <classes>
-	        <class name="tests.EndToEndDataDrivenTest"/>
+	        <class name="tests.Endtoenddatadriventest"/>
 	    </classes>
 	</test>
 	
