@@ -41,4 +41,10 @@
 	    </classes>
 	</test>
 	
+	<test name="E2E Data Driven Tests">
+	    <classes>
+	        <class name="tests.EndToEndDataDrivenTest"/>
+	    </classes>
+	</test>
+	
 </suite>

@@ -1,65 +1,96 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testng-results ignored="0" total="4" passed="4" failed="0" skipped="0">
+<testng-results ignored="0" total="1" passed="1" failed="0" skipped="0">
   <reporter-output>
   </reporter-output>
-  <suite started-at="2026-05-29T14:04:55 IST" name="Default suite" finished-at="2026-05-29T14:08:28 IST" duration-ms="212685">
+  <suite started-at="2026-06-07T15:08:38 IST" name="Default suite" finished-at="2026-06-07T15:09:48 IST" duration-ms="70267">
     <groups>
     </groups>
-    <test started-at="2026-05-29T14:04:55 IST" name="Default test" finished-at="2026-05-29T14:08:28 IST" duration-ms="212685">
-      <class name="tests.EndToEndTest">
-        <test-method is-config="true" signature="initializeDatabase()[pri:0, instance:tests.EndToEndTest@10289886]" started-at="2026-05-29T14:04:30 IST" name="initializeDatabase" finished-at="2026-05-29T14:04:55 IST" duration-ms="25375" status="PASS">
+    <test started-at="2026-06-07T15:08:38 IST" name="Default test" finished-at="2026-06-07T15:09:48 IST" duration-ms="70267">
+      <class name="tests.Endtoenddatadriventest">
+        <test-method is-config="true" signature="initializeDatabase()[pri:0, instance:tests.Endtoenddatadriventest@2ad48653]" started-at="2026-06-07T15:08:26 IST" name="initializeDatabase" finished-at="2026-06-07T15:08:38 IST" duration-ms="12298" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- initializeDatabase -->
-        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.EndToEndTest@10289886]" started-at="2026-05-29T14:04:55 IST" name="setUp" finished-at="2026-05-29T14:04:58 IST" duration-ms="2382" status="PASS">
+        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.Endtoenddatadriventest@2ad48653]" started-at="2026-06-07T15:08:39 IST" name="setUp" finished-at="2026-06-07T15:08:41 IST" duration-ms="1443" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- setUp -->
-        <test-method signature="testNewCustomerOnboarding()[pri:1, instance:tests.EndToEndTest@10289886]" started-at="2026-05-29T14:04:58 IST" name="testNewCustomerOnboarding" description="E2E: New customer onboarding flow" finished-at="2026-05-29T14:05:36 IST" duration-ms="38210" status="PASS">
+        <test-method signature="testE2EFromExcel(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)[pri:0, instance:tests.Endtoenddatadriventest@2ad48653]" started-at="2026-06-07T15:08:41 IST" name="testE2EFromExcel" description="Data-Driven E2E: Banking flows from Excel" data-provider="e2eData" finished-at="2026-06-07T15:09:48 IST" duration-ms="67317" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[E2E004]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[Complete_Banking_Session]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[Register → Transfer $50 → Pay Bill $75 → Verify All Transactions → Logout]]>
+              </value>
+            </param>
+            <param index="3">
+              <value>
+                <![CDATA[50]]>
+              </value>
+            </param>
+            <param index="4">
+              <value>
+                <![CDATA[Airtel Internet]]>
+              </value>
+            </param>
+            <param index="5">
+              <value>
+                <![CDATA[200 Net Street]]>
+              </value>
+            </param>
+            <param index="6">
+              <value>
+                <![CDATA[Bangalore]]>
+              </value>
+            </param>
+            <param index="7">
+              <value>
+                <![CDATA[KA]]>
+              </value>
+            </param>
+            <param index="8">
+              <value>
+                <![CDATA[560001]]>
+              </value>
+            </param>
+            <param index="9">
+              <value>
+                <![CDATA[9876543210]]>
+              </value>
+            </param>
+            <param index="10">
+              <value>
+                <![CDATA[987654]]>
+              </value>
+            </param>
+            <param index="11">
+              <value>
+                <![CDATA[75]]>
+              </value>
+            </param>
+            <param index="12">
+              <value>
+                <![CDATA[1]]>
+              </value>
+            </param>
+          </params>
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- testNewCustomerOnboarding -->
-        <test-method is-config="true" signature="tearDown()[pri:0, instance:tests.EndToEndTest@10289886]" started-at="2026-05-29T14:05:36 IST" name="tearDown" finished-at="2026-05-29T14:05:37 IST" duration-ms="652" status="PASS">
+        </test-method> <!-- testE2EFromExcel -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:tests.Endtoenddatadriventest@2ad48653]" started-at="2026-06-07T15:09:48 IST" name="tearDown" finished-at="2026-06-07T15:09:48 IST" duration-ms="260" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- tearDown -->
-        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.EndToEndTest@10289886]" started-at="2026-05-29T14:05:37 IST" name="setUp" finished-at="2026-05-29T14:05:40 IST" duration-ms="3079" status="PASS">
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- setUp -->
-        <test-method signature="testFundTransferFlow()[pri:2, instance:tests.EndToEndTest@10289886]" started-at="2026-05-29T14:05:40 IST" name="testFundTransferFlow" description="E2E: Fund transfer with transaction verification" finished-at="2026-05-29T14:06:21 IST" duration-ms="40761" status="PASS">
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- testFundTransferFlow -->
-        <test-method is-config="true" signature="tearDown()[pri:0, instance:tests.EndToEndTest@10289886]" started-at="2026-05-29T14:06:21 IST" name="tearDown" finished-at="2026-05-29T14:06:21 IST" duration-ms="618" status="PASS">
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- tearDown -->
-        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.EndToEndTest@10289886]" started-at="2026-05-29T14:06:21 IST" name="setUp" finished-at="2026-05-29T14:06:24 IST" duration-ms="2460" status="PASS">
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- setUp -->
-        <test-method signature="testBillPaymentFlow()[pri:3, instance:tests.EndToEndTest@10289886]" started-at="2026-05-29T14:06:24 IST" name="testBillPaymentFlow" description="E2E: Bill payment with transaction verification" finished-at="2026-05-29T14:07:24 IST" duration-ms="60267" status="PASS">
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- testBillPaymentFlow -->
-        <test-method is-config="true" signature="tearDown()[pri:0, instance:tests.EndToEndTest@10289886]" started-at="2026-05-29T14:07:24 IST" name="tearDown" finished-at="2026-05-29T14:07:25 IST" duration-ms="710" status="PASS">
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- tearDown -->
-        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.EndToEndTest@10289886]" started-at="2026-05-29T14:07:25 IST" name="setUp" finished-at="2026-05-29T14:07:27 IST" duration-ms="2540" status="PASS">
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- setUp -->
-        <test-method signature="testCompleteBankingSession()[pri:4, instance:tests.EndToEndTest@10289886]" started-at="2026-05-29T14:07:27 IST" name="testCompleteBankingSession" description="E2E: Complete banking session with full verification" finished-at="2026-05-29T14:08:27 IST" duration-ms="59888" status="PASS">
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- testCompleteBankingSession -->
-        <test-method is-config="true" signature="tearDown()[pri:0, instance:tests.EndToEndTest@10289886]" started-at="2026-05-29T14:08:27 IST" name="tearDown" finished-at="2026-05-29T14:08:28 IST" duration-ms="644" status="PASS">
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- tearDown -->
-      </class> <!-- tests.EndToEndTest -->
+      </class> <!-- tests.Endtoenddatadriventest -->
     </test> <!-- Default test -->
   </suite> <!-- Default suite -->
 </testng-results>
