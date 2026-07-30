@@ -2,95 +2,20 @@
 <testng-results ignored="0" total="1" passed="1" failed="0" skipped="0">
   <reporter-output>
   </reporter-output>
-  <suite started-at="2026-06-07T15:08:38 IST" name="Default suite" finished-at="2026-06-07T15:09:48 IST" duration-ms="70267">
+  <suite started-at="2026-07-24T10:39:22 IST" name="Default suite" finished-at="2026-07-24T10:39:29 IST" duration-ms="7372">
     <groups>
     </groups>
-    <test started-at="2026-06-07T15:08:38 IST" name="Default test" finished-at="2026-06-07T15:09:48 IST" duration-ms="70267">
-      <class name="tests.Endtoenddatadriventest">
-        <test-method is-config="true" signature="initializeDatabase()[pri:0, instance:tests.Endtoenddatadriventest@2ad48653]" started-at="2026-06-07T15:08:26 IST" name="initializeDatabase" finished-at="2026-06-07T15:08:38 IST" duration-ms="12298" status="PASS">
+    <test started-at="2026-07-24T10:39:22 IST" name="Default test" finished-at="2026-07-24T10:39:29 IST" duration-ms="7372">
+      <class name="com.parabank.api.tests.LoginApiTest">
+        <test-method is-config="true" signature="apiSetup()[pri:0, instance:com.parabank.api.tests.LoginApiTest@1a5a4e19]" started-at="2026-07-24T10:39:22 IST" name="apiSetup" finished-at="2026-07-24T10:39:22 IST" duration-ms="797" status="PASS">
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- initializeDatabase -->
-        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.Endtoenddatadriventest@2ad48653]" started-at="2026-06-07T15:08:39 IST" name="setUp" finished-at="2026-06-07T15:08:41 IST" duration-ms="1443" status="PASS">
+        </test-method> <!-- apiSetup -->
+        <test-method signature="loginWithValidCredentials_returnsCustomer()[pri:0, instance:com.parabank.api.tests.LoginApiTest@1a5a4e19]" started-at="2026-07-24T10:39:23 IST" name="loginWithValidCredentials_returnsCustomer" finished-at="2026-07-24T10:39:29 IST" duration-ms="6301" status="PASS">
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- setUp -->
-        <test-method signature="testE2EFromExcel(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)[pri:0, instance:tests.Endtoenddatadriventest@2ad48653]" started-at="2026-06-07T15:08:41 IST" name="testE2EFromExcel" description="Data-Driven E2E: Banking flows from Excel" data-provider="e2eData" finished-at="2026-06-07T15:09:48 IST" duration-ms="67317" status="PASS">
-          <params>
-            <param index="0">
-              <value>
-                <![CDATA[E2E004]]>
-              </value>
-            </param>
-            <param index="1">
-              <value>
-                <![CDATA[Complete_Banking_Session]]>
-              </value>
-            </param>
-            <param index="2">
-              <value>
-                <![CDATA[Register → Transfer $50 → Pay Bill $75 → Verify All Transactions → Logout]]>
-              </value>
-            </param>
-            <param index="3">
-              <value>
-                <![CDATA[50]]>
-              </value>
-            </param>
-            <param index="4">
-              <value>
-                <![CDATA[Airtel Internet]]>
-              </value>
-            </param>
-            <param index="5">
-              <value>
-                <![CDATA[200 Net Street]]>
-              </value>
-            </param>
-            <param index="6">
-              <value>
-                <![CDATA[Bangalore]]>
-              </value>
-            </param>
-            <param index="7">
-              <value>
-                <![CDATA[KA]]>
-              </value>
-            </param>
-            <param index="8">
-              <value>
-                <![CDATA[560001]]>
-              </value>
-            </param>
-            <param index="9">
-              <value>
-                <![CDATA[9876543210]]>
-              </value>
-            </param>
-            <param index="10">
-              <value>
-                <![CDATA[987654]]>
-              </value>
-            </param>
-            <param index="11">
-              <value>
-                <![CDATA[75]]>
-              </value>
-            </param>
-            <param index="12">
-              <value>
-                <![CDATA[1]]>
-              </value>
-            </param>
-          </params>
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- testE2EFromExcel -->
-        <test-method is-config="true" signature="tearDown()[pri:0, instance:tests.Endtoenddatadriventest@2ad48653]" started-at="2026-06-07T15:09:48 IST" name="tearDown" finished-at="2026-06-07T15:09:48 IST" duration-ms="260" status="PASS">
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- tearDown -->
-      </class> <!-- tests.Endtoenddatadriventest -->
+        </test-method> <!-- loginWithValidCredentials_returnsCustomer -->
+      </class> <!-- com.parabank.api.tests.LoginApiTest -->
     </test> <!-- Default test -->
   </suite> <!-- Default suite -->
 </testng-results>

@@ -3,14 +3,12 @@
 <suite name="Failed suite [Default suite]" guice-stage="DEVELOPMENT">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="tests.Endtoenddatadriventest">
+      <class name="com.parabank.api.tests.LoginApiTest">
         <methods>
-          <include name="initializeDatabase"/>
-          <include name="setUp"/>
-          <include name="tearDown"/>
-          <include name="testE2EFromExcel" invocation-numbers="0 1 2 3"/>
+          <include name="loginWithValidCredentials_returnsCustomer"/>
+          <include name="apiSetup"/>
         </methods>
-      </class> <!-- tests.Endtoenddatadriventest -->
+      </class> <!-- com.parabank.api.tests.LoginApiTest -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->

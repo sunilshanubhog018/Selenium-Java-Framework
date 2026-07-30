@@ -1,0 +1,1 @@
+{"uuid":"e3a55d70-05d0-4c72-b7ca-367e2bbae59b","name":"com.parabank.api.tests.LoginApiTest","children":["8288c409-1702-4cc4-abf3-1a73539ef528"],"befores":[{"name":"apiSetup","status":"passed","stage":"finished","description":"","steps":[],"attachments":[],"parameters":[],"start":1784457188411,"stop":1784457189048}],"afters":[],"start":1784457188357,"stop":1784457193979}
