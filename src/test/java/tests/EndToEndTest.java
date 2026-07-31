@@ -15,25 +15,6 @@ import java.util.List;
 
 public class EndToEndTest extends BaseTest {
 
-    private void pause(int seconds) {
-        try { Thread.sleep(seconds * 1000L); } catch (InterruptedException e) {}
-    }
-
-    // ================================================================
-    //  HELPER METHOD: registerFreshUser()
-    //  Registers a new user and returns the username
-    //
-    //  FIX ADDED HERE:
-    //  Problem: ParaBank DB gets overloaded after many registrations
-    //           Registration fails silently — shows "Signing up is easy!"
-    //           instead of "Welcome username"
-    //           User is NOT created, NOT logged in
-    //           All subsequent steps fail (Log Out / Accounts Overview not found)
-    //
-    //  Fix: Check if registration succeeded (title contains "Welcome")
-    //       If NOT → fall back to config user from config.properties
-    //       Config user was registered long ago and is stable in DB
-    // ================================================================
     private String registerFreshUser(String prefix) {
         String username = prefix + "_" + System.currentTimeMillis();
         String password = "Test@1234";
@@ -41,18 +22,17 @@ public class EndToEndTest extends BaseTest {
         getDriver().get(ConfigReader.get("base.url"));
         LoginPage loginPage = new LoginPage(getDriver());
         loginPage.clickRegister();
-        pause(2);
 
         RegisterPage registerPage = new RegisterPage(getDriver());
+        registerPage.waitForUrl("register");
         registerPage.registerUser(
                 "E2E", "Tester", "100 Test Street",
                 "Bangalore", "KA", "560001",
                 "9876543210", "123-45-6789",
                 username, password
         );
-        pause(3);
+        registerPage.waitForVisible(By.cssSelector("#rightPanel h1.title"));
 
-        // Check what ParaBank returned after registration
         String title = "";
         try {
             title = registerPage.getSuccessTitle();
@@ -61,86 +41,51 @@ public class EndToEndTest extends BaseTest {
         }
         System.out.println("  Registration result: " + title);
 
-        // ---- FALLBACK FIX ----
-        // If title does NOT contain "Welcome" → registration failed
-        // ParaBank showed "Signing up is easy!" (form again) instead
-        // Solution: Login with config user as fallback
         if (!title.contains("Welcome")) {
             System.out.println("  ⚠ Registration failed — using config user as fallback");
-
-            // Navigate to login page
             getDriver().get(ConfigReader.get("base.url"));
             loginPage = new LoginPage(getDriver());
-
-            // Login with pre-existing config user
-            // This user is stable — registered long ago, always in DB
             loginPage.login(
                     ConfigReader.get("test.username"),
                     ConfigReader.get("test.password")
             );
-            pause(3);
-
-            System.out.println("  ✓ Logged in with config user: "
-                    + ConfigReader.get("test.username"));
-
-            // Return config username so tests can use it
+            loginPage.waitForUrl("overview");
+            System.out.println("  ✓ Logged in with config user: " + ConfigReader.get("test.username"));
             return ConfigReader.get("test.username");
         }
 
-        // Registration succeeded — return new username
         return username;
     }
 
-    // ================================================================
-    //  E2E TEST 1: New Customer Onboarding
-    //  Register → Login → View Accounts → Check Activity → Logout
-    // ================================================================
     @Test(priority = 1, description = "E2E: New customer onboarding flow")
     public void testNewCustomerOnboarding() {
         System.out.println("\n🏦 E2E Test 1: New Customer Onboarding");
 
-        // Step 1: Register new customer
-        // registerFreshUser() handles both success and fallback scenarios
         System.out.println("  Step 1: Registering new customer...");
         String username = registerFreshUser("onboard");
         String password = "Test@1234";
 
-        // ---- FIX ADDED HERE ----
-        // Step 2: Logout after registration
-        // Problem: When registration FAILS → fallback logs in with config user
-        //          BUT when registration SUCCEEDS → ParaBank auto-logs in
-        //          Both cases need logout before testing fresh login
-        //          However if fallback was used → we're already on logged-in page
-        //          "Log Out" link exists in both cases UNLESS page is still on
-        //          registration form (edge case)
-        // Fix: Wrap logout in try-catch
-        //      If "Log Out" found → click it (normal flow)
-        //      If "Log Out" NOT found → already on login page, skip logout
         System.out.println("  Step 2: Logging out after registration...");
         try {
             new LoginPage(getDriver()).logout();
-            pause(2);
+            new LoginPage(getDriver()).waitForVisible(By.name("username"));
         } catch (Exception e) {
-            // Already on login page — no logout needed
             System.out.println("  Already on login page — skipping logout");
         }
 
-        // Step 3: Login with new credentials
         System.out.println("  Step 3: Logging in with credentials...");
         getDriver().get(ConfigReader.get("base.url"));
         LoginPage loginPage = new LoginPage(getDriver());
         loginPage.login(username, password);
-        pause(3);
+        loginPage.waitForUrl("overview");
 
-        Assert.assertTrue(
-                getDriver().getCurrentUrl().contains("overview"),
+        Assert.assertTrue(getDriver().getCurrentUrl().contains("overview"),
                 "Step 3 Failed: Should redirect to accounts overview!");
 
-        // Step 4: Verify accounts overview
         System.out.println("  Step 4: Verifying accounts overview...");
         AccountsOverviewPage accountsPage = new AccountsOverviewPage(getDriver());
         accountsPage.clickAccountsOverview();
-        pause(3);
+        accountsPage.waitForUrl("overview");
 
         Assert.assertTrue(accountsPage.isOnAccountsOverviewPage(),
                 "Step 4 Failed: Should be on Accounts Overview!");
@@ -151,12 +96,11 @@ public class EndToEndTest extends BaseTest {
         String balance = accountsPage.getTotalBalance();
         System.out.println("  Account: " + accountNumber + " | Balance: " + balance);
 
-        // Step 5: Click account → verify activity page loads
         System.out.println("  Step 5: Viewing account activity...");
         accountsPage.clickFirstAccount();
-        pause(3);
-
         ActivityPage activityPage = new ActivityPage(getDriver());
+        activityPage.waitForUrl("activity");
+
         Assert.assertTrue(activityPage.isOnActivityPage(),
                 "Step 5 Failed: Should be on Account Activity page!");
         Assert.assertTrue(activityPage.isTransactionTableDisplayed(),
@@ -165,90 +109,65 @@ public class EndToEndTest extends BaseTest {
         int txnCount = activityPage.getTransactionCount();
         System.out.println("  Transactions found: " + txnCount);
 
-        // Step 6: Logout
         System.out.println("  Step 6: Logging out...");
         activityPage.logout();
-        pause(2);
-
         LoginPage verifyPage = new LoginPage(getDriver());
+        verifyPage.waitForVisible(By.name("username"));
+
         Assert.assertTrue(verifyPage.isLoginFormDisplayed(),
                 "Step 6 Failed: Should see login form after logout!");
 
         System.out.println("  ✅ E2E Test 1 PASSED!");
-        System.out.println("  Summary: Registered → Logged in → Viewed Accounts"
-                + " → Checked Activity → Logged out");
     }
 
-    // ================================================================
-    //  E2E TEST 2: Fund Transfer + Transaction Verification
-    //  Register → Login → Transfer → Verify Activity Shows Debit
-    //
-    //  NOTE: registerFreshUser() already handles fallback internally
-    //        No additional fixes needed here — if registration fails,
-    //        config user is used and tests proceed normally
-    // ================================================================
     @Test(priority = 2, description = "E2E: Fund transfer with transaction verification")
     public void testFundTransferFlow() {
         System.out.println("\n🏦 E2E Test 2: Fund Transfer + Activity Verification");
 
-        // Step 1: Register (or fallback to config user)
         System.out.println("  Step 1: Setting up customer account...");
         registerFreshUser("transfer");
-        pause(2);
 
-        // Step 2: Check initial balance
-        // At this point user is logged in (either new user or config user)
         System.out.println("  Step 2: Checking initial balance...");
         AccountsOverviewPage accountsPage = new AccountsOverviewPage(getDriver());
         accountsPage.clickAccountsOverview();
-        pause(3);
+        accountsPage.waitForUrl("overview");
 
         String initialBalance = accountsPage.getTotalBalance();
-        String accountNumber = accountsPage.getFirstAccountNumber();
         System.out.println("  Initial Balance: " + initialBalance);
-        System.out.println("  Account: " + accountNumber);
+        Assert.assertTrue(initialBalance.contains("$"), "Step 2 Failed: Balance should be displayed!");
 
-        Assert.assertTrue(initialBalance.contains("$"),
-                "Step 2 Failed: Balance should be displayed!");
-
-        // Step 3: Transfer $50
         System.out.println("  Step 3: Transferring $50...");
         accountsPage.clickTransferFunds();
-        pause(3);
-
         TransferFundsPage transferPage = new TransferFundsPage(getDriver());
+        transferPage.waitForUrl("transfer");
+
         Assert.assertTrue(transferPage.isOnTransferFundsPage(),
                 "Step 3 Failed: Should be on Transfer Funds page!");
 
         transferPage.enterAmount("50");
         transferPage.clickTransfer();
-        pause(5);
+        transferPage.waitForVisible(By.cssSelector("#rightPanel h1.title"));
 
         String transferResult = transferPage.getRightPanelText();
         Assert.assertTrue(
-                transferResult.contains("Transfer Complete")
-                || transferResult.contains("transferred"),
+                transferResult.contains("Transfer Complete") || transferResult.contains("transferred"),
                 "Step 3 Failed: Transfer should complete! Got: " + transferResult);
         System.out.println("  Transfer: SUCCESS");
 
-        // Step 4: Go to Accounts Overview
         System.out.println("  Step 4: Returning to accounts overview...");
         accountsPage.clickAccountsOverview();
-        pause(3);
+        accountsPage.waitForUrl("overview");
 
         String finalBalance = accountsPage.getTotalBalance();
         System.out.println("  Balance after transfer: " + finalBalance);
-        Assert.assertTrue(finalBalance.contains("$"),
-                "Step 4 Failed: Balance should still be displayed!");
+        Assert.assertTrue(finalBalance.contains("$"), "Step 4 Failed: Balance should still be displayed!");
 
-        // Step 5: Click account → verify transaction in activity
         System.out.println("  Step 5: Verifying transaction in account activity...");
         accountsPage.clickFirstAccount();
-        pause(3);
-
         ActivityPage activityPage = new ActivityPage(getDriver());
-        Assert.assertTrue(activityPage.isOnActivityPage(),
-                "Step 5 Failed: Should be on Activity page!");
+        activityPage.waitForUrl("activity");
+
+        Assert.assertTrue(activityPage.isOnActivityPage(), "Step 5 Failed: Should be on Activity page!");
         Assert.assertTrue(activityPage.isTransactionTableDisplayed(),
                 "Step 5 Failed: Transaction table should be visible!");
 
@@ -259,51 +178,38 @@ public class EndToEndTest extends BaseTest {
 
         List<String> debits = activityPage.getDebitAmounts();
         System.out.println("  Debit amounts: " + debits);
-
         System.out.println("  ✅ E2E Test 2 PASSED!");
-        System.out.println("  Summary: Registered → Transfer $50 → Verified in Activity");
     }
 
-    // ================================================================
-    //  E2E TEST 3: Bill Payment + Transaction Verification
-    //  Register → Login → Pay Bill → Verify Activity Shows Debit
-    // ================================================================
     @Test(priority = 3, description = "E2E: Bill payment with transaction verification")
     public void testBillPaymentFlow() {
         System.out.println("\n🏦 E2E Test 3: Bill Payment + Activity Verification");
 
-        // Step 1: Register (or fallback to config user)
         System.out.println("  Step 1: Setting up customer account...");
         registerFreshUser("billpay");
-        pause(2);
 
-        // Step 2: Check initial balance
         System.out.println("  Step 2: Checking initial balance...");
         AccountsOverviewPage accountsPage = new AccountsOverviewPage(getDriver());
         accountsPage.clickAccountsOverview();
-        pause(3);
+        accountsPage.waitForUrl("overview");
 
         String initialBalance = accountsPage.getTotalBalance();
         System.out.println("  Initial Balance: " + initialBalance);
 
-        // Step 3: Pay electricity bill $100
         System.out.println("  Step 3: Paying electricity bill of $100...");
         accountsPage.clickBillPay();
-        pause(3);
-
         BillPayPage billPayPage = new BillPayPage(getDriver());
-        Assert.assertTrue(billPayPage.isOnBillPayPage(),
-                "Step 3 Failed: Should be on Bill Pay page!");
+        billPayPage.waitForUrl("billpay");
 
-     // Step 3: Pay electricity bill $100
+        Assert.assertTrue(billPayPage.isOnBillPayPage(), "Step 3 Failed: Should be on Bill Pay page!");
+
         billPayPage.payBill(
                 "BESCOM Electric", "100 Power Street",
                 "Bangalore", "KA", "560001",
                 "9876543210", "123456", "100"
         );
-        pause(8); // ← increase from 5 to 8 seconds on CI
+        billPayPage.waitForVisible(By.cssSelector("#rightPanel h1.title"));
 
-        // More flexible assertion — check multiple success indicators
         String pageText = billPayPage.getRightPanelText();
         Assert.assertTrue(
                 billPayPage.isPaymentSuccessful()
@@ -313,27 +219,22 @@ public class EndToEndTest extends BaseTest {
                 "Step 3 Failed: Bill payment should complete! Got: " + pageText);
 
         String confirmText = billPayPage.getResultText();
-        System.out.println("  Confirmation: "
-                + confirmText.substring(0, Math.min(80, confirmText.length())));
+        System.out.println("  Confirmation: " + confirmText.substring(0, Math.min(80, confirmText.length())));
 
-        // Step 4: Check balance after payment
         System.out.println("  Step 4: Checking balance after payment...");
         accountsPage.clickAccountsOverview();
-        pause(3);
+        accountsPage.waitForUrl("overview");
 
         String balanceAfterPayment = accountsPage.getTotalBalance();
         System.out.println("  Balance after payment: " + balanceAfterPayment);
-        Assert.assertTrue(balanceAfterPayment.contains("$"),
-                "Step 4 Failed: Balance should be displayed!");
+        Assert.assertTrue(balanceAfterPayment.contains("$"), "Step 4 Failed: Balance should be displayed!");
 
-        // Step 5: Click account → verify transaction in activity
         System.out.println("  Step 5: Verifying bill payment in transaction history...");
         accountsPage.clickFirstAccount();
-        pause(3);
-
         ActivityPage activityPage = new ActivityPage(getDriver());
-        Assert.assertTrue(activityPage.isOnActivityPage(),
-                "Step 5 Failed: Should be on Activity page!");
+        activityPage.waitForUrl("activity");
+
+        Assert.assertTrue(activityPage.isOnActivityPage(), "Step 5 Failed: Should be on Activity page!");
         Assert.assertTrue(activityPage.isTransactionTableDisplayed(),
                 "Step 5 Failed: Transaction table should be visible!");
 
@@ -346,67 +247,51 @@ public class EndToEndTest extends BaseTest {
         List<String> descriptions = activityPage.getTransactionDescriptions();
         System.out.println("  Debit amounts: " + debits);
         System.out.println("  Descriptions: " + descriptions);
-
         System.out.println("  ✅ E2E Test 3 PASSED!");
-        System.out.println("  Summary: Registered → Paid Bill $100 → Verified in Activity");
     }
 
-    // ================================================================
-    //  E2E TEST 4: Complete Banking Session
-    //  Register → Login → Transfer → Pay Bill → Verify All Transactions
-    // ================================================================
     @Test(priority = 4, description = "E2E: Complete banking session with full verification")
     public void testCompleteBankingSession() {
         System.out.println("\n🏦 E2E Test 4: Complete Banking Session");
 
-        // Step 1: Register (or fallback to config user)
         System.out.println("  Step 1: Registering new customer...");
         registerFreshUser("session");
-        pause(2);
 
-        // Step 2: View accounts
         System.out.println("  Step 2: Viewing accounts...");
         AccountsOverviewPage accountsPage = new AccountsOverviewPage(getDriver());
         accountsPage.clickAccountsOverview();
-        pause(3);
+        accountsPage.waitForUrl("overview");
 
         String initialBalance = accountsPage.getTotalBalance();
         System.out.println("  Starting Balance: " + initialBalance);
         Assert.assertTrue(accountsPage.isAccountsTableDisplayed(),
                 "Step 2 Failed: Accounts table should be visible!");
 
-        // Step 3: Transfer $50
         System.out.println("  Step 3: Transferring $50...");
         accountsPage.clickTransferFunds();
-        pause(3);
-
         TransferFundsPage transferPage = new TransferFundsPage(getDriver());
+        transferPage.waitForUrl("transfer");
         transferPage.enterAmount("50");
         transferPage.clickTransfer();
-        pause(5);
+        transferPage.waitForVisible(By.cssSelector("#rightPanel h1.title"));
 
         String transferResult = transferPage.getRightPanelText();
         Assert.assertTrue(
-                transferResult.contains("Transfer Complete")
-                || transferResult.contains("transferred"),
+                transferResult.contains("Transfer Complete") || transferResult.contains("transferred"),
                 "Step 3 Failed: Transfer should complete!");
         System.out.println("  Transfer $50: SUCCESS");
 
-        // Step 4: Pay internet bill $75
-        // FIX: Increased pause to 8 seconds for CI + more flexible assertion
         System.out.println("  Step 4: Paying internet bill of $75...");
         accountsPage.clickBillPay();
-        pause(3);
-
         BillPayPage billPayPage = new BillPayPage(getDriver());
+        billPayPage.waitForUrl("billpay");
         billPayPage.payBill(
                 "Airtel Internet", "200 Net Street",
                 "Bangalore", "KA", "560001",
                 "9876543210", "987654", "75"
         );
-        pause(8); // ← increased from 5 to 8 for CI
+        billPayPage.waitForVisible(By.cssSelector("#rightPanel h1.title"));
 
-        // More flexible assertion — checks multiple success indicators
         String billPayText = billPayPage.getRightPanelText();
         Assert.assertTrue(
                 billPayPage.isPaymentSuccessful()
@@ -416,50 +301,42 @@ public class EndToEndTest extends BaseTest {
                 "Step 4 Failed: Bill payment should complete! Got: " + billPayText);
         System.out.println("  Bill Payment $75: SUCCESS");
 
-        // Step 5: Check final balance
         System.out.println("  Step 5: Checking final balance...");
         accountsPage.clickAccountsOverview();
-        pause(3);
+        accountsPage.waitForUrl("overview");
 
         String finalBalance = accountsPage.getTotalBalance();
         System.out.println("  Final Balance: " + finalBalance);
-        Assert.assertTrue(finalBalance.contains("$"),
-                "Step 5 Failed: Balance should be displayed!");
+        Assert.assertTrue(finalBalance.contains("$"), "Step 5 Failed: Balance should be displayed!");
 
-        // Step 6: Verify ALL transactions in activity
-        // FIX: Check URL for activity page instead of only page title
         System.out.println("  Step 6: Verifying all transactions in activity...");
         accountsPage.clickFirstAccount();
-        pause(3);
-
         ActivityPage activityPage = new ActivityPage(getDriver());
-        Assert.assertTrue(activityPage.isOnActivityPage(),
-                "Step 6 Failed: Should be on Activity page!");
+        activityPage.waitForUrl("activity");
+
+        Assert.assertTrue(activityPage.isOnActivityPage(), "Step 6 Failed: Should be on Activity page!");
         Assert.assertTrue(activityPage.isTransactionTableDisplayed(),
                 "Step 6 Failed: Transaction table should be visible!");
 
         int txnCount = activityPage.getTransactionCount();
         System.out.println("  Total transactions: " + txnCount);
-        Assert.assertTrue(txnCount >= 1,
-                "Step 6 Failed: Should have at least 1 transaction!");
+        Assert.assertTrue(txnCount >= 1, "Step 6 Failed: Should have at least 1 transaction!");
 
         List<String> debits = activityPage.getDebitAmounts();
         List<String> descriptions = activityPage.getTransactionDescriptions();
         System.out.println("  Debit amounts: " + debits);
         System.out.println("  Descriptions: " + descriptions);
 
-        // Step 7: Logout
         System.out.println("  Step 7: Ending banking session...");
         activityPage.logout();
-        pause(2);
-
         LoginPage loginPage = new LoginPage(getDriver());
+        loginPage.waitForVisible(By.name("username"));
+
         Assert.assertTrue(loginPage.isLoginFormDisplayed(),
                 "Step 7 Failed: Should see login form after logout!");
 
         System.out.println("  ✅ E2E Test 4 PASSED!");
         System.out.println("  Summary: Registered → Viewed Accounts → Transfer $50"
-                + " → Bill Pay $75 → Verified " + txnCount
-                + " transactions → Logged out");
+                + " → Bill Pay $75 → Verified " + txnCount + " transactions → Logged out");
     }
 }

@@ -91,4 +91,14 @@ public class BasePage {
     public String getRightPanelText() {
         return getText(By.id("rightPanel"));
     }
+
+    // Wait until URL contains given fragment
+    public void waitForUrl(String urlFragment) {
+        wait.until(ExpectedConditions.urlContains(urlFragment));
+    }
+
+    // Wait until element is visible
+    public void waitForVisible(By locator) {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+    }
 }

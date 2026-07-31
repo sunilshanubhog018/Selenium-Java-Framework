@@ -68,13 +68,6 @@ public class RegisterTest extends BaseTest {
         String title = registerPage.getSuccessTitle();
         Assert.assertTrue(title.contains("elcome"),
                 "Should show welcome message after registration! Got: " + title);
-
-        // Wait 3 seconds after successful registration
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
     // ================================================================
     //  TEST 4: Register with duplicate username
@@ -138,8 +131,6 @@ public class RegisterTest extends BaseTest {
         Assert.assertTrue(
                 getDriver().getCurrentUrl().contains("overview"),
                 "Should login successfully with newly registered user!");
-
-        try { Thread.sleep(3000); } catch (InterruptedException e) { e.printStackTrace(); }
 
         loginPage.logout();
     }

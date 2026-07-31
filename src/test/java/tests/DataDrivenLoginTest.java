@@ -21,10 +21,6 @@ public class DataDrivenLoginTest extends BaseTest {
 
     private LoginPage loginPage;
 
-    private void pause(int seconds) {
-        try { Thread.sleep(seconds * 1000L); } catch (InterruptedException e) {}
-    }
-
     @BeforeMethod
     public void navigateToLoginPage() {
         getDriver().get(ConfigReader.get("base.url"));
@@ -68,15 +64,15 @@ public class DataDrivenLoginTest extends BaseTest {
         if (username.equals("REGISTER_NEW")) {
             String newUsername = "dd_" + System.currentTimeMillis();
             loginPage.clickRegister();
-            pause(2);
             RegisterPage registerPage = new RegisterPage(getDriver());
+            registerPage.waitForUrl("register");
             registerPage.registerUser(
                     "Data", "Driven", "123 Test Street",
                     "Mumbai", "MH", "400001",
                     "9876543210", "111-22-3333",
                     newUsername, password
             );
-            pause(3);
+            registerPage.waitForUrl("overview");
             registerPage.logout();
             getDriver().get(ConfigReader.get("base.url"));
             pause(2);
@@ -94,7 +90,7 @@ public class DataDrivenLoginTest extends BaseTest {
             loginPage.enterPassword(password);
         }
         loginPage.clickLogin();
-        pause(3);
+        loginPage.waitForVisible(By.id("rightPanel"));
 
         // ---- VERIFY RESULTS ----
         if (expected.equals("pass")) {
@@ -112,11 +108,10 @@ public class DataDrivenLoginTest extends BaseTest {
             Assert.assertTrue(getDriver().getCurrentUrl().contains("overview"),
                     testCaseID + ": First login should succeed!");
             new AccountsOverviewPage(getDriver()).logout();
-            pause(2);
             getDriver().get(ConfigReader.get("base.url"));
             loginPage = new LoginPage(getDriver());
             loginPage.login(username, password);
-            pause(3);
+            loginPage.waitForUrl("overview");
             Assert.assertTrue(getDriver().getCurrentUrl().contains("overview"),
                     testCaseID + ": Re-login should succeed!");
 
@@ -124,11 +119,11 @@ public class DataDrivenLoginTest extends BaseTest {
             Assert.assertTrue(getDriver().getCurrentUrl().contains("overview"),
                     testCaseID + ": Login should succeed!");
             new AccountsOverviewPage(getDriver()).clickTransferFunds();
-            pause(3);
             TransferFundsPage transferPage = new TransferFundsPage(getDriver());
+            transferPage.waitForUrl("transfer");
             transferPage.enterAmount("50");
             transferPage.clickTransfer();
-            pause(5);
+            transferPage.waitForVisible(By.cssSelector("#rightPanel h1.title"));
             String transferText = transferPage.getRightPanelText();
             Assert.assertTrue(
                     transferText.contains("Transfer Complete") || transferText.contains("transferred"),
@@ -138,14 +133,14 @@ public class DataDrivenLoginTest extends BaseTest {
             Assert.assertTrue(getDriver().getCurrentUrl().contains("overview"),
                     testCaseID + ": Login should succeed!");
             new AccountsOverviewPage(getDriver()).clickBillPay();
-            pause(3);
             BillPayPage billPayPage = new BillPayPage(getDriver());
+            billPayPage.waitForUrl("billpay");
             billPayPage.payBill(
                     "Electric Company", "100 Power Street",
                     "Mumbai", "MH", "400001",
                     "9876543210", "12345", "120"
             );
-            pause(5);
+            billPayPage.waitForVisible(By.cssSelector("#rightPanel h1.title"));
             String billPayText = billPayPage.getRightPanelText();
             Assert.assertTrue(
                     billPayText.contains("Bill Payment Complete") || billPayText.contains("payment")

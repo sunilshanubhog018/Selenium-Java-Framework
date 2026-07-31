@@ -152,11 +152,7 @@ public class LoginTest extends BaseTest {
         		        "Should redirect to accounts overview after login! URL: " + getDriver().getCurrentUrl());
 
         // Wait 3 seconds then logout
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        new AccountsOverviewPage(getDriver()).waitForUrl("overview");
         new AccountsOverviewPage(getDriver()).logout();
     }
 }
