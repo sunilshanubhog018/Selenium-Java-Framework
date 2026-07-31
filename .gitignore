@@ -14,8 +14,10 @@ build/
 *.swp
 *.swo
 
-# Test reports
+# Test reports & generated output
 test-output/
+allure-results/
+allure-report/
 screenshots/
 logs/
 *.log
@@ -29,6 +31,5 @@ Thumbs.db
 dependency-reduced-pom.xml
 
 # Sensitive data - NEVER commit these
-*config.properties
 *.env
 credentials.txt
