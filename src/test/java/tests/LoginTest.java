@@ -4,6 +4,7 @@ import base.BaseTest;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import pages.AccountsOverviewPage;
 import pages.LoginPage;
 import utils.ConfigReader;
 
@@ -156,6 +157,6 @@ public class LoginTest extends BaseTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        getDriver().findElement(org.openqa.selenium.By.linkText("Log Out")).click();
+        new AccountsOverviewPage(getDriver()).logout();
     }
 }

@@ -6,6 +6,7 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+import pages.AccountsOverviewPage;
 import pages.BillPayPage;
 import pages.LoginPage;
 import pages.RegisterPage;
@@ -76,7 +77,7 @@ public class DataDrivenLoginTest extends BaseTest {
                     newUsername, password
             );
             pause(3);
-            getDriver().findElement(By.linkText("Log Out")).click();
+            registerPage.logout();
             getDriver().get(ConfigReader.get("base.url"));
             pause(2);
             loginPage = new LoginPage(getDriver());
@@ -103,14 +104,14 @@ public class DataDrivenLoginTest extends BaseTest {
         } else if (expected.equals("pass_verify_accounts")) {
             Assert.assertTrue(getDriver().getCurrentUrl().contains("overview"),
                     testCaseID + ": Should be on accounts page!");
-            String pageText = getDriver().findElement(By.id("rightPanel")).getText();
+            String pageText = new AccountsOverviewPage(getDriver()).getRightPanelText();
             Assert.assertTrue(pageText.contains("Account"),
                     testCaseID + ": Should show account info!");
 
         } else if (expected.equals("pass_relogin")) {
             Assert.assertTrue(getDriver().getCurrentUrl().contains("overview"),
                     testCaseID + ": First login should succeed!");
-            getDriver().findElement(By.linkText("Log Out")).click();
+            new AccountsOverviewPage(getDriver()).logout();
             pause(2);
             getDriver().get(ConfigReader.get("base.url"));
             loginPage = new LoginPage(getDriver());
@@ -122,13 +123,13 @@ public class DataDrivenLoginTest extends BaseTest {
         } else if (expected.equals("pass_transfer")) {
             Assert.assertTrue(getDriver().getCurrentUrl().contains("overview"),
                     testCaseID + ": Login should succeed!");
-            getDriver().findElement(By.linkText("Transfer Funds")).click();
+            new AccountsOverviewPage(getDriver()).clickTransferFunds();
             pause(3);
             TransferFundsPage transferPage = new TransferFundsPage(getDriver());
             transferPage.enterAmount("50");
             transferPage.clickTransfer();
             pause(5);
-            String transferText = getDriver().findElement(By.id("rightPanel")).getText();
+            String transferText = transferPage.getRightPanelText();
             Assert.assertTrue(
                     transferText.contains("Transfer Complete") || transferText.contains("transferred"),
                     testCaseID + ": Transfer should complete! Got: " + transferText);
@@ -136,7 +137,7 @@ public class DataDrivenLoginTest extends BaseTest {
         } else if (expected.equals("pass_billpay")) {
             Assert.assertTrue(getDriver().getCurrentUrl().contains("overview"),
                     testCaseID + ": Login should succeed!");
-            getDriver().findElement(By.linkText("Bill Pay")).click();
+            new AccountsOverviewPage(getDriver()).clickBillPay();
             pause(3);
             BillPayPage billPayPage = new BillPayPage(getDriver());
             billPayPage.payBill(
@@ -145,7 +146,7 @@ public class DataDrivenLoginTest extends BaseTest {
                     "9876543210", "12345", "120"
             );
             pause(5);
-            String billPayText = getDriver().findElement(By.id("rightPanel")).getText();
+            String billPayText = billPayPage.getRightPanelText();
             Assert.assertTrue(
                     billPayText.contains("Bill Payment Complete") || billPayText.contains("payment")
                     || billPayText.contains("successful"),
@@ -153,7 +154,7 @@ public class DataDrivenLoginTest extends BaseTest {
 
         } else {
             try {
-                String pageText = getDriver().findElement(By.id("rightPanel")).getText();
+                String pageText = new AccountsOverviewPage(getDriver()).getRightPanelText();
                 Assert.assertTrue(
                         pageText.contains("Error") || pageText.contains("error")
                         || getDriver().getCurrentUrl().contains("login"),

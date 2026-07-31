@@ -7,7 +7,6 @@ import org.testng.annotations.Test;
 import pages.LoginPage;
 import pages.RegisterPage;
 import utils.ConfigReader;
-import org.openqa.selenium.By;
 
 public class RegisterTest extends BaseTest {
 
@@ -94,7 +93,7 @@ public class RegisterTest extends BaseTest {
         );
 
         // Now logout and go back to register page
-        getDriver().findElement(By.linkText("Log Out")).click();
+        registerPage.logout();
         getDriver().get(ConfigReader.get("base.url"));
         LoginPage loginPage = new LoginPage(getDriver());
         loginPage.clickRegister();
@@ -130,7 +129,7 @@ public class RegisterTest extends BaseTest {
                 "Should show welcome message! Got: " + title);
 
         // Replace driver with getDriver()
-        getDriver().findElement(By.linkText("Log Out")).click();
+        registerPage.logout();
         getDriver().get(ConfigReader.get("base.url"));
 
         LoginPage loginPage = new LoginPage(getDriver());   // ← fix
@@ -142,6 +141,6 @@ public class RegisterTest extends BaseTest {
 
         try { Thread.sleep(3000); } catch (InterruptedException e) { e.printStackTrace(); }
 
-        getDriver().findElement(By.linkText("Log Out")).click();
+        loginPage.logout();
     }
 }

@@ -118,7 +118,7 @@ public class EndToEndTest extends BaseTest {
         //      If "Log Out" NOT found → already on login page, skip logout
         System.out.println("  Step 2: Logging out after registration...");
         try {
-            getDriver().findElement(By.linkText("Log Out")).click();
+            new LoginPage(getDriver()).logout();
             pause(2);
         } catch (Exception e) {
             // Already on login page — no logout needed
@@ -167,7 +167,7 @@ public class EndToEndTest extends BaseTest {
 
         // Step 6: Logout
         System.out.println("  Step 6: Logging out...");
-        getDriver().findElement(By.linkText("Log Out")).click();
+        activityPage.logout();
         pause(2);
 
         LoginPage verifyPage = new LoginPage(getDriver());
@@ -224,8 +224,7 @@ public class EndToEndTest extends BaseTest {
         transferPage.clickTransfer();
         pause(5);
 
-        String transferResult = getDriver()
-                .findElement(By.id("rightPanel")).getText();
+        String transferResult = transferPage.getRightPanelText();
         Assert.assertTrue(
                 transferResult.contains("Transfer Complete")
                 || transferResult.contains("transferred"),
@@ -305,8 +304,7 @@ public class EndToEndTest extends BaseTest {
         pause(8); // ← increase from 5 to 8 seconds on CI
 
         // More flexible assertion — check multiple success indicators
-        String pageText = getDriver().findElement(
-                By.id("rightPanel")).getText();
+        String pageText = billPayPage.getRightPanelText();
         Assert.assertTrue(
                 billPayPage.isPaymentSuccessful()
                 || pageText.contains("Bill Payment Complete")
@@ -387,8 +385,7 @@ public class EndToEndTest extends BaseTest {
         transferPage.clickTransfer();
         pause(5);
 
-        String transferResult = getDriver()
-                .findElement(By.id("rightPanel")).getText();
+        String transferResult = transferPage.getRightPanelText();
         Assert.assertTrue(
                 transferResult.contains("Transfer Complete")
                 || transferResult.contains("transferred"),
@@ -410,8 +407,7 @@ public class EndToEndTest extends BaseTest {
         pause(8); // ← increased from 5 to 8 for CI
 
         // More flexible assertion — checks multiple success indicators
-        String billPayText = getDriver()
-                .findElement(By.id("rightPanel")).getText();
+        String billPayText = billPayPage.getRightPanelText();
         Assert.assertTrue(
                 billPayPage.isPaymentSuccessful()
                 || billPayText.contains("Bill Payment Complete")
@@ -454,7 +450,7 @@ public class EndToEndTest extends BaseTest {
 
         // Step 7: Logout
         System.out.println("  Step 7: Ending banking session...");
-        getDriver().findElement(By.linkText("Log Out")).click();
+        activityPage.logout();
         pause(2);
 
         LoginPage loginPage = new LoginPage(getDriver());

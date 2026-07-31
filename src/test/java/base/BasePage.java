@@ -81,4 +81,14 @@ public class BasePage {
     protected void waitForElementToDisappear(By locator) {
         wait.until(ExpectedConditions.invisibilityOfElementLocated(locator));
     }
+
+    // Logout — available on every page after login
+    public void logout() {
+        click(By.linkText("Log Out"));
+    }
+
+    // Get right panel text — used to verify transfer/bill pay results
+    public String getRightPanelText() {
+        return getText(By.id("rightPanel"));
+    }
 }
