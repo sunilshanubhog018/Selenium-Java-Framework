@@ -30,7 +30,6 @@ jobs:
 
       - name: Run All Tests
         run: mvn clean test
-        continue-on-error: true
 
       - name: Generate Allure Report
         if: always()
