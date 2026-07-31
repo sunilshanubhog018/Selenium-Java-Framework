@@ -75,8 +75,8 @@ public class DataDrivenLoginTest extends BaseTest {
             registerPage.waitForUrl("overview");
             registerPage.logout();
             getDriver().get(ConfigReader.get("base.url"));
-            pause(2);
             loginPage = new LoginPage(getDriver());
+            loginPage.waitForVisible(By.name("username"));
             username = newUsername;
         }
 
@@ -90,7 +90,12 @@ public class DataDrivenLoginTest extends BaseTest {
             loginPage.enterPassword(password);
         }
         loginPage.clickLogin();
-        loginPage.waitForVisible(By.id("rightPanel"));
+        // wait for page to respond — either overview (pass) or rightPanel (fail)
+        try {
+            loginPage.waitForUrl("overview");
+        } catch (Exception e) {
+            loginPage.waitForVisible(By.id("rightPanel"));
+        }
 
         // ---- VERIFY RESULTS ----
         if (expected.equals("pass")) {
