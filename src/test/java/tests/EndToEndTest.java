@@ -30,26 +30,25 @@ public class EndToEndTest extends BaseTest {
     private String registerAndLogin(String prefix) {
         String username = prefix + "_" + System.currentTimeMillis();
 
+        String body = String.format(
+            "{\"firstName\":\"E2E\",\"lastName\":\"Tester\"," +
+            "\"address\":{\"street\":\"100 Test Street\",\"city\":\"Bangalore\",\"state\":\"KA\",\"zipCode\":\"560001\"}," +
+            "\"phoneNumber\":\"9876543210\",\"ssn\":\"123-45-6789\"," +
+            "\"username\":\"%s\",\"password\":\"%s\"}", username, PASSWORD);
+
         RestAssured.useRelaxedHTTPSValidation();
         RestAssured
             .given()
                 .baseUri(ConfigReader.get("api.base.uri"))
-                .contentType(ContentType.URLENC)
-                .formParam("customer.firstName", "E2E")
-                .formParam("customer.lastName", "Tester")
-                .formParam("customer.address.street", "100 Test Street")
-                .formParam("customer.address.city", "Bangalore")
-                .formParam("customer.address.state", "KA")
-                .formParam("customer.address.zipCode", "560001")
-                .formParam("customer.phoneNumber", "9876543210")
-                .formParam("customer.ssn", "123-45-6789")
-                .formParam("customer.username", username)
-                .formParam("customer.password", PASSWORD)
-            .post("/parabank/register.htm")
+                .basePath("/parabank/services/bank")
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+                .body(body)
+            .post("/customers/create")
             .then()
                 .statusCode(org.hamcrest.Matchers.anyOf(
                     org.hamcrest.Matchers.is(200),
-                    org.hamcrest.Matchers.is(302)
+                    org.hamcrest.Matchers.is(201)
                 ));
 
         System.out.println("  ✓ API registration: " + username);
