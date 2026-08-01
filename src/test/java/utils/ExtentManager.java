@@ -7,7 +7,7 @@ import com.aventstack.extentreports.reporter.configuration.Theme;
 public class ExtentManager {
 
     // Single instance shared across all tests
-    private static ExtentReports extent;
+    private static volatile ExtentReports extent;
 
     // ================================================================
     //  getInstance() — creates ExtentReports only once (Singleton)
@@ -15,7 +15,11 @@ public class ExtentManager {
     // ================================================================
     public static ExtentReports getInstance() {
         if (extent == null) {
-            extent = createInstance();
+            synchronized (ExtentManager.class) {
+                if (extent == null) {
+                    extent = createInstance();
+                }
+            }
         }
         return extent;
     }
