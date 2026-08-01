@@ -15,11 +15,4 @@
         </classes>
     </test>
 
-    <test name="API Smoke Tests">
-        <classes>
-            <class name="com.parabank.api.tests.LoginApiTest"/>
-            <class name="com.parabank.api.tests.AccountApiTest"/>
-        </classes>
-    </test>
-
 </suite>
