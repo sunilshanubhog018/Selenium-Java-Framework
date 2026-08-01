@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+
+<suite name="ParaBank Smoke Test Suite">
+
+    <listeners>
+        <listener class-name="listeners.TestListener"/>
+    </listeners>
+
+    <test name="Smoke Tests">
+        <classes>
+            <class name="tests.RegisterTest"/>
+            <class name="tests.LoginTest"/>
+        </classes>
+    </test>
+
+    <test name="API Smoke Tests">
+        <classes>
+            <class name="com.parabank.api.tests.LoginApiTest"/>
+            <class name="com.parabank.api.tests.AccountApiTest"/>
+        </classes>
+    </test>
+
+</suite>

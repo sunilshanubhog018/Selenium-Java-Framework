@@ -63,3 +63,34 @@ jobs:
           echo "### 📊 Reports Generated:" >> $GITHUB_STEP_SUMMARY
           echo "- ✅ Allure Report" >> $GITHUB_STEP_SUMMARY
           echo "- ✅ TestNG Reports" >> $GITHUB_STEP_SUMMARY
+
+  smoke-tests:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Setup Chrome
+        uses: browser-actions/setup-chrome@v1
+        with:
+          chrome-version: stable
+
+      - name: Run Smoke Tests
+        run: mvn clean test -Dsurefire.suiteXmlFiles=testng-smoke.xml
+
+      - name: Upload Smoke Test Reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: smoke-reports-${{ github.run_number }}
+          path: target/surefire-reports/
+          retention-days: 7
