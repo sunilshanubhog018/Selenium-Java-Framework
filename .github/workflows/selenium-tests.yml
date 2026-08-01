@@ -43,6 +43,14 @@ jobs:
           path: target/site/allure-report/
           retention-days: 30
 
+      - name: Upload Extent Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: extent-report-${{ github.run_number }}
+          path: test-output/ExtentReport.html
+          retention-days: 30
+
       - name: Upload TestNG Reports
         if: always()
         uses: actions/upload-artifact@v4
@@ -86,6 +94,14 @@ jobs:
 
       - name: Run Smoke Tests
         run: mvn clean test -Dsurefire.suiteXmlFiles=testng-smoke.xml
+
+      - name: Upload Smoke Extent Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: smoke-extent-report-${{ github.run_number }}
+          path: test-output/ExtentReport.html
+          retention-days: 7
 
       - name: Upload Smoke Test Reports
         if: always()
