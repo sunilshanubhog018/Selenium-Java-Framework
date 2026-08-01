@@ -2,6 +2,9 @@ package com.parabank.api.tests;
 
 import com.parabank.api.base.BaseApiTest;
 import com.parabank.api.specs.ApiSpecs;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
 import utils.ConfigReader;
 
 import io.restassured.response.Response;
@@ -12,9 +15,12 @@ import java.util.List;
 
 import static io.restassured.RestAssured.given;
 
+@Epic("Banking Application")
+@Feature("API - Accounts")
 public class AccountApiTest extends BaseApiTest {
 
     @Test
+    @Story("Get customer accounts returns list")
     public void getCustomerAccounts_returnsAccountList() {
         String customerId = ConfigReader.get("api.customer.id");
 

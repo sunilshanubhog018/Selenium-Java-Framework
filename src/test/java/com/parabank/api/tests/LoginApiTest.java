@@ -2,6 +2,9 @@ package com.parabank.api.tests;
 
 import com.parabank.api.base.BaseApiTest;
 import com.parabank.api.specs.ApiSpecs;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
 import utils.ConfigReader;
 
 import io.restassured.response.Response;
@@ -11,9 +14,12 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 
+@Epic("Banking Application")
+@Feature("API - Authentication")
 public class LoginApiTest extends BaseApiTest {
 
     @Test
+    @Story("Valid login returns customer")
     public void loginWithValidCredentials_returnsCustomer() {
         String username = ConfigReader.get("api.username");
         String password = ConfigReader.get("api.password");

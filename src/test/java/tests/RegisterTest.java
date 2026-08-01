@@ -1,6 +1,9 @@
 package tests;
 
 import base.BaseTest;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -8,6 +11,8 @@ import pages.LoginPage;
 import pages.RegisterPage;
 import utils.ConfigReader;
 
+@Epic("Banking Application")
+@Feature("Registration")
 public class RegisterTest extends BaseTest {
 
     private RegisterPage registerPage;
@@ -25,6 +30,7 @@ public class RegisterTest extends BaseTest {
     //  TEST 1: Verify registration form is displayed
     // ================================================================
     @Test(priority = 1, description = "Verify registration form loads")
+    @Story("Registration form visibility")
     public void testRegisterFormDisplayed() {
         Assert.assertTrue(registerPage.isRegisterFormDisplayed(),
                 "Registration form should be visible!");
@@ -34,6 +40,7 @@ public class RegisterTest extends BaseTest {
     //  TEST 2: Register with all fields empty
     // ================================================================
     @Test(priority = 2, description = "Submit empty registration form")
+    @Story("Empty form validation")
     public void testEmptyRegistration() {
         registerPage.clickRegister();
 
@@ -49,6 +56,7 @@ public class RegisterTest extends BaseTest {
     }
 
     @Test(priority = 3, description = "Register new user with valid data")
+    @Story("Valid registration")
     public void testValidRegistration() {
         // Dynamic username — unique every run
         String username = "user_" + System.currentTimeMillis();
@@ -73,6 +81,7 @@ public class RegisterTest extends BaseTest {
     //  TEST 4: Register with duplicate username
     // ================================================================
     @Test(priority = 4, description = "Register with already existing username")
+    @Story("Duplicate username validation")
     public void testDuplicateUsername() {
         // First register a user
         String username = "dup_" + System.currentTimeMillis();
@@ -106,6 +115,7 @@ public class RegisterTest extends BaseTest {
     }
 
     @Test(priority = 5, description = "Register new user then login with those credentials")
+    @Story("Register then login")
     public void testRegisterThenLogin() {
         String uniqueUsername = "auto_" + System.currentTimeMillis();
         String password = "Test@1234";

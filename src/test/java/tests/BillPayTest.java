@@ -1,6 +1,9 @@
 package tests;
 
 import base.BaseTest;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
 import org.openqa.selenium.By;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
@@ -11,6 +14,8 @@ import pages.LoginPage;
 import pages.RegisterPage;
 import utils.ConfigReader;
 
+@Epic("Banking Application")
+@Feature("Bill Pay")
 public class BillPayTest extends BaseTest {
 
     private BillPayPage billPayPage;
@@ -46,18 +51,21 @@ public class BillPayTest extends BaseTest {
     }
 
     @Test(priority = 1, description = "Verify Bill Pay page is displayed")
+    @Story("Page visibility")
     public void testBillPayPageDisplayed() {
         Assert.assertTrue(billPayPage.isOnBillPayPage(),
                 "Should be on Bill Payment page!");
     }
 
     @Test(priority = 2, description = "Verify bill pay form is displayed")
+    @Story("Bill pay form visibility")
     public void testBillPayFormDisplayed() {
         Assert.assertTrue(billPayPage.isBillPayFormDisplayed(),
                 "Bill pay form should be visible!");
     }
 
     @Test(priority = 3, description = "Submit empty bill pay form shows error")
+    @Story("Empty form validation")
     public void testEmptyFormSubmit() {
         billPayPage.clickSendPayment();
         billPayPage.waitForVisible(By.id("rightPanel"));
@@ -69,6 +77,7 @@ public class BillPayTest extends BaseTest {
     }
 
     @Test(priority = 4, description = "Pay bill with valid data")
+    @Story("Valid bill payment")
     public void testValidBillPayment() {
         billPayPage.payBill(
                 "Electric Company", "100 Power Street",
@@ -81,6 +90,7 @@ public class BillPayTest extends BaseTest {
     }
 
     @Test(priority = 5, description = "Verify payment success message details")
+    @Story("Payment success message")
     public void testPaymentSuccessMessage() {
         billPayPage.payBill(
                 "Water Board", "200 Water Lane",
@@ -96,6 +106,7 @@ public class BillPayTest extends BaseTest {
     }
 
     @Test(priority = 6, description = "Pay bill and verify balance still shown")
+    @Story("Bill payment and balance verification")
     public void testPayBillAndVerifyBalance() {
         AccountsOverviewPage accountsPage = new AccountsOverviewPage(getDriver());
         accountsPage.clickAccountsOverview();
@@ -125,6 +136,7 @@ public class BillPayTest extends BaseTest {
     }
 
     @Test(priority = 7, description = "Pay bill with mismatched account numbers")
+    @Story("Mismatched account validation")
     public void testMismatchedAccountNumbers() {
         billPayPage.enterPayeeName("Gas Company");
         billPayPage.enterAddress("400 Gas Road");

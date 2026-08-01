@@ -1,6 +1,9 @@
 package tests;
 
 import base.BaseTest;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
 import org.openqa.selenium.By;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
@@ -10,6 +13,8 @@ import pages.LoginPage;
 import pages.RegisterPage;
 import utils.ConfigReader;
 
+@Epic("Banking Application")
+@Feature("Accounts Overview")
 public class AccountsOverviewTest extends BaseTest {
 
     private AccountsOverviewPage accountsPage;
@@ -39,18 +44,21 @@ public class AccountsOverviewTest extends BaseTest {
     }
 
     @Test(priority = 1, description = "Verify Accounts Overview page title")
+    @Story("Page title verification")
     public void testPageTitle() {
         Assert.assertTrue(accountsPage.isOnAccountsOverviewPage(),
                 "Should be on Accounts Overview page!");
     }
 
     @Test(priority = 2, description = "Verify accounts table is visible")
+    @Story("Accounts table visibility")
     public void testAccountsTableDisplayed() {
         Assert.assertTrue(accountsPage.isAccountsTableDisplayed(),
                 "Accounts table should be visible!");
     }
 
     @Test(priority = 3, description = "Verify new user has at least one account")
+    @Story("Account existence")
     public void testAccountExists() {
         int count = accountsPage.getAccountCount();
         Assert.assertTrue(count >= 1,
@@ -58,6 +66,7 @@ public class AccountsOverviewTest extends BaseTest {
     }
 
     @Test(priority = 4, description = "Verify account number is displayed")
+    @Story("Account number display")
     public void testAccountNumberDisplayed() {
         String accountNumber = accountsPage.getFirstAccountNumber();
         Assert.assertFalse(accountNumber.isEmpty(),
@@ -65,6 +74,7 @@ public class AccountsOverviewTest extends BaseTest {
     }
 
     @Test(priority = 5, description = "Verify total balance is shown")
+    @Story("Total balance display")
     public void testTotalBalanceDisplayed() {
         String total = accountsPage.getTotalBalance();
         Assert.assertTrue(total.contains("$"),
@@ -72,6 +82,7 @@ public class AccountsOverviewTest extends BaseTest {
     }
 
     @Test(priority = 6, description = "Verify Transfer Funds link navigates correctly")
+    @Story("Transfer funds navigation")
     public void testTransferFundsLink() {
         accountsPage.clickTransferFunds();
         accountsPage.waitForUrl("transfer");
@@ -80,6 +91,7 @@ public class AccountsOverviewTest extends BaseTest {
     }
 
     @Test(priority = 7, description = "Verify logout returns to login page")
+    @Story("Logout functionality")
     public void testLogOut() {
         accountsPage.clickLogOut();
         LoginPage loginPage = new LoginPage(getDriver());

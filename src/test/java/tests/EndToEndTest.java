@@ -1,6 +1,9 @@
 package tests;
 
 import base.BaseTest;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
 import org.openqa.selenium.By;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -13,6 +16,8 @@ import pages.TransferFundsPage;
 import utils.ConfigReader;
 import java.util.List;
 
+@Epic("Banking Application")
+@Feature("End to End")
 public class EndToEndTest extends BaseTest {
 
     private String registerFreshUser(String prefix) {
@@ -58,6 +63,7 @@ public class EndToEndTest extends BaseTest {
     }
 
     @Test(priority = 1, description = "E2E: New customer onboarding flow")
+    @Story("New customer onboarding")
     public void testNewCustomerOnboarding() {
         System.out.println("\n🏦 E2E Test 1: New Customer Onboarding");
 
@@ -121,6 +127,7 @@ public class EndToEndTest extends BaseTest {
     }
 
     @Test(priority = 2, description = "E2E: Fund transfer with transaction verification")
+    @Story("Fund transfer flow")
     public void testFundTransferFlow() {
         System.out.println("\n🏦 E2E Test 2: Fund Transfer + Activity Verification");
 
@@ -182,6 +189,7 @@ public class EndToEndTest extends BaseTest {
     }
 
     @Test(priority = 3, description = "E2E: Bill payment with transaction verification")
+    @Story("Bill payment flow")
     public void testBillPaymentFlow() {
         System.out.println("\n🏦 E2E Test 3: Bill Payment + Activity Verification");
 
@@ -251,6 +259,7 @@ public class EndToEndTest extends BaseTest {
     }
 
     @Test(priority = 4, description = "E2E: Complete banking session with full verification")
+    @Story("Complete banking session")
     public void testCompleteBankingSession() {
         System.out.println("\n🏦 E2E Test 4: Complete Banking Session");
 
