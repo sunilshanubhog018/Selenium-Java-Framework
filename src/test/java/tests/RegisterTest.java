@@ -5,6 +5,7 @@ import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Story;
 import org.testng.Assert;
+import org.testng.asserts.SoftAssert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import pages.LoginPage;
@@ -44,15 +45,12 @@ public class RegisterTest extends BaseTest {
     public void testEmptyRegistration() {
         registerPage.clickRegister();
 
-        // Error messages should appear for required fields
-        Assert.assertTrue(registerPage.isFirstNameErrorDisplayed(),
-                "First name error should appear!");
-        Assert.assertTrue(registerPage.isLastNameErrorDisplayed(),
-                "Last name error should appear!");
-        Assert.assertTrue(registerPage.isUsernameErrorDisplayed(),
-                "Username error should appear!");
-        Assert.assertTrue(registerPage.isPasswordErrorDisplayed(),
-                "Password error should appear!");
+        SoftAssert softAssert = new SoftAssert();
+        softAssert.assertTrue(registerPage.isFirstNameErrorDisplayed(), "First name error should appear!");
+        softAssert.assertTrue(registerPage.isLastNameErrorDisplayed(), "Last name error should appear!");
+        softAssert.assertTrue(registerPage.isUsernameErrorDisplayed(), "Username error should appear!");
+        softAssert.assertTrue(registerPage.isPasswordErrorDisplayed(), "Password error should appear!");
+        softAssert.assertAll();
     }
 
     @Test(priority = 3, groups = {"smoke", "regression", "register"}, description = "Register new user with valid data")

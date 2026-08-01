@@ -5,6 +5,7 @@ import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Story;
 import org.testng.Assert;
+import org.testng.asserts.SoftAssert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import pages.AccountsOverviewPage;
@@ -83,18 +84,15 @@ public class LoginTest extends BaseTest {
     public void testInvalidLogin() {
         loginPage.login("wronguser", "wrongpass");
 
-        // Verify error title heading is displayed
-        Assert.assertTrue(loginPage.isErrorTitleDisplayed(),
+        SoftAssert softAssert = new SoftAssert();
+        softAssert.assertTrue(loginPage.isErrorTitleDisplayed(),
                 "Error! heading should appear for invalid credentials");
-
-        // Verify error title text
-        Assert.assertEquals(loginPage.getErrorTitle(), "Error!",
+        softAssert.assertEquals(loginPage.getErrorTitle(), "Error!",
                 "Error title text mismatch");
-
-        // Verify error message text
-        Assert.assertEquals(loginPage.getErrorMessage(),
+        softAssert.assertEquals(loginPage.getErrorMessage(),
                 "The username and password could not be verified.",
                 "Error message text mismatch");
+        softAssert.assertAll();
     }
 
     // ================================================================
