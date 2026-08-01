@@ -4,8 +4,6 @@ import base.BaseTest;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Story;
-import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
 import org.openqa.selenium.By;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
@@ -15,6 +13,7 @@ import pages.AccountsOverviewPage;
 import pages.ActivityPage;
 import pages.BillPayPage;
 import pages.LoginPage;
+import pages.RegisterPage;
 import pages.TransferFundsPage;
 import utils.ConfigReader;
 import utils.ExcelReader;
@@ -31,26 +30,17 @@ public class EndToEndDataDrivenTest extends BaseTest {
 
     private String registerAndLogin(String prefix) {
         String username = prefix + "_" + System.currentTimeMillis();
-        String body = String.format(
-            "{\"firstName\":\"E2E\",\"lastName\":\"Tester\"," +
-            "\"address\":{\"street\":\"100 Test Street\",\"city\":\"Bangalore\",\"state\":\"KA\",\"zipCode\":\"560001\"}," +
-            "\"phoneNumber\":\"9876543210\",\"ssn\":\"123-45-6789\"," +
-            "\"username\":\"%s\",\"password\":\"%s\"}", username, PASSWORD);
 
-        RestAssured.useRelaxedHTTPSValidation();
-        RestAssured
-            .given()
-                .baseUri(ConfigReader.get("api.base.uri"))
-                .basePath("/parabank/services/bank")
-                .contentType(ContentType.JSON)
-                .accept(ContentType.JSON)
-                .body(body)
-            .post("/customers/create")
-            .then()
-                .statusCode(org.hamcrest.Matchers.anyOf(
-                    org.hamcrest.Matchers.is(200),
-                    org.hamcrest.Matchers.is(201)
-                ));
+        getDriver().get(ConfigReader.get("base.url") + "register.htm");
+        RegisterPage registerPage = new RegisterPage(getDriver());
+        registerPage.registerUser(
+            "E2E", "Tester", "100 Test Street",
+            "Bangalore", "KA", "560001",
+            "9876543210", "123-45-6789",
+            username, PASSWORD
+        );
+        registerPage.waitForVisible(By.cssSelector("#rightPanel h1.title"));
+
         getDriver().get(ConfigReader.get("base.url"));
         LoginPage loginPage = new LoginPage(getDriver());
         loginPage.login(username, PASSWORD);
