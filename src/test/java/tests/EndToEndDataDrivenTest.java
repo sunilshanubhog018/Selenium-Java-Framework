@@ -48,7 +48,7 @@ public class EndToEndDataDrivenTest extends BaseTest {
         return filtered.toArray(new Object[0][0]);
     }
 
-    @Test(dataProvider = "e2eData", description = "Data-driven E2E banking flow from Excel")
+    @Test(dataProvider = "e2eData", groups = {"e2e", "datadriven"}, description = "Data-driven E2E banking flow from Excel")
     public void testE2EFromExcel(String testCaseID, String description,
                                   String username, String password,
                                   String transferAmount, String billAmount,

@@ -62,7 +62,7 @@ public class EndToEndTest extends BaseTest {
         return username;
     }
 
-    @Test(priority = 1, description = "E2E: New customer onboarding flow")
+    @Test(priority = 1, groups = {"e2e"}, description = "E2E: New customer onboarding flow")
     @Story("New customer onboarding")
     public void testNewCustomerOnboarding() {
         System.out.println("\n🏦 E2E Test 1: New Customer Onboarding");
@@ -126,7 +126,7 @@ public class EndToEndTest extends BaseTest {
         System.out.println("  ✅ E2E Test 1 PASSED!");
     }
 
-    @Test(priority = 2, description = "E2E: Fund transfer with transaction verification")
+    @Test(priority = 2, groups = {"e2e"}, description = "E2E: Fund transfer with transaction verification")
     @Story("Fund transfer flow")
     public void testFundTransferFlow() {
         System.out.println("\n🏦 E2E Test 2: Fund Transfer + Activity Verification");
@@ -188,7 +188,7 @@ public class EndToEndTest extends BaseTest {
         System.out.println("  ✅ E2E Test 2 PASSED!");
     }
 
-    @Test(priority = 3, description = "E2E: Bill payment with transaction verification")
+    @Test(priority = 3, groups = {"e2e"}, description = "E2E: Bill payment with transaction verification")
     @Story("Bill payment flow")
     public void testBillPaymentFlow() {
         System.out.println("\n🏦 E2E Test 3: Bill Payment + Activity Verification");
@@ -258,7 +258,7 @@ public class EndToEndTest extends BaseTest {
         System.out.println("  ✅ E2E Test 3 PASSED!");
     }
 
-    @Test(priority = 4, description = "E2E: Complete banking session with full verification")
+    @Test(priority = 4, groups = {"e2e"}, description = "E2E: Complete banking session with full verification")
     @Story("Complete banking session")
     public void testCompleteBankingSession() {
         System.out.println("\n🏦 E2E Test 4: Complete Banking Session");

@@ -50,21 +50,21 @@ public class TransferFundsTest extends BaseTest {
         transferPage.waitForUrl("transfer");
     }
 
-    @Test(priority = 1, description = "Verify Transfer Funds page is displayed")
+    @Test(priority = 1, groups = {"regression", "transfer"}, description = "Verify Transfer Funds page is displayed")
     @Story("Page visibility")
     public void testTransferPageDisplayed() {
         Assert.assertTrue(transferPage.isOnTransferFundsPage(),
                 "Should be on Transfer Funds page!");
     }
 
-    @Test(priority = 2, description = "Verify transfer form is displayed")
+    @Test(priority = 2, groups = {"regression", "transfer"}, description = "Verify transfer form is displayed")
     @Story("Transfer form visibility")
     public void testTransferFormDisplayed() {
         Assert.assertTrue(transferPage.isTransferFormDisplayed(),
                 "Transfer form should be visible!");
     }
 
-    @Test(priority = 3, description = "Verify From Account dropdown has accounts")
+    @Test(priority = 3, groups = {"regression", "transfer"}, description = "Verify From Account dropdown has accounts")
     @Story("Account dropdown population")
     public void testFromAccountHasOptions() {
         int count = transferPage.getFromAccountCount();
@@ -72,7 +72,7 @@ public class TransferFundsTest extends BaseTest {
                 "From Account dropdown should have at least 1 option! Found: " + count);
     }
 
-    @Test(priority = 4, description = "Transfer with empty amount shows error")
+    @Test(priority = 4, groups = {"regression", "transfer"}, description = "Transfer with empty amount shows error")
     @Story("Empty amount validation")
     public void testTransferEmptyAmount() {
         transferPage.clickTransfer();
@@ -84,7 +84,7 @@ public class TransferFundsTest extends BaseTest {
                 "Should show error for empty amount! Got: " + pageText);
     }
 
-    @Test(priority = 5, description = "Transfer with invalid amount shows error")
+    @Test(priority = 5, groups = {"regression", "transfer"}, description = "Transfer with invalid amount shows error")
     @Story("Invalid amount validation")
     public void testTransferInvalidAmount() {
         transferPage.enterAmount("abc");
@@ -97,7 +97,7 @@ public class TransferFundsTest extends BaseTest {
                 "Should show error for invalid amount! Got: " + pageText);
     }
 
-    @Test(priority = 7, description = "Verify transfer success message")
+    @Test(priority = 7, groups = {"regression", "transfer"}, description = "Verify transfer success message")
     @Story("Successful transfer")
     public void testTransferSuccessMessage() {
         transferPage.enterAmount("100");
@@ -110,7 +110,7 @@ public class TransferFundsTest extends BaseTest {
                 "Success message should mention transfer! Got: " + pageText);
     }
 
-    @Test(priority = 8, description = "Transfer funds and verify balance")
+    @Test(priority = 8, groups = {"regression", "transfer"}, description = "Transfer funds and verify balance")
     @Story("Transfer and balance verification")
     public void testTransferAndVerifyBalance() {
         AccountsOverviewPage accountsPage = new AccountsOverviewPage(getDriver());

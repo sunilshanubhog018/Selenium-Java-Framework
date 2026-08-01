@@ -50,21 +50,21 @@ public class BillPayTest extends BaseTest {
         billPayPage.waitForUrl("billpay");
     }
 
-    @Test(priority = 1, description = "Verify Bill Pay page is displayed")
+    @Test(priority = 1, groups = {"regression", "billpay"}, description = "Verify Bill Pay page is displayed")
     @Story("Page visibility")
     public void testBillPayPageDisplayed() {
         Assert.assertTrue(billPayPage.isOnBillPayPage(),
                 "Should be on Bill Payment page!");
     }
 
-    @Test(priority = 2, description = "Verify bill pay form is displayed")
+    @Test(priority = 2, groups = {"regression", "billpay"}, description = "Verify bill pay form is displayed")
     @Story("Bill pay form visibility")
     public void testBillPayFormDisplayed() {
         Assert.assertTrue(billPayPage.isBillPayFormDisplayed(),
                 "Bill pay form should be visible!");
     }
 
-    @Test(priority = 3, description = "Submit empty bill pay form shows error")
+    @Test(priority = 3, groups = {"regression", "billpay"}, description = "Submit empty bill pay form shows error")
     @Story("Empty form validation")
     public void testEmptyFormSubmit() {
         billPayPage.clickSendPayment();
@@ -76,7 +76,7 @@ public class BillPayTest extends BaseTest {
                 "Should show error for empty form! Got: " + pageText);
     }
 
-    @Test(priority = 4, description = "Pay bill with valid data")
+    @Test(priority = 4, groups = {"regression", "billpay"}, description = "Pay bill with valid data")
     @Story("Valid bill payment")
     public void testValidBillPayment() {
         billPayPage.payBill(
@@ -89,7 +89,7 @@ public class BillPayTest extends BaseTest {
                 "Bill payment should complete successfully!");
     }
 
-    @Test(priority = 5, description = "Verify payment success message details")
+    @Test(priority = 5, groups = {"regression", "billpay"}, description = "Verify payment success message details")
     @Story("Payment success message")
     public void testPaymentSuccessMessage() {
         billPayPage.payBill(
@@ -105,7 +105,7 @@ public class BillPayTest extends BaseTest {
                 "Success message should contain payment details! Got: " + resultText);
     }
 
-    @Test(priority = 6, description = "Pay bill and verify balance still shown")
+    @Test(priority = 6, groups = {"regression", "billpay"}, description = "Pay bill and verify balance still shown")
     @Story("Bill payment and balance verification")
     public void testPayBillAndVerifyBalance() {
         AccountsOverviewPage accountsPage = new AccountsOverviewPage(getDriver());
@@ -135,7 +135,7 @@ public class BillPayTest extends BaseTest {
                 "Balance should still be displayed after payment! Got: " + finalBalance);
     }
 
-    @Test(priority = 7, description = "Pay bill with mismatched account numbers")
+    @Test(priority = 7, groups = {"regression", "billpay"}, description = "Pay bill with mismatched account numbers")
     @Story("Mismatched account validation")
     public void testMismatchedAccountNumbers() {
         billPayPage.enterPayeeName("Gas Company");

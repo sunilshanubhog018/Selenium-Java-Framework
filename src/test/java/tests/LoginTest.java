@@ -29,7 +29,7 @@ public class LoginTest extends BaseTest {
     // ================================================================
     //  TEST 1: Verify login form is displayed when site opens
     // ================================================================
-    @Test(priority = 1, description = "Verify login form is visible on homepage")
+    @Test(priority = 1, groups = {"smoke", "regression", "login"}, description = "Verify login form is visible on homepage")
     @Story("Login form visibility")
     public void testLoginFormDisplayed() {
         // LoginPage method returns true/false
@@ -41,7 +41,7 @@ public class LoginTest extends BaseTest {
     // ================================================================
     //  TEST 2: Login with empty username and password
     // ================================================================
-    @Test(priority = 2, description = "Click login without entering anything")
+    @Test(priority = 2, groups = {"regression", "login"}, description = "Click login without entering anything")
     @Story("Empty credentials validation")
     public void testEmptyBothFields() {
         // Click login without typing anything
@@ -55,7 +55,7 @@ public class LoginTest extends BaseTest {
     // ================================================================
     //  TEST 3: Login with empty username only
     // ================================================================
-    @Test(priority = 3, description = "Login with empty username")
+    @Test(priority = 3, groups = {"regression", "login"}, description = "Login with empty username")
     @Story("Empty username validation")
     public void testEmptyUsername() {
         loginPage.enterPassword("Test@1234");
@@ -68,7 +68,7 @@ public class LoginTest extends BaseTest {
     // ================================================================
     //  TEST 4: Login with empty password only
     // ================================================================
-    @Test(priority = 4, description = "Login with empty password")
+    @Test(priority = 4, groups = {"regression", "login"}, description = "Login with empty password")
     @Story("Empty password validation")
     public void testEmptyPassword() {
         loginPage.enterUsername("testuser123");
@@ -78,7 +78,7 @@ public class LoginTest extends BaseTest {
                 "Error should appear when password is empty!");
     }
 
-    @Test(priority = 5, description = "Login with wrong username and password")
+    @Test(priority = 5, groups = {"regression", "login"}, description = "Login with wrong username and password")
     @Story("Invalid credentials validation")
     public void testInvalidLogin() {
         loginPage.login("wronguser", "wrongpass");
@@ -100,7 +100,7 @@ public class LoginTest extends BaseTest {
     // ================================================================
     //  TEST 6: Login with invalid username, valid password
     // ================================================================
-    @Test(priority = 6, description = "Login with wrong username")
+    @Test(priority = 6, groups = {"regression", "login"}, description = "Login with wrong username")
     @Story("Invalid username validation")
     public void testInvalidUsername() {
         loginPage.login("nonexistentuser", ConfigReader.get("test.password"));
@@ -112,7 +112,7 @@ public class LoginTest extends BaseTest {
     // ================================================================
     //  TEST 7: Login with valid username, invalid password
     // ================================================================
-    @Test(priority = 7, description = "Login with wrong password")
+    @Test(priority = 7, groups = {"regression", "login"}, description = "Login with wrong password")
     @Story("Invalid password validation")
     public void testInvalidPassword() {
         loginPage.login(ConfigReader.get("test.username"), "WrongPass999");
@@ -124,7 +124,7 @@ public class LoginTest extends BaseTest {
     // ================================================================
     //  TEST 8: Verify Register link works
     // ================================================================
-    @Test(priority = 8, description = "Click Register link and verify registration page")
+    @Test(priority = 8, groups = {"regression", "login"}, description = "Click Register link and verify registration page")
     @Story("Register link navigation")
     public void testRegisterLink() {
         loginPage.clickRegister();
@@ -137,7 +137,7 @@ public class LoginTest extends BaseTest {
     // ================================================================
     //  TEST 9: Verify Forgot Login link works
     // ================================================================
-    @Test(priority = 9, description = "Click Forgot Login and verify lookup page")
+    @Test(priority = 9, groups = {"regression", "login"}, description = "Click Forgot Login and verify lookup page")
     @Story("Forgot login navigation")
     public void testForgotLoginLink() {
         loginPage.clickForgotLogin();
@@ -151,7 +151,7 @@ public class LoginTest extends BaseTest {
     //  TEST 10: Valid login (needs registered user)
     //  We will create RegisterPage next to set up test user
     // ================================================================
-    @Test(priority = 10, description = "Login with valid credentials")
+    @Test(priority = 10, groups = {"smoke", "regression", "login"}, description = "Login with valid credentials")
     @Story("Valid login")
     public void testValidLogin() {
         // Read credentials from config.properties

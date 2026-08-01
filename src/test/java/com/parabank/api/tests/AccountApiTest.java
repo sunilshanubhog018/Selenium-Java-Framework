@@ -19,7 +19,7 @@ import static io.restassured.RestAssured.given;
 @Feature("API - Accounts")
 public class AccountApiTest extends BaseApiTest {
 
-    @Test
+    @Test(groups = {"smoke", "api"})
     @Story("Get customer accounts returns list")
     public void getCustomerAccounts_returnsAccountList() {
         String customerId = ConfigReader.get("api.customer.id");

@@ -29,7 +29,7 @@ public class RegisterTest extends BaseTest {
     // ================================================================
     //  TEST 1: Verify registration form is displayed
     // ================================================================
-    @Test(priority = 1, description = "Verify registration form loads")
+    @Test(priority = 1, groups = {"smoke", "regression", "register"}, description = "Verify registration form loads")
     @Story("Registration form visibility")
     public void testRegisterFormDisplayed() {
         Assert.assertTrue(registerPage.isRegisterFormDisplayed(),
@@ -39,7 +39,7 @@ public class RegisterTest extends BaseTest {
     // ================================================================
     //  TEST 2: Register with all fields empty
     // ================================================================
-    @Test(priority = 2, description = "Submit empty registration form")
+    @Test(priority = 2, groups = {"regression", "register"}, description = "Submit empty registration form")
     @Story("Empty form validation")
     public void testEmptyRegistration() {
         registerPage.clickRegister();
@@ -55,7 +55,7 @@ public class RegisterTest extends BaseTest {
                 "Password error should appear!");
     }
 
-    @Test(priority = 3, description = "Register new user with valid data")
+    @Test(priority = 3, groups = {"smoke", "regression", "register"}, description = "Register new user with valid data")
     @Story("Valid registration")
     public void testValidRegistration() {
         // Dynamic username — unique every run
@@ -80,7 +80,7 @@ public class RegisterTest extends BaseTest {
     // ================================================================
     //  TEST 4: Register with duplicate username
     // ================================================================
-    @Test(priority = 4, description = "Register with already existing username")
+    @Test(priority = 4, groups = {"regression", "register"}, description = "Register with already existing username")
     @Story("Duplicate username validation")
     public void testDuplicateUsername() {
         // First register a user
@@ -114,7 +114,7 @@ public class RegisterTest extends BaseTest {
                 "Should show error for duplicate username!");
     }
 
-    @Test(priority = 5, description = "Register new user then login with those credentials")
+    @Test(priority = 5, groups = {"regression", "register"}, description = "Register new user then login with those credentials")
     @Story("Register then login")
     public void testRegisterThenLogin() {
         String uniqueUsername = "auto_" + System.currentTimeMillis();

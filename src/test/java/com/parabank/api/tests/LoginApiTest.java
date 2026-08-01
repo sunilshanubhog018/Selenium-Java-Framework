@@ -18,7 +18,7 @@ import static org.hamcrest.Matchers.notNullValue;
 @Feature("API - Authentication")
 public class LoginApiTest extends BaseApiTest {
 
-    @Test
+    @Test(groups = {"smoke", "api"})
     @Story("Valid login returns customer")
     public void loginWithValidCredentials_returnsCustomer() {
         String username = ConfigReader.get("api.username");

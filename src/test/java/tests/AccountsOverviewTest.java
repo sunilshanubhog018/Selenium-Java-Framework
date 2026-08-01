@@ -43,21 +43,21 @@ public class AccountsOverviewTest extends BaseTest {
         accountsPage.waitForUrl("overview");
     }
 
-    @Test(priority = 1, description = "Verify Accounts Overview page title")
+    @Test(priority = 1, groups = {"regression", "accounts"}, description = "Verify Accounts Overview page title")
     @Story("Page title verification")
     public void testPageTitle() {
         Assert.assertTrue(accountsPage.isOnAccountsOverviewPage(),
                 "Should be on Accounts Overview page!");
     }
 
-    @Test(priority = 2, description = "Verify accounts table is visible")
+    @Test(priority = 2, groups = {"regression", "accounts"}, description = "Verify accounts table is visible")
     @Story("Accounts table visibility")
     public void testAccountsTableDisplayed() {
         Assert.assertTrue(accountsPage.isAccountsTableDisplayed(),
                 "Accounts table should be visible!");
     }
 
-    @Test(priority = 3, description = "Verify new user has at least one account")
+    @Test(priority = 3, groups = {"regression", "accounts"}, description = "Verify new user has at least one account")
     @Story("Account existence")
     public void testAccountExists() {
         int count = accountsPage.getAccountCount();
@@ -65,7 +65,7 @@ public class AccountsOverviewTest extends BaseTest {
                 "New user should have at least 1 account! Found: " + count);
     }
 
-    @Test(priority = 4, description = "Verify account number is displayed")
+    @Test(priority = 4, groups = {"regression", "accounts"}, description = "Verify account number is displayed")
     @Story("Account number display")
     public void testAccountNumberDisplayed() {
         String accountNumber = accountsPage.getFirstAccountNumber();
@@ -73,7 +73,7 @@ public class AccountsOverviewTest extends BaseTest {
                 "Account number should not be empty!");
     }
 
-    @Test(priority = 5, description = "Verify total balance is shown")
+    @Test(priority = 5, groups = {"regression", "accounts"}, description = "Verify total balance is shown")
     @Story("Total balance display")
     public void testTotalBalanceDisplayed() {
         String total = accountsPage.getTotalBalance();
@@ -81,7 +81,7 @@ public class AccountsOverviewTest extends BaseTest {
                 "Total balance should contain dollar sign! Got: " + total);
     }
 
-    @Test(priority = 6, description = "Verify Transfer Funds link navigates correctly")
+    @Test(priority = 6, groups = {"regression", "accounts"}, description = "Verify Transfer Funds link navigates correctly")
     @Story("Transfer funds navigation")
     public void testTransferFundsLink() {
         accountsPage.clickTransferFunds();
@@ -90,7 +90,7 @@ public class AccountsOverviewTest extends BaseTest {
                 "Should navigate to Transfer Funds page!");
     }
 
-    @Test(priority = 7, description = "Verify logout returns to login page")
+    @Test(priority = 7, groups = {"regression", "accounts"}, description = "Verify logout returns to login page")
     @Story("Logout functionality")
     public void testLogOut() {
         accountsPage.clickLogOut();

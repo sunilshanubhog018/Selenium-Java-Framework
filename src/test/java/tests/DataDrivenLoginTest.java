@@ -48,7 +48,7 @@ public class DataDrivenLoginTest extends BaseTest {
         return filteredData.toArray(new Object[0][0]);
     }
 
-    @Test(dataProvider = "loginData", description = "Data-driven login test from Excel")
+    @Test(dataProvider = "loginData", groups = {"regression", "datadriven"}, description = "Data-driven login test from Excel")
     public void testLoginFromExcel(String testCaseID, String category,
                                     String description, String username,
                                     String password, String expected) {
