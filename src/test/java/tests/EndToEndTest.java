@@ -4,6 +4,8 @@ import base.BaseTest;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Story;
+import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
 import org.openqa.selenium.By;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -11,7 +13,6 @@ import pages.AccountsOverviewPage;
 import pages.ActivityPage;
 import pages.BillPayPage;
 import pages.LoginPage;
-import pages.RegisterPage;
 import pages.TransferFundsPage;
 import utils.ConfigReader;
 import java.util.List;
@@ -20,44 +21,44 @@ import java.util.List;
 @Feature("End to End")
 public class EndToEndTest extends BaseTest {
 
-    private String registerFreshUser(String prefix) {
+    private static final String PASSWORD = "Test@1234";
+
+    /**
+     * Registers a new user via the ParaBank REST API (bypasses UI throttling),
+     * then logs in via the UI. Returns the generated username.
+     */
+    private String registerAndLogin(String prefix) {
         String username = prefix + "_" + System.currentTimeMillis();
-        String password = "Test@1234";
+
+        RestAssured.useRelaxedHTTPSValidation();
+        RestAssured
+            .given()
+                .baseUri(ConfigReader.get("api.base.uri"))
+                .contentType(ContentType.URLENC)
+                .formParam("customer.firstName", "E2E")
+                .formParam("customer.lastName", "Tester")
+                .formParam("customer.address.street", "100 Test Street")
+                .formParam("customer.address.city", "Bangalore")
+                .formParam("customer.address.state", "KA")
+                .formParam("customer.address.zipCode", "560001")
+                .formParam("customer.phoneNumber", "9876543210")
+                .formParam("customer.ssn", "123-45-6789")
+                .formParam("customer.username", username)
+                .formParam("customer.password", PASSWORD)
+            .post("/parabank/register.htm")
+            .then()
+                .statusCode(org.hamcrest.Matchers.anyOf(
+                    org.hamcrest.Matchers.is(200),
+                    org.hamcrest.Matchers.is(302)
+                ));
+
+        System.out.println("  ✓ API registration: " + username);
 
         getDriver().get(ConfigReader.get("base.url"));
         LoginPage loginPage = new LoginPage(getDriver());
-        loginPage.clickRegister();
-
-        RegisterPage registerPage = new RegisterPage(getDriver());
-        registerPage.waitForUrl("register");
-        registerPage.registerUser(
-                "E2E", "Tester", "100 Test Street",
-                "Bangalore", "KA", "560001",
-                "9876543210", "123-45-6789",
-                username, password
-        );
-        registerPage.waitForVisible(By.cssSelector("#rightPanel h1.title"));
-
-        String title = "";
-        try {
-            title = registerPage.getSuccessTitle();
-        } catch (Exception e) {
-            System.out.println("  ⚠ Could not get title: " + e.getMessage());
-        }
-        System.out.println("  Registration result: " + title);
-
-        if (!title.contains("Welcome")) {
-            System.out.println("  ⚠ Registration failed — using config user as fallback");
-            getDriver().get(ConfigReader.get("base.url"));
-            loginPage = new LoginPage(getDriver());
-            loginPage.login(
-                    ConfigReader.get("test.username"),
-                    ConfigReader.get("test.password")
-            );
-            loginPage.waitForUrl("overview");
-            System.out.println("  ✓ Logged in with config user: " + ConfigReader.get("test.username"));
-            return ConfigReader.get("test.username");
-        }
+        loginPage.login(username, PASSWORD);
+        loginPage.waitForUrl("overview");
+        System.out.println("  ✓ UI login successful");
 
         return username;
     }
@@ -68,60 +69,45 @@ public class EndToEndTest extends BaseTest {
         System.out.println("\n🏦 E2E Test 1: New Customer Onboarding");
 
         System.out.println("  Step 1: Registering new customer...");
-        String username = registerFreshUser("onboard");
-        String password = "Test@1234";
-
-        System.out.println("  Step 2: Logging out after registration...");
-        try {
-            new LoginPage(getDriver()).logout();
-            new LoginPage(getDriver()).waitForVisible(By.name("username"));
-        } catch (Exception e) {
-            System.out.println("  Already on login page — skipping logout");
-        }
-
-        System.out.println("  Step 3: Logging in with credentials...");
-        getDriver().get(ConfigReader.get("base.url"));
-        LoginPage loginPage = new LoginPage(getDriver());
-        loginPage.login(username, password);
-        loginPage.waitForUrl("overview");
+        String username = registerAndLogin("onboard");
 
         Assert.assertTrue(getDriver().getCurrentUrl().contains("overview"),
-                "Step 3 Failed: Should redirect to accounts overview!");
+                "Step 1 Failed: Should redirect to accounts overview after login!");
 
-        System.out.println("  Step 4: Verifying accounts overview...");
+        System.out.println("  Step 2: Verifying accounts overview...");
         AccountsOverviewPage accountsPage = new AccountsOverviewPage(getDriver());
         accountsPage.clickAccountsOverview();
         accountsPage.waitForUrl("overview");
 
         Assert.assertTrue(accountsPage.isOnAccountsOverviewPage(),
-                "Step 4 Failed: Should be on Accounts Overview!");
+                "Step 2 Failed: Should be on Accounts Overview!");
         Assert.assertTrue(accountsPage.getAccountCount() >= 1,
-                "Step 4 Failed: Should have at least 1 account!");
+                "Step 2 Failed: Should have at least 1 account!");
 
         String accountNumber = accountsPage.getFirstAccountNumber();
         String balance = accountsPage.getTotalBalance();
         System.out.println("  Account: " + accountNumber + " | Balance: " + balance);
 
-        System.out.println("  Step 5: Viewing account activity...");
+        System.out.println("  Step 3: Viewing account activity...");
         accountsPage.clickFirstAccount();
         ActivityPage activityPage = new ActivityPage(getDriver());
         activityPage.waitForUrl("activity");
 
         Assert.assertTrue(activityPage.isOnActivityPage(),
-                "Step 5 Failed: Should be on Account Activity page!");
+                "Step 3 Failed: Should be on Account Activity page!");
         Assert.assertTrue(activityPage.isTransactionTableDisplayed(),
-                "Step 5 Failed: Transaction table should be visible!");
+                "Step 3 Failed: Transaction table should be visible!");
 
         int txnCount = activityPage.getTransactionCount();
         System.out.println("  Transactions found: " + txnCount);
 
-        System.out.println("  Step 6: Logging out...");
+        System.out.println("  Step 4: Logging out...");
         activityPage.logout();
         LoginPage verifyPage = new LoginPage(getDriver());
         verifyPage.waitForVisible(By.name("username"));
 
         Assert.assertTrue(verifyPage.isLoginFormDisplayed(),
-                "Step 6 Failed: Should see login form after logout!");
+                "Step 4 Failed: Should see login form after logout!");
 
         System.out.println("  ✅ E2E Test 1 PASSED!");
     }
@@ -132,7 +118,7 @@ public class EndToEndTest extends BaseTest {
         System.out.println("\n🏦 E2E Test 2: Fund Transfer + Activity Verification");
 
         System.out.println("  Step 1: Setting up customer account...");
-        registerFreshUser("transfer");
+        registerAndLogin("transfer");
 
         System.out.println("  Step 2: Checking initial balance...");
         AccountsOverviewPage accountsPage = new AccountsOverviewPage(getDriver());
@@ -194,7 +180,7 @@ public class EndToEndTest extends BaseTest {
         System.out.println("\n🏦 E2E Test 3: Bill Payment + Activity Verification");
 
         System.out.println("  Step 1: Setting up customer account...");
-        registerFreshUser("billpay");
+        registerAndLogin("billpay");
 
         System.out.println("  Step 2: Checking initial balance...");
         AccountsOverviewPage accountsPage = new AccountsOverviewPage(getDriver());
@@ -264,7 +250,7 @@ public class EndToEndTest extends BaseTest {
         System.out.println("\n🏦 E2E Test 4: Complete Banking Session");
 
         System.out.println("  Step 1: Registering new customer...");
-        registerFreshUser("session");
+        registerAndLogin("session");
 
         System.out.println("  Step 2: Viewing accounts...");
         AccountsOverviewPage accountsPage = new AccountsOverviewPage(getDriver());
