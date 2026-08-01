@@ -112,6 +112,15 @@ public class TestListener implements ITestListener {
     }
 
     @Override
+    public void onTestFailedButWithinSuccessPercentage(ITestResult result) {
+        System.out.println("🔄 Test Retrying: " + result.getMethod().getMethodName());
+        if (extentTest.get() != null) {
+            extentTest.get().log(Status.WARNING,
+                    "Test failed — retrying: " + result.getMethod().getMethodName());
+        }
+    }
+
+    @Override
     public void onTestSkipped(ITestResult result) {
         System.out.println("⊘ Test Skipped: " + result.getMethod().getMethodName());
 
