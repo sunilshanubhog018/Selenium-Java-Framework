@@ -2,6 +2,7 @@ package com.parabank.api.tests;
 
 import com.parabank.api.base.BaseApiTest;
 import com.parabank.api.specs.ApiSpecs;
+import utils.ConfigReader;
 
 import io.restassured.response.Response;
 import io.restassured.path.json.JsonPath;
@@ -11,29 +12,24 @@ import java.util.List;
 
 import static io.restassured.RestAssured.given;
 
-
-
-
 public class AccountApiTest extends BaseApiTest {
 
     @Test
     public void getCustomerAccounts_returnsAccountList() {
+        String customerId = ConfigReader.get("api.customer.id");
 
         Response response =
             given()
                 .spec(ApiSpecs.requestSpec())
             .when()
-                .get("/customers/12212/accounts")
+                .get("/customers/" + customerId + "/accounts")
             .then()
                 .spec(ApiSpecs.responseSpec200())
                 .extract().response();
 
-        // Print the whole response so we can SEE the account array structure
         System.out.println("Accounts response: " + response.asString());
-        
-     // ===== new lines below =====
-        JsonPath js = response.jsonPath();
 
+        JsonPath js = response.jsonPath();
         int accountCount = js.getList("$").size();
         System.out.println("Total accounts: " + accountCount);
 
