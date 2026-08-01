@@ -1,7 +1,7 @@
 package utils;
 
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 public class ConfigReader {
@@ -12,11 +12,12 @@ public class ConfigReader {
     // Static block - runs ONCE when class is first used
     // Loads the config.properties file into memory
     static {
-        try {
-            FileInputStream file = new FileInputStream("src/test/resources/config.properties");
+        try (InputStream input = ConfigReader.class.getClassLoader().getResourceAsStream("config.properties")) {
+            if (input == null) {
+                throw new RuntimeException("config.properties not found in classpath!");
+            }
             properties = new Properties();
-            properties.load(file);
-            file.close();
+            properties.load(input);
         } catch (IOException e) {
             throw new RuntimeException("Failed to load config.properties: " + e.getMessage());
         }
