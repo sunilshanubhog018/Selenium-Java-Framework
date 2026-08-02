@@ -1,0 +1,2641 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+  <meta charset='utf-8'>
+  <title>TestNG reports</title>
+
+    <link type="text/css" href="testng-reports1.css" rel="stylesheet" id="ultra" />
+    <link type="text/css" href="testng-reports.css" rel="stylesheet" id="retro" disabled="false"/>
+    <script type="text/javascript" src="jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="testng-reports.js"></script>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type='text/javascript'>
+      google.load('visualization', '1', {packages:['table']});
+      google.setOnLoadCallback(drawTable);
+      var suiteTableInitFunctions = new Array();
+      var suiteTableData = new Array();
+    </script>
+    <!--
+      <script type="text/javascript" src="jquery-ui/js/jquery-ui-1.8.16.custom.min.js"></script>
+     -->
+  </head>
+
+  <body>    <div class="top-banner-root">
+      <span class="top-banner-title-font">Test results</span>
+      <button id="button" class="button">Switch Retro Theme</button> <!-- button -->
+      <br/>
+      <span class="top-banner-font-1">1 suite</span>
+    </div> <!-- top-banner-root -->
+    <div class="navigator-root">
+      <div class="navigator-suite-header">
+        <span>All suites</span>
+        <a href="#" title="Collapse/expand all the suites" class="collapse-all-link">
+          <img src="collapseall.gif" class="collapse-all-icon">
+          </img> <!-- collapse-all-icon -->
+        </a> <!-- collapse-all-link -->
+      </div> <!-- navigator-suite-header -->
+      <div class="suite">
+        <div class="rounded-window">
+          <div class="suite-header light-rounded-window-top">
+            <a href="#" panel-name="suite-ParaBank_Banking_Test_Suite" class="navigator-link">
+              <span class="suite-name border-skipped">ParaBank Banking Test Suite</span>
+            </a> <!-- navigator-link -->
+          </div> <!-- suite-header light-rounded-window-top -->
+          <div class="navigator-suite-content">
+            <div class="suite-section-title">
+              <span>Info</span>
+            </div> <!-- suite-section-title -->
+            <div class="suite-section-content">
+              <ul>
+                <li>
+                  <a href="#" panel-name="test-xml-ParaBank_Banking_Test_Suite" class="navigator-link ">
+                    <span>testng.xml</span>
+                  </a> <!-- navigator-link  -->
+                </li>
+                <li>
+                  <a href="#" panel-name="testlist-ParaBank_Banking_Test_Suite" class="navigator-link ">
+                    <span class="test-stats">6 tests</span>
+                  </a> <!-- navigator-link  -->
+                </li>
+                <li>
+                  <a href="#" panel-name="group-ParaBank_Banking_Test_Suite" class="navigator-link ">
+                    <span>9 groups</span>
+                  </a> <!-- navigator-link  -->
+                </li>
+                <li>
+                  <a href="#" panel-name="times-ParaBank_Banking_Test_Suite" class="navigator-link ">
+                    <span>Times</span>
+                  </a> <!-- navigator-link  -->
+                </li>
+                <li>
+                  <a href="#" panel-name="reporter-ParaBank_Banking_Test_Suite" class="navigator-link ">
+                    <span>Reporter output</span>
+                  </a> <!-- navigator-link  -->
+                </li>
+                <li>
+                  <a href="#" panel-name="ignored-methods-ParaBank_Banking_Test_Suite" class="navigator-link ">
+                    <span>Ignored methods</span>
+                  </a> <!-- navigator-link  -->
+                </li>
+                <li>
+                  <a href="#" panel-name="chronological-ParaBank_Banking_Test_Suite" class="navigator-link ">
+                    <span>Chronological view</span>
+                  </a> <!-- navigator-link  -->
+                </li>
+              </ul>
+            </div> <!-- suite-section-content -->
+            <div class="result-section">
+              <div class="suite-section-title">
+                <span>Results</span>
+              </div> <!-- suite-section-title -->
+              <div class="suite-section-content">
+                <ul>
+                  <li>
+                    <span class="method-stats">54 methods,  4 skipped,  50 passed</span>
+                  </li>
+                  <li>
+                    <span class="method-list-title skipped">Skipped methods</span>
+                    <span class="show-or-hide-methods skipped">
+                      <a href="#" panel-name="suite-ParaBank_Banking_Test_Suite" class="hide-methods skipped suite-ParaBank_Banking_Test_Suite"> (hide)</a> <!-- hide-methods skipped suite-ParaBank_Banking_Test_Suite -->
+                      <a href="#" panel-name="suite-ParaBank_Banking_Test_Suite" class="show-methods skipped suite-ParaBank_Banking_Test_Suite"> (show)</a> <!-- show-methods skipped suite-ParaBank_Banking_Test_Suite -->
+                    </span>
+                    <div class="method-list-content skipped suite-ParaBank_Banking_Test_Suite">
+                      <span>
+                        <img src="skipped.png" width="3%"/>
+                        <a href="#" panel-name="suite-ParaBank_Banking_Test_Suite" title="tests.LoginTest" class="method navigator-link" hash-for-method="testInvalidLogin">testInvalidLogin</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="skipped.png" width="3%"/>
+                        <a href="#" panel-name="suite-ParaBank_Banking_Test_Suite" title="tests.LoginTest" class="method navigator-link" hash-for-method="testInvalidPassword">testInvalidPassword</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="skipped.png" width="3%"/>
+                        <a href="#" panel-name="suite-ParaBank_Banking_Test_Suite" title="tests.LoginTest" class="method navigator-link" hash-for-method="testInvalidUsername">testInvalidUsername</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                    </div> <!-- method-list-content skipped suite-ParaBank_Banking_Test_Suite -->
+                  </li>
+                  <li>
+                    <span class="method-list-title skipped">Retried methods</span>
+                    <span class="show-or-hide-methods skipped">
+                      <a href="#" panel-name="suite-ParaBank_Banking_Test_Suite" class="hide-methods skipped suite-ParaBank_Banking_Test_Suite"> (hide)</a> <!-- hide-methods skipped suite-ParaBank_Banking_Test_Suite -->
+                      <a href="#" panel-name="suite-ParaBank_Banking_Test_Suite" class="show-methods skipped suite-ParaBank_Banking_Test_Suite"> (show)</a> <!-- show-methods skipped suite-ParaBank_Banking_Test_Suite -->
+                    </span>
+                    <div class="method-list-content skipped suite-ParaBank_Banking_Test_Suite">
+                      <span>
+                        <img src="skipped.png" width="3%"/>
+                        <a href="#" panel-name="suite-ParaBank_Banking_Test_Suite" title="tests.RegisterTest" class="method navigator-link" hash-for-method="testRegisterThenLogin">testRegisterThenLogin</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                    </div> <!-- method-list-content skipped suite-ParaBank_Banking_Test_Suite -->
+                  </li>
+                  <li>
+                    <span class="method-list-title passed">Passed methods</span>
+                    <span class="show-or-hide-methods passed">
+                      <a href="#" panel-name="suite-ParaBank_Banking_Test_Suite" class="hide-methods passed suite-ParaBank_Banking_Test_Suite"> (hide)</a> <!-- hide-methods passed suite-ParaBank_Banking_Test_Suite -->
+                      <a href="#" panel-name="suite-ParaBank_Banking_Test_Suite" class="show-methods passed suite-ParaBank_Banking_Test_Suite"> (show)</a> <!-- show-methods passed suite-ParaBank_Banking_Test_Suite -->
+                    </span>
+                    <div class="method-list-content passed suite-ParaBank_Banking_Test_Suite">
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-ParaBank_Banking_Test_Suite" title="tests.AccountsOverviewTest" class="method navigator-link" hash-for-method="testAccountExists">testAccountExists</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-ParaBank_Banking_Test_Suite" title="tests.AccountsOverviewTest" class="method navigator-link" hash-for-method="testAccountNumberDisplayed">testAccountNumberDisplayed</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-ParaBank_Banking_Test_Suite" title="tests.AccountsOverviewTest" class="method navigator-link" hash-for-method="testAccountsTableDisplayed">testAccountsTableDisplayed</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-ParaBank_Banking_Test_Suite" title="tests.BillPayTest" class="method navigator-link" hash-for-method="testBillPayFormDisplayed">testBillPayFormDisplayed</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-ParaBank_Banking_Test_Suite" title="tests.BillPayTest" class="method navigator-link" hash-for-method="testBillPayPageDisplayed">testBillPayPageDisplayed</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-ParaBank_Banking_Test_Suite" title="tests.EndToEndTest" class="method navigator-link" hash-for-method="testBillPaymentFlow">testBillPaymentFlow</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-ParaBank_Banking_Test_Suite" title="tests.EndToEndTest" class="method navigator-link" hash-for-method="testCompleteBankingSession">testCompleteBankingSession</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-ParaBank_Banking_Test_Suite" title="tests.RegisterTest" class="method navigator-link" hash-for-method="testDuplicateUsername">testDuplicateUsername</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-ParaBank_Banking_Test_Suite" title="tests.EndToEndDataDrivenTest" class="method navigator-link" hash-for-method="testE2EFromExcel(E2E004, Complete_Banking_Session, Register → Transfer $50 → Pay Bill $75 → Verify All Transactions →...)">testE2EFromExcel(E2E004, Complete_Banking_Session, Register → Transfer $50 → Pay Bill $75 → Verify All Transactions →...)</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-ParaBank_Banking_Test_Suite" title="tests.LoginTest" class="method navigator-link" hash-for-method="testEmptyBothFields">testEmptyBothFields</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-ParaBank_Banking_Test_Suite" title="tests.BillPayTest" class="method navigator-link" hash-for-method="testEmptyFormSubmit">testEmptyFormSubmit</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-ParaBank_Banking_Test_Suite" title="tests.LoginTest" class="method navigator-link" hash-for-method="testEmptyPassword">testEmptyPassword</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-ParaBank_Banking_Test_Suite" title="tests.RegisterTest" class="method navigator-link" hash-for-method="testEmptyRegistration">testEmptyRegistration</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-ParaBank_Banking_Test_Suite" title="tests.LoginTest" class="method navigator-link" hash-for-method="testEmptyUsername">testEmptyUsername</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-ParaBank_Banking_Test_Suite" title="tests.LoginTest" class="method navigator-link" hash-for-method="testForgotLoginLink">testForgotLoginLink</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-ParaBank_Banking_Test_Suite" title="tests.TransferFundsTest" class="method navigator-link" hash-for-method="testFromAccountHasOptions">testFromAccountHasOptions</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-ParaBank_Banking_Test_Suite" title="tests.EndToEndTest" class="method navigator-link" hash-for-method="testFundTransferFlow">testFundTransferFlow</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-ParaBank_Banking_Test_Suite" title="tests.AccountsOverviewTest" class="method navigator-link" hash-for-method="testLogOut">testLogOut</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-ParaBank_Banking_Test_Suite" title="tests.LoginTest" class="method navigator-link" hash-for-method="testLoginFormDisplayed">testLoginFormDisplayed</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-ParaBank_Banking_Test_Suite" title="tests.DataDrivenLoginTest" class="method navigator-link" hash-for-method="testLoginFromExcel(TC002, Positive - E2E, Login with newly registered user, REGISTER_NEW, Test@1234, pass)">testLoginFromExcel(TC002, Positive - E2E, Login with newly registered user, REGISTER_NEW, Test@1234, pass)</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-ParaBank_Banking_Test_Suite" title="tests.DataDrivenLoginTest" class="method navigator-link" hash-for-method="testLoginFromExcel(TC003, Positive - E2E, Login then verify accounts page, REGISTER_NEW, Test@1234, pass_verify_account...)">testLoginFromExcel(TC003, Positive - E2E, Login then verify accounts page, REGISTER_NEW, Test@1234, pass_verify_account...)</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-ParaBank_Banking_Test_Suite" title="tests.DataDrivenLoginTest" class="method navigator-link" hash-for-method="testLoginFromExcel(TC005, Positive - E2E, Login and navigate to transfer funds, REGISTER_NEW, Test@1234, pass_transfer)">testLoginFromExcel(TC005, Positive - E2E, Login and navigate to transfer funds, REGISTER_NEW, Test@1234, pass_transfer)</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-ParaBank_Banking_Test_Suite" title="tests.DataDrivenLoginTest" class="method navigator-link" hash-for-method="testLoginFromExcel(TC004, Positive - E2E, Login then logout then login again, REGISTER_NEW, Test@1234, pass_relogin)">testLoginFromExcel(TC004, Positive - E2E, Login then logout then login again, REGISTER_NEW, Test@1234, pass_relogin)</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-ParaBank_Banking_Test_Suite" title="tests.DataDrivenLoginTest" class="method navigator-link" hash-for-method="testLoginFromExcel(TC009, Negative - Empty, Empty password only, testuser123, , fail)">testLoginFromExcel(TC009, Negative - Empty, Empty password only, testuser123, , fail)</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-ParaBank_Banking_Test_Suite" title="tests.DataDrivenLoginTest" class="method navigator-link" hash-for-method="testLoginFromExcel(TC006, Positive - E2E, Login and navigate to bill pay, REGISTER_NEW, Test@1234, pass_billpay)">testLoginFromExcel(TC006, Positive - E2E, Login and navigate to bill pay, REGISTER_NEW, Test@1234, pass_billpay)</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-ParaBank_Banking_Test_Suite" title="tests.DataDrivenLoginTest" class="method navigator-link" hash-for-method="testLoginFromExcel(TC011, Negative - Empty, Password with only spaces, testuser123, , fail)">testLoginFromExcel(TC011, Negative - Empty, Password with only spaces, testuser123, , fail)</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-ParaBank_Banking_Test_Suite" title="tests.DataDrivenLoginTest" class="method navigator-link" hash-for-method="testLoginFromExcel(TC012, Negative - Empty, Both fields with only spaces, , , fail)">testLoginFromExcel(TC012, Negative - Empty, Both fields with only spaces, , , fail)</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-ParaBank_Banking_Test_Suite" title="tests.DataDrivenLoginTest" class="method navigator-link" hash-for-method="testLoginFromExcel(TC007, Negative - Empty, Both fields empty, , , fail)">testLoginFromExcel(TC007, Negative - Empty, Both fields empty, , , fail)</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-ParaBank_Banking_Test_Suite" title="tests.DataDrivenLoginTest" class="method navigator-link" hash-for-method="testLoginFromExcel(TC010, Negative - Empty, Username with only spaces, , Test@1234, fail)">testLoginFromExcel(TC010, Negative - Empty, Username with only spaces, , Test@1234, fail)</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-ParaBank_Banking_Test_Suite" title="tests.DataDrivenLoginTest" class="method navigator-link" hash-for-method="testLoginFromExcel(TC001, Positive - E2E, Valid login with config credentials, CONFIG_USERNAME, CONFIG_PASSWORD, pass)">testLoginFromExcel(TC001, Positive - E2E, Valid login with config credentials, CONFIG_USERNAME, CONFIG_PASSWORD, pass)</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-ParaBank_Banking_Test_Suite" title="tests.DataDrivenLoginTest" class="method navigator-link" hash-for-method="testLoginFromExcel(TC008, Negative - Empty, Empty username only, , Test@1234, fail)">testLoginFromExcel(TC008, Negative - Empty, Empty username only, , Test@1234, fail)</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-ParaBank_Banking_Test_Suite" title="tests.BillPayTest" class="method navigator-link" hash-for-method="testMismatchedAccountNumbers">testMismatchedAccountNumbers</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-ParaBank_Banking_Test_Suite" title="tests.EndToEndTest" class="method navigator-link" hash-for-method="testNewCustomerOnboarding">testNewCustomerOnboarding</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-ParaBank_Banking_Test_Suite" title="tests.AccountsOverviewTest" class="method navigator-link" hash-for-method="testPageTitle">testPageTitle</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-ParaBank_Banking_Test_Suite" title="tests.BillPayTest" class="method navigator-link" hash-for-method="testPayBillAndVerifyBalance">testPayBillAndVerifyBalance</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-ParaBank_Banking_Test_Suite" title="tests.BillPayTest" class="method navigator-link" hash-for-method="testPaymentSuccessMessage">testPaymentSuccessMessage</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-ParaBank_Banking_Test_Suite" title="tests.RegisterTest" class="method navigator-link" hash-for-method="testRegisterFormDisplayed">testRegisterFormDisplayed</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-ParaBank_Banking_Test_Suite" title="tests.LoginTest" class="method navigator-link" hash-for-method="testRegisterLink">testRegisterLink</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-ParaBank_Banking_Test_Suite" title="tests.RegisterTest" class="method navigator-link" hash-for-method="testRegisterThenLogin">testRegisterThenLogin</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-ParaBank_Banking_Test_Suite" title="tests.AccountsOverviewTest" class="method navigator-link" hash-for-method="testTotalBalanceDisplayed">testTotalBalanceDisplayed</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-ParaBank_Banking_Test_Suite" title="tests.TransferFundsTest" class="method navigator-link" hash-for-method="testTransferAndVerifyBalance">testTransferAndVerifyBalance</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-ParaBank_Banking_Test_Suite" title="tests.TransferFundsTest" class="method navigator-link" hash-for-method="testTransferEmptyAmount">testTransferEmptyAmount</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-ParaBank_Banking_Test_Suite" title="tests.TransferFundsTest" class="method navigator-link" hash-for-method="testTransferFormDisplayed">testTransferFormDisplayed</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-ParaBank_Banking_Test_Suite" title="tests.AccountsOverviewTest" class="method navigator-link" hash-for-method="testTransferFundsLink">testTransferFundsLink</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-ParaBank_Banking_Test_Suite" title="tests.TransferFundsTest" class="method navigator-link" hash-for-method="testTransferInvalidAmount">testTransferInvalidAmount</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-ParaBank_Banking_Test_Suite" title="tests.TransferFundsTest" class="method navigator-link" hash-for-method="testTransferPageDisplayed">testTransferPageDisplayed</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-ParaBank_Banking_Test_Suite" title="tests.TransferFundsTest" class="method navigator-link" hash-for-method="testTransferSuccessMessage">testTransferSuccessMessage</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-ParaBank_Banking_Test_Suite" title="tests.BillPayTest" class="method navigator-link" hash-for-method="testValidBillPayment">testValidBillPayment</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-ParaBank_Banking_Test_Suite" title="tests.LoginTest" class="method navigator-link" hash-for-method="testValidLogin">testValidLogin</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-ParaBank_Banking_Test_Suite" title="tests.RegisterTest" class="method navigator-link" hash-for-method="testValidRegistration">testValidRegistration</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                    </div> <!-- method-list-content passed suite-ParaBank_Banking_Test_Suite -->
+                  </li>
+                </ul>
+              </div> <!-- suite-section-content -->
+            </div> <!-- result-section -->
+          </div> <!-- navigator-suite-content -->
+        </div> <!-- rounded-window -->
+      </div> <!-- suite -->
+    </div> <!-- navigator-root -->
+    <div class="wrapper">
+      <div class="main-panel-root">
+        <div panel-name="suite-ParaBank_Banking_Test_Suite" class="panel ParaBank_Banking_Test_Suite">
+          <div class="suite-ParaBank_Banking_Test_Suite-class-skipped">
+            <div class="main-panel-header rounded-window-top">
+              <img src="skipped.png"/>
+              <span class="class-name">tests.RegisterTest</span>
+            </div> <!-- main-panel-header rounded-window-top -->
+            <div class="main-panel-content rounded-window-bottom">
+              <div class="method">
+                <div class="method-content">
+                  <a name="testRegisterThenLogin">
+                  </a> <!-- testRegisterThenLogin -->
+                  <span class="method-name">testRegisterThenLogin</span>
+                  <div class="stack-trace">java.lang.AssertionError: Should login successfully with newly registered user! expected [true] but found [false]
+	at tests.RegisterTest.testRegisterThenLogin(RegisterTest.java:139)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+... Removed 32 stack frames
+</div> <!-- stack-trace -->
+                  <em>
+(Register new user then login with those credentials)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+            </div> <!-- main-panel-content rounded-window-bottom -->
+          </div> <!-- suite-ParaBank_Banking_Test_Suite-class-skipped -->
+          <div class="suite-ParaBank_Banking_Test_Suite-class-skipped">
+            <div class="main-panel-header rounded-window-top">
+              <img src="skipped.png"/>
+              <span class="class-name">tests.LoginTest</span>
+            </div> <!-- main-panel-header rounded-window-top -->
+            <div class="main-panel-content rounded-window-bottom">
+              <div class="method">
+                <div class="method-content">
+                  <a name="testInvalidLogin">
+                  </a> <!-- testInvalidLogin -->
+                  <span class="method-name">testInvalidLogin</span>
+                  <div class="stack-trace">org.testng.SkipException: ParaBank public demo currently accepts invalid credentials (redirects to overview). Negative login assertion skipped — see KNOWN_ISSUES.md
+	at tests.LoginTest.testInvalidLogin(LoginTest.java:70)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+... Removed 29 stack frames
+</div> <!-- stack-trace -->
+                  <em>
+(Login with wrong username and password)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="testInvalidPassword">
+                  </a> <!-- testInvalidPassword -->
+                  <span class="method-name">testInvalidPassword</span>
+                  <div class="stack-trace">org.testng.SkipException: ParaBank public demo currently accepts invalid credentials (redirects to overview). Negative login assertion skipped — see KNOWN_ISSUES.md
+	at tests.LoginTest.testInvalidPassword(LoginTest.java:108)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+... Removed 29 stack frames
+</div> <!-- stack-trace -->
+                  <em>
+(Login with wrong password)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="testInvalidUsername">
+                  </a> <!-- testInvalidUsername -->
+                  <span class="method-name">testInvalidUsername</span>
+                  <div class="stack-trace">org.testng.SkipException: ParaBank public demo currently accepts invalid credentials (redirects to overview). Negative login assertion skipped — see KNOWN_ISSUES.md
+	at tests.LoginTest.testInvalidUsername(LoginTest.java:93)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+... Removed 29 stack frames
+</div> <!-- stack-trace -->
+                  <em>
+(Login with wrong username)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+            </div> <!-- main-panel-content rounded-window-bottom -->
+          </div> <!-- suite-ParaBank_Banking_Test_Suite-class-skipped -->
+          <div class="suite-ParaBank_Banking_Test_Suite-class-passed">
+            <div class="main-panel-header rounded-window-top">
+              <img src="passed.png"/>
+              <span class="class-name">tests.BillPayTest</span>
+            </div> <!-- main-panel-header rounded-window-top -->
+            <div class="main-panel-content rounded-window-bottom">
+              <div class="method">
+                <div class="method-content">
+                  <a name="testBillPayFormDisplayed">
+                  </a> <!-- testBillPayFormDisplayed -->
+                  <span class="method-name">testBillPayFormDisplayed</span>
+                  <em>
+(Verify bill pay form is displayed)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="testBillPayPageDisplayed">
+                  </a> <!-- testBillPayPageDisplayed -->
+                  <span class="method-name">testBillPayPageDisplayed</span>
+                  <em>
+(Verify Bill Pay page is displayed)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="testEmptyFormSubmit">
+                  </a> <!-- testEmptyFormSubmit -->
+                  <span class="method-name">testEmptyFormSubmit</span>
+                  <em>
+(Submit empty bill pay form shows error)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="testMismatchedAccountNumbers">
+                  </a> <!-- testMismatchedAccountNumbers -->
+                  <span class="method-name">testMismatchedAccountNumbers</span>
+                  <em>
+(Pay bill with mismatched account numbers)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="testPayBillAndVerifyBalance">
+                  </a> <!-- testPayBillAndVerifyBalance -->
+                  <span class="method-name">testPayBillAndVerifyBalance</span>
+                  <em>
+(Pay bill and verify balance still shown)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="testPaymentSuccessMessage">
+                  </a> <!-- testPaymentSuccessMessage -->
+                  <span class="method-name">testPaymentSuccessMessage</span>
+                  <em>
+(Verify payment success message details)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="testValidBillPayment">
+                  </a> <!-- testValidBillPayment -->
+                  <span class="method-name">testValidBillPayment</span>
+                  <em>
+(Pay bill with valid data)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+            </div> <!-- main-panel-content rounded-window-bottom -->
+          </div> <!-- suite-ParaBank_Banking_Test_Suite-class-passed -->
+          <div class="suite-ParaBank_Banking_Test_Suite-class-passed">
+            <div class="main-panel-header rounded-window-top">
+              <img src="passed.png"/>
+              <span class="class-name">tests.EndToEndDataDrivenTest</span>
+            </div> <!-- main-panel-header rounded-window-top -->
+            <div class="main-panel-content rounded-window-bottom">
+              <div class="method">
+                <div class="method-content">
+                  <a name="testE2EFromExcel(E2E004, Complete_Banking_Session, Register → Transfer $50 → Pay Bill $75 → Verify All Transactions →...)">
+                  </a> <!-- testE2EFromExcel(E2E004, Complete_Banking_Session, Register → Transfer $50 → Pay Bill $75 → Verify All Transactions →...) -->
+                  <span class="method-name">testE2EFromExcel</span>
+                  <span class="parameters">(E2E004,Complete_Banking_Session,Register → Transfer $50 → Pay Bill $75 → Verify All Transactions → Logout,50,Airtel Internet,200 Net Street,Bangalore,KA,560001,9876543210,987654,75,1)</span>
+                  <em>
+(Data-driven E2E banking flow from Excel)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+            </div> <!-- main-panel-content rounded-window-bottom -->
+          </div> <!-- suite-ParaBank_Banking_Test_Suite-class-passed -->
+          <div class="suite-ParaBank_Banking_Test_Suite-class-passed">
+            <div class="main-panel-header rounded-window-top">
+              <img src="passed.png"/>
+              <span class="class-name">tests.DataDrivenLoginTest</span>
+            </div> <!-- main-panel-header rounded-window-top -->
+            <div class="main-panel-content rounded-window-bottom">
+              <div class="method">
+                <div class="method-content">
+                  <a name="testLoginFromExcel(TC002, Positive - E2E, Login with newly registered user, REGISTER_NEW, Test@1234, pass)">
+                  </a> <!-- testLoginFromExcel(TC002, Positive - E2E, Login with newly registered user, REGISTER_NEW, Test@1234, pass) -->
+                  <span class="method-name">testLoginFromExcel</span>
+                  <span class="parameters">(TC002,Positive - E2E,Login with newly registered user,REGISTER_NEW,Test@1234,pass)</span>
+                  <em>
+(Data-driven login test from Excel)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="testLoginFromExcel(TC003, Positive - E2E, Login then verify accounts page, REGISTER_NEW, Test@1234, pass_verify_account...)">
+                  </a> <!-- testLoginFromExcel(TC003, Positive - E2E, Login then verify accounts page, REGISTER_NEW, Test@1234, pass_verify_account...) -->
+                  <span class="method-name">testLoginFromExcel</span>
+                  <span class="parameters">(TC003,Positive - E2E,Login then verify accounts page,REGISTER_NEW,Test@1234,pass_verify_accounts)</span>
+                  <em>
+(Data-driven login test from Excel)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="testLoginFromExcel(TC005, Positive - E2E, Login and navigate to transfer funds, REGISTER_NEW, Test@1234, pass_transfer)">
+                  </a> <!-- testLoginFromExcel(TC005, Positive - E2E, Login and navigate to transfer funds, REGISTER_NEW, Test@1234, pass_transfer) -->
+                  <span class="method-name">testLoginFromExcel</span>
+                  <span class="parameters">(TC005,Positive - E2E,Login and navigate to transfer funds,REGISTER_NEW,Test@1234,pass_transfer)</span>
+                  <em>
+(Data-driven login test from Excel)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="testLoginFromExcel(TC004, Positive - E2E, Login then logout then login again, REGISTER_NEW, Test@1234, pass_relogin)">
+                  </a> <!-- testLoginFromExcel(TC004, Positive - E2E, Login then logout then login again, REGISTER_NEW, Test@1234, pass_relogin) -->
+                  <span class="method-name">testLoginFromExcel</span>
+                  <span class="parameters">(TC004,Positive - E2E,Login then logout then login again,REGISTER_NEW,Test@1234,pass_relogin)</span>
+                  <em>
+(Data-driven login test from Excel)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="testLoginFromExcel(TC009, Negative - Empty, Empty password only, testuser123, , fail)">
+                  </a> <!-- testLoginFromExcel(TC009, Negative - Empty, Empty password only, testuser123, , fail) -->
+                  <span class="method-name">testLoginFromExcel</span>
+                  <span class="parameters">(TC009,Negative - Empty,Empty password only,testuser123,,fail)</span>
+                  <em>
+(Data-driven login test from Excel)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="testLoginFromExcel(TC006, Positive - E2E, Login and navigate to bill pay, REGISTER_NEW, Test@1234, pass_billpay)">
+                  </a> <!-- testLoginFromExcel(TC006, Positive - E2E, Login and navigate to bill pay, REGISTER_NEW, Test@1234, pass_billpay) -->
+                  <span class="method-name">testLoginFromExcel</span>
+                  <span class="parameters">(TC006,Positive - E2E,Login and navigate to bill pay,REGISTER_NEW,Test@1234,pass_billpay)</span>
+                  <em>
+(Data-driven login test from Excel)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="testLoginFromExcel(TC011, Negative - Empty, Password with only spaces, testuser123, , fail)">
+                  </a> <!-- testLoginFromExcel(TC011, Negative - Empty, Password with only spaces, testuser123, , fail) -->
+                  <span class="method-name">testLoginFromExcel</span>
+                  <span class="parameters">(TC011,Negative - Empty,Password with only spaces,testuser123,,fail)</span>
+                  <em>
+(Data-driven login test from Excel)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="testLoginFromExcel(TC012, Negative - Empty, Both fields with only spaces, , , fail)">
+                  </a> <!-- testLoginFromExcel(TC012, Negative - Empty, Both fields with only spaces, , , fail) -->
+                  <span class="method-name">testLoginFromExcel</span>
+                  <span class="parameters">(TC012,Negative - Empty,Both fields with only spaces,,,fail)</span>
+                  <em>
+(Data-driven login test from Excel)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="testLoginFromExcel(TC007, Negative - Empty, Both fields empty, , , fail)">
+                  </a> <!-- testLoginFromExcel(TC007, Negative - Empty, Both fields empty, , , fail) -->
+                  <span class="method-name">testLoginFromExcel</span>
+                  <span class="parameters">(TC007,Negative - Empty,Both fields empty,,,fail)</span>
+                  <em>
+(Data-driven login test from Excel)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="testLoginFromExcel(TC010, Negative - Empty, Username with only spaces, , Test@1234, fail)">
+                  </a> <!-- testLoginFromExcel(TC010, Negative - Empty, Username with only spaces, , Test@1234, fail) -->
+                  <span class="method-name">testLoginFromExcel</span>
+                  <span class="parameters">(TC010,Negative - Empty,Username with only spaces,,Test@1234,fail)</span>
+                  <em>
+(Data-driven login test from Excel)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="testLoginFromExcel(TC001, Positive - E2E, Valid login with config credentials, CONFIG_USERNAME, CONFIG_PASSWORD, pass)">
+                  </a> <!-- testLoginFromExcel(TC001, Positive - E2E, Valid login with config credentials, CONFIG_USERNAME, CONFIG_PASSWORD, pass) -->
+                  <span class="method-name">testLoginFromExcel</span>
+                  <span class="parameters">(TC001,Positive - E2E,Valid login with config credentials,CONFIG_USERNAME,CONFIG_PASSWORD,pass)</span>
+                  <em>
+(Data-driven login test from Excel)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="testLoginFromExcel(TC008, Negative - Empty, Empty username only, , Test@1234, fail)">
+                  </a> <!-- testLoginFromExcel(TC008, Negative - Empty, Empty username only, , Test@1234, fail) -->
+                  <span class="method-name">testLoginFromExcel</span>
+                  <span class="parameters">(TC008,Negative - Empty,Empty username only,,Test@1234,fail)</span>
+                  <em>
+(Data-driven login test from Excel)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+            </div> <!-- main-panel-content rounded-window-bottom -->
+          </div> <!-- suite-ParaBank_Banking_Test_Suite-class-passed -->
+          <div class="suite-ParaBank_Banking_Test_Suite-class-passed">
+            <div class="main-panel-header rounded-window-top">
+              <img src="passed.png"/>
+              <span class="class-name">tests.RegisterTest</span>
+            </div> <!-- main-panel-header rounded-window-top -->
+            <div class="main-panel-content rounded-window-bottom">
+              <div class="method">
+                <div class="method-content">
+                  <a name="testDuplicateUsername">
+                  </a> <!-- testDuplicateUsername -->
+                  <span class="method-name">testDuplicateUsername</span>
+                  <em>
+(Register with already existing username)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="testEmptyRegistration">
+                  </a> <!-- testEmptyRegistration -->
+                  <span class="method-name">testEmptyRegistration</span>
+                  <em>
+(Submit empty registration form)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="testRegisterFormDisplayed">
+                  </a> <!-- testRegisterFormDisplayed -->
+                  <span class="method-name">testRegisterFormDisplayed</span>
+                  <em>
+(Verify registration form loads)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="testRegisterThenLogin">
+                  </a> <!-- testRegisterThenLogin -->
+                  <span class="method-name">testRegisterThenLogin</span>
+                  <em>
+(Register new user then login with those credentials)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="testValidRegistration">
+                  </a> <!-- testValidRegistration -->
+                  <span class="method-name">testValidRegistration</span>
+                  <em>
+(Register new user with valid data)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+            </div> <!-- main-panel-content rounded-window-bottom -->
+          </div> <!-- suite-ParaBank_Banking_Test_Suite-class-passed -->
+          <div class="suite-ParaBank_Banking_Test_Suite-class-passed">
+            <div class="main-panel-header rounded-window-top">
+              <img src="passed.png"/>
+              <span class="class-name">tests.AccountsOverviewTest</span>
+            </div> <!-- main-panel-header rounded-window-top -->
+            <div class="main-panel-content rounded-window-bottom">
+              <div class="method">
+                <div class="method-content">
+                  <a name="testAccountExists">
+                  </a> <!-- testAccountExists -->
+                  <span class="method-name">testAccountExists</span>
+                  <em>
+(Verify new user has at least one account)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="testAccountNumberDisplayed">
+                  </a> <!-- testAccountNumberDisplayed -->
+                  <span class="method-name">testAccountNumberDisplayed</span>
+                  <em>
+(Verify account number is displayed)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="testAccountsTableDisplayed">
+                  </a> <!-- testAccountsTableDisplayed -->
+                  <span class="method-name">testAccountsTableDisplayed</span>
+                  <em>
+(Verify accounts table is visible)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="testLogOut">
+                  </a> <!-- testLogOut -->
+                  <span class="method-name">testLogOut</span>
+                  <em>
+(Verify logout returns to login page)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="testPageTitle">
+                  </a> <!-- testPageTitle -->
+                  <span class="method-name">testPageTitle</span>
+                  <em>
+(Verify Accounts Overview page title)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="testTotalBalanceDisplayed">
+                  </a> <!-- testTotalBalanceDisplayed -->
+                  <span class="method-name">testTotalBalanceDisplayed</span>
+                  <em>
+(Verify total balance is shown)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="testTransferFundsLink">
+                  </a> <!-- testTransferFundsLink -->
+                  <span class="method-name">testTransferFundsLink</span>
+                  <em>
+(Verify Transfer Funds link navigates correctly)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+            </div> <!-- main-panel-content rounded-window-bottom -->
+          </div> <!-- suite-ParaBank_Banking_Test_Suite-class-passed -->
+          <div class="suite-ParaBank_Banking_Test_Suite-class-passed">
+            <div class="main-panel-header rounded-window-top">
+              <img src="passed.png"/>
+              <span class="class-name">tests.TransferFundsTest</span>
+            </div> <!-- main-panel-header rounded-window-top -->
+            <div class="main-panel-content rounded-window-bottom">
+              <div class="method">
+                <div class="method-content">
+                  <a name="testFromAccountHasOptions">
+                  </a> <!-- testFromAccountHasOptions -->
+                  <span class="method-name">testFromAccountHasOptions</span>
+                  <em>
+(Verify From Account dropdown has accounts)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="testTransferAndVerifyBalance">
+                  </a> <!-- testTransferAndVerifyBalance -->
+                  <span class="method-name">testTransferAndVerifyBalance</span>
+                  <em>
+(Transfer funds and verify balance)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="testTransferEmptyAmount">
+                  </a> <!-- testTransferEmptyAmount -->
+                  <span class="method-name">testTransferEmptyAmount</span>
+                  <em>
+(Transfer with empty amount shows error)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="testTransferFormDisplayed">
+                  </a> <!-- testTransferFormDisplayed -->
+                  <span class="method-name">testTransferFormDisplayed</span>
+                  <em>
+(Verify transfer form is displayed)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="testTransferInvalidAmount">
+                  </a> <!-- testTransferInvalidAmount -->
+                  <span class="method-name">testTransferInvalidAmount</span>
+                  <em>
+(Transfer with invalid amount shows error)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="testTransferPageDisplayed">
+                  </a> <!-- testTransferPageDisplayed -->
+                  <span class="method-name">testTransferPageDisplayed</span>
+                  <em>
+(Verify Transfer Funds page is displayed)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="testTransferSuccessMessage">
+                  </a> <!-- testTransferSuccessMessage -->
+                  <span class="method-name">testTransferSuccessMessage</span>
+                  <em>
+(Verify transfer success message)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+            </div> <!-- main-panel-content rounded-window-bottom -->
+          </div> <!-- suite-ParaBank_Banking_Test_Suite-class-passed -->
+          <div class="suite-ParaBank_Banking_Test_Suite-class-passed">
+            <div class="main-panel-header rounded-window-top">
+              <img src="passed.png"/>
+              <span class="class-name">tests.EndToEndTest</span>
+            </div> <!-- main-panel-header rounded-window-top -->
+            <div class="main-panel-content rounded-window-bottom">
+              <div class="method">
+                <div class="method-content">
+                  <a name="testBillPaymentFlow">
+                  </a> <!-- testBillPaymentFlow -->
+                  <span class="method-name">testBillPaymentFlow</span>
+                  <em>
+(E2E: Bill payment with transaction verification)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="testCompleteBankingSession">
+                  </a> <!-- testCompleteBankingSession -->
+                  <span class="method-name">testCompleteBankingSession</span>
+                  <em>
+(E2E: Complete banking session with full verification)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="testFundTransferFlow">
+                  </a> <!-- testFundTransferFlow -->
+                  <span class="method-name">testFundTransferFlow</span>
+                  <em>
+(E2E: Fund transfer with transaction verification)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="testNewCustomerOnboarding">
+                  </a> <!-- testNewCustomerOnboarding -->
+                  <span class="method-name">testNewCustomerOnboarding</span>
+                  <em>
+(E2E: New customer onboarding flow)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+            </div> <!-- main-panel-content rounded-window-bottom -->
+          </div> <!-- suite-ParaBank_Banking_Test_Suite-class-passed -->
+          <div class="suite-ParaBank_Banking_Test_Suite-class-passed">
+            <div class="main-panel-header rounded-window-top">
+              <img src="passed.png"/>
+              <span class="class-name">tests.LoginTest</span>
+            </div> <!-- main-panel-header rounded-window-top -->
+            <div class="main-panel-content rounded-window-bottom">
+              <div class="method">
+                <div class="method-content">
+                  <a name="testEmptyBothFields">
+                  </a> <!-- testEmptyBothFields -->
+                  <span class="method-name">testEmptyBothFields</span>
+                  <em>
+(Click login without entering anything)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="testEmptyPassword">
+                  </a> <!-- testEmptyPassword -->
+                  <span class="method-name">testEmptyPassword</span>
+                  <em>
+(Login with empty password)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="testEmptyUsername">
+                  </a> <!-- testEmptyUsername -->
+                  <span class="method-name">testEmptyUsername</span>
+                  <em>
+(Login with empty username)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="testForgotLoginLink">
+                  </a> <!-- testForgotLoginLink -->
+                  <span class="method-name">testForgotLoginLink</span>
+                  <em>
+(Click Forgot Login and verify lookup page)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="testLoginFormDisplayed">
+                  </a> <!-- testLoginFormDisplayed -->
+                  <span class="method-name">testLoginFormDisplayed</span>
+                  <em>
+(Verify login form is visible on homepage)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="testRegisterLink">
+                  </a> <!-- testRegisterLink -->
+                  <span class="method-name">testRegisterLink</span>
+                  <em>
+(Click Register link and verify registration page)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="testValidLogin">
+                  </a> <!-- testValidLogin -->
+                  <span class="method-name">testValidLogin</span>
+                  <em>
+(Login with valid credentials)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+            </div> <!-- main-panel-content rounded-window-bottom -->
+          </div> <!-- suite-ParaBank_Banking_Test_Suite-class-passed -->
+        </div> <!-- panel ParaBank_Banking_Test_Suite -->
+        <div panel-name="test-xml-ParaBank_Banking_Test_Suite" class="panel">
+          <div class="main-panel-header rounded-window-top">
+            <span class="header-content">/home/runner/work/Selenium-Java-Framework/Selenium-Java-Framework/testng.xml</span>
+          </div> <!-- main-panel-header rounded-window-top -->
+          <div class="main-panel-content rounded-window-bottom">
+            <pre>
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;!DOCTYPE suite SYSTEM &quot;https://testng.org/testng-1.0.dtd&quot;&gt;
+&lt;suite name=&quot;ParaBank Banking Test Suite&quot; guice-stage=&quot;DEVELOPMENT&quot; verbose=&quot;0&quot;&gt;
+  &lt;listeners&gt;
+    &lt;listener class-name=&quot;listeners.TestListener&quot;/&gt;
+    &lt;listener class-name=&quot;listeners.RetryListener&quot;/&gt;
+  &lt;/listeners&gt;
+  &lt;test thread-count=&quot;5&quot; name=&quot;Smoke Tests&quot; verbose=&quot;0&quot;&gt;
+    &lt;classes&gt;
+      &lt;class name=&quot;tests.RegisterTest&quot;/&gt;
+      &lt;class name=&quot;tests.LoginTest&quot;/&gt;
+    &lt;/classes&gt;
+  &lt;/test&gt; &lt;!-- Smoke Tests --&gt;
+  &lt;test thread-count=&quot;5&quot; name=&quot;Account Tests&quot; verbose=&quot;0&quot;&gt;
+    &lt;classes&gt;
+      &lt;class name=&quot;tests.AccountsOverviewTest&quot;/&gt;
+    &lt;/classes&gt;
+  &lt;/test&gt; &lt;!-- Account Tests --&gt;
+  &lt;test thread-count=&quot;5&quot; name=&quot;Transaction Tests&quot; verbose=&quot;0&quot;&gt;
+    &lt;classes&gt;
+      &lt;class name=&quot;tests.TransferFundsTest&quot;/&gt;
+      &lt;class name=&quot;tests.BillPayTest&quot;/&gt;
+    &lt;/classes&gt;
+  &lt;/test&gt; &lt;!-- Transaction Tests --&gt;
+  &lt;test thread-count=&quot;5&quot; name=&quot;Data Driven Tests&quot; verbose=&quot;0&quot;&gt;
+    &lt;classes&gt;
+      &lt;class name=&quot;tests.DataDrivenLoginTest&quot;/&gt;
+    &lt;/classes&gt;
+  &lt;/test&gt; &lt;!-- Data Driven Tests --&gt;
+  &lt;test thread-count=&quot;5&quot; name=&quot;E2E Tests&quot; verbose=&quot;0&quot;&gt;
+    &lt;classes&gt;
+      &lt;class name=&quot;tests.EndToEndTest&quot;/&gt;
+    &lt;/classes&gt;
+  &lt;/test&gt; &lt;!-- E2E Tests --&gt;
+  &lt;test thread-count=&quot;5&quot; name=&quot;E2E Data Driven Tests&quot; verbose=&quot;0&quot;&gt;
+    &lt;classes&gt;
+      &lt;class name=&quot;tests.EndToEndDataDrivenTest&quot;/&gt;
+    &lt;/classes&gt;
+  &lt;/test&gt; &lt;!-- E2E Data Driven Tests --&gt;
+&lt;/suite&gt; &lt;!-- ParaBank Banking Test Suite --&gt;
+            </pre>
+          </div> <!-- main-panel-content rounded-window-bottom -->
+        </div> <!-- panel -->
+        <div panel-name="testlist-ParaBank_Banking_Test_Suite" class="panel">
+          <div class="main-panel-header rounded-window-top">
+            <span class="header-content">Tests for ParaBank Banking Test Suite</span>
+          </div> <!-- main-panel-header rounded-window-top -->
+          <div class="main-panel-content rounded-window-bottom">
+            <ul>
+              <li>
+                <span class="test-name">Smoke Tests (2 classes)</span>
+              </li>
+              <li>
+                <span class="test-name">Account Tests (1 class)</span>
+              </li>
+              <li>
+                <span class="test-name">Transaction Tests (2 classes)</span>
+              </li>
+              <li>
+                <span class="test-name">Data Driven Tests (1 class)</span>
+              </li>
+              <li>
+                <span class="test-name">E2E Tests (1 class)</span>
+              </li>
+              <li>
+                <span class="test-name">E2E Data Driven Tests (1 class)</span>
+              </li>
+            </ul>
+          </div> <!-- main-panel-content rounded-window-bottom -->
+        </div> <!-- panel -->
+        <div panel-name="group-ParaBank_Banking_Test_Suite" class="panel">
+          <div class="main-panel-header rounded-window-top">
+            <span class="header-content">Groups for ParaBank Banking Test Suite</span>
+          </div> <!-- main-panel-header rounded-window-top -->
+          <div class="main-panel-content rounded-window-bottom">
+            <div class="test-group">
+              <span class="test-group-name">accounts</span>
+              <br/>
+              <div class="method-in-group">
+                <span class="method-in-group-name">testAccountExists</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testAccountNumberDisplayed</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testAccountsTableDisplayed</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testLogOut</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testPageTitle</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testTotalBalanceDisplayed</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testTransferFundsLink</span>
+                <br/>
+              </div> <!-- method-in-group -->
+            </div> <!-- test-group -->
+            <div class="test-group">
+              <span class="test-group-name">billpay</span>
+              <br/>
+              <div class="method-in-group">
+                <span class="method-in-group-name">testBillPayFormDisplayed</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testBillPayPageDisplayed</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testEmptyFormSubmit</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testMismatchedAccountNumbers</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testPayBillAndVerifyBalance</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testPaymentSuccessMessage</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testValidBillPayment</span>
+                <br/>
+              </div> <!-- method-in-group -->
+            </div> <!-- test-group -->
+            <div class="test-group">
+              <span class="test-group-name">datadriven</span>
+              <br/>
+              <div class="method-in-group">
+                <span class="method-in-group-name">testE2EFromExcel</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testLoginFromExcel</span>
+                <br/>
+              </div> <!-- method-in-group -->
+            </div> <!-- test-group -->
+            <div class="test-group">
+              <span class="test-group-name">e2e</span>
+              <br/>
+              <div class="method-in-group">
+                <span class="method-in-group-name">testBillPaymentFlow</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testCompleteBankingSession</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testE2EFromExcel</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testFundTransferFlow</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testNewCustomerOnboarding</span>
+                <br/>
+              </div> <!-- method-in-group -->
+            </div> <!-- test-group -->
+            <div class="test-group">
+              <span class="test-group-name">login</span>
+              <br/>
+              <div class="method-in-group">
+                <span class="method-in-group-name">testEmptyBothFields</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testEmptyPassword</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testEmptyUsername</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testForgotLoginLink</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testInvalidLogin</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testInvalidPassword</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testInvalidUsername</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testLoginFormDisplayed</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testRegisterLink</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testValidLogin</span>
+                <br/>
+              </div> <!-- method-in-group -->
+            </div> <!-- test-group -->
+            <div class="test-group">
+              <span class="test-group-name">register</span>
+              <br/>
+              <div class="method-in-group">
+                <span class="method-in-group-name">testDuplicateUsername</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testEmptyRegistration</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testRegisterFormDisplayed</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testRegisterThenLogin</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testValidRegistration</span>
+                <br/>
+              </div> <!-- method-in-group -->
+            </div> <!-- test-group -->
+            <div class="test-group">
+              <span class="test-group-name">regression</span>
+              <br/>
+              <div class="method-in-group">
+                <span class="method-in-group-name">testAccountExists</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testAccountNumberDisplayed</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testAccountsTableDisplayed</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testBillPayFormDisplayed</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testBillPayPageDisplayed</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testDuplicateUsername</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testEmptyBothFields</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testEmptyFormSubmit</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testEmptyPassword</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testEmptyRegistration</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testEmptyUsername</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testForgotLoginLink</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testFromAccountHasOptions</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testInvalidLogin</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testInvalidPassword</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testInvalidUsername</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testLogOut</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testLoginFormDisplayed</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testLoginFromExcel</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testMismatchedAccountNumbers</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testPageTitle</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testPayBillAndVerifyBalance</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testPaymentSuccessMessage</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testRegisterFormDisplayed</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testRegisterLink</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testRegisterThenLogin</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testTotalBalanceDisplayed</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testTransferAndVerifyBalance</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testTransferEmptyAmount</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testTransferFormDisplayed</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testTransferFundsLink</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testTransferInvalidAmount</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testTransferPageDisplayed</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testTransferSuccessMessage</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testValidBillPayment</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testValidLogin</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testValidRegistration</span>
+                <br/>
+              </div> <!-- method-in-group -->
+            </div> <!-- test-group -->
+            <div class="test-group">
+              <span class="test-group-name">smoke</span>
+              <br/>
+              <div class="method-in-group">
+                <span class="method-in-group-name">testLoginFormDisplayed</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testRegisterFormDisplayed</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testValidLogin</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testValidRegistration</span>
+                <br/>
+              </div> <!-- method-in-group -->
+            </div> <!-- test-group -->
+            <div class="test-group">
+              <span class="test-group-name">transfer</span>
+              <br/>
+              <div class="method-in-group">
+                <span class="method-in-group-name">testFromAccountHasOptions</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testTransferAndVerifyBalance</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testTransferEmptyAmount</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testTransferFormDisplayed</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testTransferInvalidAmount</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testTransferPageDisplayed</span>
+                <br/>
+              </div> <!-- method-in-group -->
+              <div class="method-in-group">
+                <span class="method-in-group-name">testTransferSuccessMessage</span>
+                <br/>
+              </div> <!-- method-in-group -->
+            </div> <!-- test-group -->
+          </div> <!-- main-panel-content rounded-window-bottom -->
+        </div> <!-- panel -->
+        <div panel-name="times-ParaBank_Banking_Test_Suite" class="panel">
+          <div class="main-panel-header rounded-window-top">
+            <span class="header-content">Times for ParaBank Banking Test Suite</span>
+          </div> <!-- main-panel-header rounded-window-top -->
+          <div class="main-panel-content rounded-window-bottom">
+            <div class="times-div">
+              <script type="text/javascript">
+suiteTableInitFunctions.push('tableData_ParaBank_Banking_Test_Suite');
+function tableData_ParaBank_Banking_Test_Suite() {
+var data = new google.visualization.DataTable();
+data.addColumn('number', 'Number');
+data.addColumn('string', 'Method');
+data.addColumn('string', 'Class');
+data.addColumn('number', 'Time (ms)');
+data.addRows(54);
+data.setCell(0, 0, 0)
+data.setCell(0, 1, 'testTransferEmptyAmount')
+data.setCell(0, 2, 'tests.TransferFundsTest')
+data.setCell(0, 3, 16431);
+data.setCell(1, 0, 1)
+data.setCell(1, 1, 'testNewCustomerOnboarding')
+data.setCell(1, 2, 'tests.EndToEndTest')
+data.setCell(1, 3, 12446);
+data.setCell(2, 0, 2)
+data.setCell(2, 1, 'testCompleteBankingSession')
+data.setCell(2, 2, 'tests.EndToEndTest')
+data.setCell(2, 3, 6052);
+data.setCell(3, 0, 3)
+data.setCell(3, 1, 'testE2EFromExcel')
+data.setCell(3, 2, 'tests.EndToEndDataDrivenTest')
+data.setCell(3, 3, 5052);
+data.setCell(4, 0, 4)
+data.setCell(4, 1, 'testBillPaymentFlow')
+data.setCell(4, 2, 'tests.EndToEndTest')
+data.setCell(4, 3, 4336);
+data.setCell(5, 0, 5)
+data.setCell(5, 1, 'testFundTransferFlow')
+data.setCell(5, 2, 'tests.EndToEndTest')
+data.setCell(5, 3, 3851);
+data.setCell(6, 0, 6)
+data.setCell(6, 1, 'testDuplicateUsername')
+data.setCell(6, 2, 'tests.RegisterTest')
+data.setCell(6, 3, 3041);
+data.setCell(7, 0, 7)
+data.setCell(7, 1, 'testLoginFromExcel')
+data.setCell(7, 2, 'tests.DataDrivenLoginTest')
+data.setCell(7, 3, 2750);
+data.setCell(8, 0, 8)
+data.setCell(8, 1, 'testPayBillAndVerifyBalance')
+data.setCell(8, 2, 'tests.BillPayTest')
+data.setCell(8, 3, 2598);
+data.setCell(9, 0, 9)
+data.setCell(9, 1, 'testRegisterThenLogin')
+data.setCell(9, 2, 'tests.RegisterTest')
+data.setCell(9, 3, 2558);
+data.setCell(10, 0, 10)
+data.setCell(10, 1, 'testLoginFromExcel')
+data.setCell(10, 2, 'tests.DataDrivenLoginTest')
+data.setCell(10, 3, 2541);
+data.setCell(11, 0, 11)
+data.setCell(11, 1, 'testValidLogin')
+data.setCell(11, 2, 'tests.LoginTest')
+data.setCell(11, 3, 2538);
+data.setCell(12, 0, 12)
+data.setCell(12, 1, 'testTransferAndVerifyBalance')
+data.setCell(12, 2, 'tests.TransferFundsTest')
+data.setCell(12, 3, 2516);
+data.setCell(13, 0, 13)
+data.setCell(13, 1, 'testRegisterThenLogin')
+data.setCell(13, 2, 'tests.RegisterTest')
+data.setCell(13, 3, 1780);
+data.setCell(14, 0, 14)
+data.setCell(14, 1, 'testLoginFromExcel')
+data.setCell(14, 2, 'tests.DataDrivenLoginTest')
+data.setCell(14, 3, 1629);
+data.setCell(15, 0, 15)
+data.setCell(15, 1, 'testPaymentSuccessMessage')
+data.setCell(15, 2, 'tests.BillPayTest')
+data.setCell(15, 3, 1409);
+data.setCell(16, 0, 16)
+data.setCell(16, 1, 'testValidBillPayment')
+data.setCell(16, 2, 'tests.BillPayTest')
+data.setCell(16, 3, 1397);
+data.setCell(17, 0, 17)
+data.setCell(17, 1, 'testValidRegistration')
+data.setCell(17, 2, 'tests.RegisterTest')
+data.setCell(17, 3, 1336);
+data.setCell(18, 0, 18)
+data.setCell(18, 1, 'testTransferInvalidAmount')
+data.setCell(18, 2, 'tests.TransferFundsTest')
+data.setCell(18, 3, 1177);
+data.setCell(19, 0, 19)
+data.setCell(19, 1, 'testTransferSuccessMessage')
+data.setCell(19, 2, 'tests.TransferFundsTest')
+data.setCell(19, 3, 1114);
+data.setCell(20, 0, 20)
+data.setCell(20, 1, 'testInvalidUsername')
+data.setCell(20, 2, 'tests.LoginTest')
+data.setCell(20, 3, 955);
+data.setCell(21, 0, 21)
+data.setCell(21, 1, 'testMismatchedAccountNumbers')
+data.setCell(21, 2, 'tests.BillPayTest')
+data.setCell(21, 3, 867);
+data.setCell(22, 0, 22)
+data.setCell(22, 1, 'testInvalidLogin')
+data.setCell(22, 2, 'tests.LoginTest')
+data.setCell(22, 3, 727);
+data.setCell(23, 0, 23)
+data.setCell(23, 1, 'testInvalidPassword')
+data.setCell(23, 2, 'tests.LoginTest')
+data.setCell(23, 3, 704);
+data.setCell(24, 0, 24)
+data.setCell(24, 1, 'testLoginFromExcel')
+data.setCell(24, 2, 'tests.DataDrivenLoginTest')
+data.setCell(24, 3, 696);
+data.setCell(25, 0, 25)
+data.setCell(25, 1, 'testLoginFromExcel')
+data.setCell(25, 2, 'tests.DataDrivenLoginTest')
+data.setCell(25, 3, 633);
+data.setCell(26, 0, 26)
+data.setCell(26, 1, 'testLoginFromExcel')
+data.setCell(26, 2, 'tests.DataDrivenLoginTest')
+data.setCell(26, 3, 632);
+data.setCell(27, 0, 27)
+data.setCell(27, 1, 'testEmptyRegistration')
+data.setCell(27, 2, 'tests.RegisterTest')
+data.setCell(27, 3, 421);
+data.setCell(28, 0, 28)
+data.setCell(28, 1, 'testLoginFromExcel')
+data.setCell(28, 2, 'tests.DataDrivenLoginTest')
+data.setCell(28, 3, 372);
+data.setCell(29, 0, 29)
+data.setCell(29, 1, 'testLoginFromExcel')
+data.setCell(29, 2, 'tests.DataDrivenLoginTest')
+data.setCell(29, 3, 368);
+data.setCell(30, 0, 30)
+data.setCell(30, 1, 'testLogOut')
+data.setCell(30, 2, 'tests.AccountsOverviewTest')
+data.setCell(30, 3, 349);
+data.setCell(31, 0, 31)
+data.setCell(31, 1, 'testLoginFromExcel')
+data.setCell(31, 2, 'tests.DataDrivenLoginTest')
+data.setCell(31, 3, 349);
+data.setCell(32, 0, 32)
+data.setCell(32, 1, 'testEmptyUsername')
+data.setCell(32, 2, 'tests.LoginTest')
+data.setCell(32, 3, 348);
+data.setCell(33, 0, 33)
+data.setCell(33, 1, 'testLoginFromExcel')
+data.setCell(33, 2, 'tests.DataDrivenLoginTest')
+data.setCell(33, 3, 347);
+data.setCell(34, 0, 34)
+data.setCell(34, 1, 'testTransferFundsLink')
+data.setCell(34, 2, 'tests.AccountsOverviewTest')
+data.setCell(34, 3, 329);
+data.setCell(35, 0, 35)
+data.setCell(35, 1, 'testEmptyPassword')
+data.setCell(35, 2, 'tests.LoginTest')
+data.setCell(35, 3, 322);
+data.setCell(36, 0, 36)
+data.setCell(36, 1, 'testTotalBalanceDisplayed')
+data.setCell(36, 2, 'tests.AccountsOverviewTest')
+data.setCell(36, 3, 297);
+data.setCell(37, 0, 37)
+data.setCell(37, 1, 'testLoginFromExcel')
+data.setCell(37, 2, 'tests.DataDrivenLoginTest')
+data.setCell(37, 3, 273);
+data.setCell(38, 0, 38)
+data.setCell(38, 1, 'testLoginFromExcel')
+data.setCell(38, 2, 'tests.DataDrivenLoginTest')
+data.setCell(38, 3, 271);
+data.setCell(39, 0, 39)
+data.setCell(39, 1, 'testFromAccountHasOptions')
+data.setCell(39, 2, 'tests.TransferFundsTest')
+data.setCell(39, 3, 256);
+data.setCell(40, 0, 40)
+data.setCell(40, 1, 'testEmptyBothFields')
+data.setCell(40, 2, 'tests.LoginTest')
+data.setCell(40, 3, 242);
+data.setCell(41, 0, 41)
+data.setCell(41, 1, 'testRegisterLink')
+data.setCell(41, 2, 'tests.LoginTest')
+data.setCell(41, 3, 238);
+data.setCell(42, 0, 42)
+data.setCell(42, 1, 'testAccountNumberDisplayed')
+data.setCell(42, 2, 'tests.AccountsOverviewTest')
+data.setCell(42, 3, 238);
+data.setCell(43, 0, 43)
+data.setCell(43, 1, 'testForgotLoginLink')
+data.setCell(43, 2, 'tests.LoginTest')
+data.setCell(43, 3, 234);
+data.setCell(44, 0, 44)
+data.setCell(44, 1, 'testRegisterFormDisplayed')
+data.setCell(44, 2, 'tests.RegisterTest')
+data.setCell(44, 3, 232);
+data.setCell(45, 0, 45)
+data.setCell(45, 1, 'testAccountExists')
+data.setCell(45, 2, 'tests.AccountsOverviewTest')
+data.setCell(45, 3, 226);
+data.setCell(46, 0, 46)
+data.setCell(46, 1, 'testEmptyFormSubmit')
+data.setCell(46, 2, 'tests.BillPayTest')
+data.setCell(46, 3, 212);
+data.setCell(47, 0, 47)
+data.setCell(47, 1, 'testLoginFormDisplayed')
+data.setCell(47, 2, 'tests.LoginTest')
+data.setCell(47, 3, 47);
+data.setCell(48, 0, 48)
+data.setCell(48, 1, 'testTransferPageDisplayed')
+data.setCell(48, 2, 'tests.TransferFundsTest')
+data.setCell(48, 3, 28);
+data.setCell(49, 0, 49)
+data.setCell(49, 1, 'testBillPayFormDisplayed')
+data.setCell(49, 2, 'tests.BillPayTest')
+data.setCell(49, 3, 27);
+data.setCell(50, 0, 50)
+data.setCell(50, 1, 'testBillPayPageDisplayed')
+data.setCell(50, 2, 'tests.BillPayTest')
+data.setCell(50, 3, 26);
+data.setCell(51, 0, 51)
+data.setCell(51, 1, 'testAccountsTableDisplayed')
+data.setCell(51, 2, 'tests.AccountsOverviewTest')
+data.setCell(51, 3, 24);
+data.setCell(52, 0, 52)
+data.setCell(52, 1, 'testTransferFormDisplayed')
+data.setCell(52, 2, 'tests.TransferFundsTest')
+data.setCell(52, 3, 24);
+data.setCell(53, 0, 53)
+data.setCell(53, 1, 'testPageTitle')
+data.setCell(53, 2, 'tests.AccountsOverviewTest')
+data.setCell(53, 3, 6);
+window.suiteTableData['ParaBank_Banking_Test_Suite']= { tableData: data, tableDiv: 'times-div-ParaBank_Banking_Test_Suite'}
+return data;
+}
+              </script>
+              <span class="suite-total-time">Total running time: 1 minutes</span>
+              <div id="times-div-ParaBank_Banking_Test_Suite">
+              </div> <!-- times-div-ParaBank_Banking_Test_Suite -->
+            </div> <!-- times-div -->
+          </div> <!-- main-panel-content rounded-window-bottom -->
+        </div> <!-- panel -->
+        <div panel-name="reporter-ParaBank_Banking_Test_Suite" class="panel">
+          <div class="main-panel-header rounded-window-top">
+            <span class="header-content">Reporter output for ParaBank Banking Test Suite</span>
+          </div> <!-- main-panel-header rounded-window-top -->
+          <div class="main-panel-content rounded-window-bottom">
+          </div> <!-- main-panel-content rounded-window-bottom -->
+        </div> <!-- panel -->
+        <div panel-name="ignored-methods-ParaBank_Banking_Test_Suite" class="panel">
+          <div class="main-panel-header rounded-window-top">
+            <span class="header-content">2 ignored methods</span>
+          </div> <!-- main-panel-header rounded-window-top -->
+          <div class="main-panel-content rounded-window-bottom">
+            <div class="ignored-class-div">
+              <span class="ignored-class-name">tests.BillPayTest</span>
+              <div class="ignored-methods-div">
+                <span class="ignored-method-name">initializeDatabase</span>
+                <br/>
+              </div> <!-- ignored-methods-div -->
+            </div> <!-- ignored-class-div -->
+            <div class="ignored-class-div">
+              <span class="ignored-class-name">tests.LoginTest</span>
+              <div class="ignored-methods-div">
+                <span class="ignored-method-name">initializeDatabase</span>
+                <br/>
+              </div> <!-- ignored-methods-div -->
+            </div> <!-- ignored-class-div -->
+          </div> <!-- main-panel-content rounded-window-bottom -->
+        </div> <!-- panel -->
+        <div panel-name="chronological-ParaBank_Banking_Test_Suite" class="panel">
+          <div class="main-panel-header rounded-window-top">
+            <span class="header-content">Methods in chronological order</span>
+          </div> <!-- main-panel-header rounded-window-top -->
+          <div class="main-panel-content rounded-window-bottom">
+            <div class="chronological-class">
+              <div class="chronological-class-name">tests.EndToEndDataDrivenTest</div> <!-- chronological-class-name -->
+              <div class="configuration-suite before">
+                <span class="method-name">initializeDatabase</span>
+                <span class="method-start">0 ms</span>
+              </div> <!-- configuration-suite before -->
+            </div> <!-- chronological-class -->
+            <div class="chronological-class">
+              <div class="chronological-class-name">tests.RegisterTest</div> <!-- chronological-class-name -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">39 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">navigateToRegisterPage</span>
+                <span class="method-start">7240 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">testRegisterFormDisplayed</span>
+                <span class="method-start">8521 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">8764 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">8845 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">navigateToRegisterPage</span>
+                <span class="method-start">9288 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">testEmptyRegistration</span>
+                <span class="method-start">9932 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">10354 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">10427 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">navigateToRegisterPage</span>
+                <span class="method-start">10733 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">testValidRegistration</span>
+                <span class="method-start">11386 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">12723 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">12796 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">navigateToRegisterPage</span>
+                <span class="method-start">13079 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">testDuplicateUsername</span>
+                <span class="method-start">13600 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">16642 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">16714 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">navigateToRegisterPage</span>
+                <span class="method-start">17034 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">testRegisterThenLogin</span>
+                <span class="method-start">17550 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">19334 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">19405 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">navigateToRegisterPage</span>
+                <span class="method-start">19694 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">testRegisterThenLogin</span>
+                <span class="method-start">20199 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">22758 ms</span>
+              </div> <!-- configuration-method after -->
+            </div> <!-- chronological-class -->
+            <div class="chronological-class">
+              <div class="chronological-class-name">tests.LoginTest</div> <!-- chronological-class-name -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">22837 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">navigateToLoginPage</span>
+                <span class="method-start">23133 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">testLoginFormDisplayed</span>
+                <span class="method-start">23419 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">23467 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">23541 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">navigateToLoginPage</span>
+                <span class="method-start">23824 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">testEmptyBothFields</span>
+                <span class="method-start">24111 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">24354 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">24425 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">navigateToLoginPage</span>
+                <span class="method-start">24723 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">testEmptyUsername</span>
+                <span class="method-start">24999 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">25348 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">25421 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">navigateToLoginPage</span>
+                <span class="method-start">25704 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">testEmptyPassword</span>
+                <span class="method-start">25981 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">26304 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">26376 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">navigateToLoginPage</span>
+                <span class="method-start">26671 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">testInvalidLogin</span>
+                <span class="method-start">26960 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">27689 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">27762 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">navigateToLoginPage</span>
+                <span class="method-start">28056 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">testInvalidUsername</span>
+                <span class="method-start">28342 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">29298 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">29373 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">navigateToLoginPage</span>
+                <span class="method-start">29655 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">testInvalidPassword</span>
+                <span class="method-start">29931 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">30636 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">30709 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">navigateToLoginPage</span>
+                <span class="method-start">30993 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">testRegisterLink</span>
+                <span class="method-start">31298 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">31537 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">31609 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">navigateToLoginPage</span>
+                <span class="method-start">31902 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">testForgotLoginLink</span>
+                <span class="method-start">32192 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">32427 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">32499 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">navigateToLoginPage</span>
+                <span class="method-start">32775 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">testValidLogin</span>
+                <span class="method-start">33051 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">35590 ms</span>
+              </div> <!-- configuration-method after -->
+            </div> <!-- chronological-class -->
+            <div class="chronological-class">
+              <div class="chronological-class-name">tests.AccountsOverviewTest</div> <!-- chronological-class-name -->
+              <div class="configuration-class before">
+                <span class="method-name">registerSharedUser</span>
+                <span class="method-start">35936 ms</span>
+              </div> <!-- configuration-class before -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">48201 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">navigateToAccountsOverview</span>
+                <span class="method-start">48497 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">testPageTitle</span>
+                <span class="method-start">49864 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">49871 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">49943 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">navigateToAccountsOverview</span>
+                <span class="method-start">50225 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">testAccountsTableDisplayed</span>
+                <span class="method-start">51522 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">51547 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">51618 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">navigateToAccountsOverview</span>
+                <span class="method-start">51893 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">testAccountExists</span>
+                <span class="method-start">53131 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">53358 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">53431 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">navigateToAccountsOverview</span>
+                <span class="method-start">53714 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">testAccountNumberDisplayed</span>
+                <span class="method-start">55086 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">55325 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">55397 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">navigateToAccountsOverview</span>
+                <span class="method-start">55688 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">testTotalBalanceDisplayed</span>
+                <span class="method-start">57015 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">57312 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">57383 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">navigateToAccountsOverview</span>
+                <span class="method-start">57668 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">testTransferFundsLink</span>
+                <span class="method-start">58894 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">59224 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">59296 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">navigateToAccountsOverview</span>
+                <span class="method-start">59582 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">testLogOut</span>
+                <span class="method-start">60896 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">61246 ms</span>
+              </div> <!-- configuration-method after -->
+            </div> <!-- chronological-class -->
+            <div class="chronological-class">
+              <div class="chronological-class-name">tests.TransferFundsTest</div> <!-- chronological-class-name -->
+              <div class="configuration-class before">
+                <span class="method-name">registerSharedUser</span>
+                <span class="method-start">61352 ms</span>
+              </div> <!-- configuration-class before -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">73563 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">navigateToTransferFunds</span>
+                <span class="method-start">73863 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">testTransferPageDisplayed</span>
+                <span class="method-start">75431 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">75460 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">75531 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">navigateToTransferFunds</span>
+                <span class="method-start">75843 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">testTransferFormDisplayed</span>
+                <span class="method-start">77361 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">77386 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">77457 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">navigateToTransferFunds</span>
+                <span class="method-start">77733 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">testFromAccountHasOptions</span>
+                <span class="method-start">79295 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">79552 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">79624 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">navigateToTransferFunds</span>
+                <span class="method-start">79904 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">testTransferEmptyAmount</span>
+                <span class="method-start">81500 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">97932 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">98012 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">navigateToTransferFunds</span>
+                <span class="method-start">98297 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">testTransferInvalidAmount</span>
+                <span class="method-start">100169 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">101347 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">101418 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">navigateToTransferFunds</span>
+                <span class="method-start">101698 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">testTransferSuccessMessage</span>
+                <span class="method-start">103321 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">104436 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">104508 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">navigateToTransferFunds</span>
+                <span class="method-start">104801 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">testTransferAndVerifyBalance</span>
+                <span class="method-start">106411 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">108928 ms</span>
+              </div> <!-- configuration-method after -->
+            </div> <!-- chronological-class -->
+            <div class="chronological-class">
+              <div class="chronological-class-name">tests.BillPayTest</div> <!-- chronological-class-name -->
+              <div class="configuration-class before">
+                <span class="method-name">registerSharedUser</span>
+                <span class="method-start">108998 ms</span>
+              </div> <!-- configuration-class before -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">121170 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">navigateToBillPay</span>
+                <span class="method-start">121458 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">testBillPayPageDisplayed</span>
+                <span class="method-start">122931 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">122958 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">123029 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">navigateToBillPay</span>
+                <span class="method-start">123311 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">testBillPayFormDisplayed</span>
+                <span class="method-start">124829 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">124857 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">124927 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">navigateToBillPay</span>
+                <span class="method-start">125211 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">testEmptyFormSubmit</span>
+                <span class="method-start">126729 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">126942 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">127013 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">navigateToBillPay</span>
+                <span class="method-start">127295 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">testValidBillPayment</span>
+                <span class="method-start">128907 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">130305 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">130375 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">navigateToBillPay</span>
+                <span class="method-start">130660 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">testPaymentSuccessMessage</span>
+                <span class="method-start">132177 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">133587 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">133657 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">navigateToBillPay</span>
+                <span class="method-start">133934 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">testPayBillAndVerifyBalance</span>
+                <span class="method-start">135452 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">138051 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">138122 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">navigateToBillPay</span>
+                <span class="method-start">138417 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">testMismatchedAccountNumbers</span>
+                <span class="method-start">140367 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">141235 ms</span>
+              </div> <!-- configuration-method after -->
+            </div> <!-- chronological-class -->
+            <div class="chronological-class">
+              <div class="chronological-class-name">tests.DataDrivenLoginTest</div> <!-- chronological-class-name -->
+              <div class="configuration-class before">
+                <span class="method-name">registerSharedUser</span>
+                <span class="method-start">141336 ms</span>
+              </div> <!-- configuration-class before -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">240716 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">navigateToLoginPage</span>
+                <span class="method-start">240997 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">testLoginFromExcel(TC001, Positive - E2E, Valid login with config credentials, CONFIG_USERNAME, CONFIG_PASSWORD, pass)</span>
+                <span class="method-start">241396 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">242030 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">242102 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">navigateToLoginPage</span>
+                <span class="method-start">242384 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">testLoginFromExcel(TC002, Positive - E2E, Login with newly registered user, REGISTER_NEW, Test@1234, pass)</span>
+                <span class="method-start">242665 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">243299 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">243370 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">navigateToLoginPage</span>
+                <span class="method-start">243646 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">testLoginFromExcel(TC003, Positive - E2E, Login then verify accounts page, REGISTER_NEW, Test@1234, pass_verify_account...)</span>
+                <span class="method-start">244075 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">244771 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">244844 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">navigateToLoginPage</span>
+                <span class="method-start">245108 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">testLoginFromExcel(TC004, Positive - E2E, Login then logout then login again, REGISTER_NEW, Test@1234, pass_relogin)</span>
+                <span class="method-start">245371 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">247000 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">247072 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">navigateToLoginPage</span>
+                <span class="method-start">247354 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">testLoginFromExcel(TC005, Positive - E2E, Login and navigate to transfer funds, REGISTER_NEW, Test@1234, pass_transfer)</span>
+                <span class="method-start">247630 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">250172 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">250242 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">navigateToLoginPage</span>
+                <span class="method-start">250521 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">testLoginFromExcel(TC006, Positive - E2E, Login and navigate to bill pay, REGISTER_NEW, Test@1234, pass_billpay)</span>
+                <span class="method-start">250779 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">253530 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">253599 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">navigateToLoginPage</span>
+                <span class="method-start">253876 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">testLoginFromExcel(TC007, Negative - Empty, Both fields empty, , , fail)</span>
+                <span class="method-start">254159 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">254433 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">254504 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">navigateToLoginPage</span>
+                <span class="method-start">254769 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">testLoginFromExcel(TC008, Negative - Empty, Empty username only, , Test@1234, fail)</span>
+                <span class="method-start">255012 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">255381 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">255452 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">navigateToLoginPage</span>
+                <span class="method-start">255729 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">testLoginFromExcel(TC009, Negative - Empty, Empty password only, testuser123, , fail)</span>
+                <span class="method-start">256027 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">256375 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">256445 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">navigateToLoginPage</span>
+                <span class="method-start">256721 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">testLoginFromExcel(TC010, Negative - Empty, Username with only spaces, , Test@1234, fail)</span>
+                <span class="method-start">256995 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">257367 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">257437 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">navigateToLoginPage</span>
+                <span class="method-start">257711 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">testLoginFromExcel(TC011, Negative - Empty, Password with only spaces, testuser123, , fail)</span>
+                <span class="method-start">258011 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">258361 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">258433 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">navigateToLoginPage</span>
+                <span class="method-start">258696 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">testLoginFromExcel(TC012, Negative - Empty, Both fields with only spaces, , , fail)</span>
+                <span class="method-start">258954 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">259225 ms</span>
+              </div> <!-- configuration-method after -->
+            </div> <!-- chronological-class -->
+            <div class="chronological-class">
+              <div class="chronological-class-name">tests.EndToEndTest</div> <!-- chronological-class-name -->
+              <div class="configuration-class before">
+                <span class="method-name">registerSharedUser</span>
+                <span class="method-start">259324 ms</span>
+              </div> <!-- configuration-class before -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">271427 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">testNewCustomerOnboarding</span>
+                <span class="method-start">271726 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">284173 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">284253 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">testFundTransferFlow</span>
+                <span class="method-start">284542 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">288393 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">288465 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">testBillPaymentFlow</span>
+                <span class="method-start">288733 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">293070 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">293140 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">testCompleteBankingSession</span>
+                <span class="method-start">293405 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">299457 ms</span>
+              </div> <!-- configuration-method after -->
+            </div> <!-- chronological-class -->
+            <div class="chronological-class">
+              <div class="chronological-class-name">tests.EndToEndDataDrivenTest</div> <!-- chronological-class-name -->
+              <div class="configuration-class before">
+                <span class="method-name">registerSharedUser</span>
+                <span class="method-start">299557 ms</span>
+              </div> <!-- configuration-class before -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">311695 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">navigateToHome</span>
+                <span class="method-start">311968 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">testE2EFromExcel(E2E004, Complete_Banking_Session, Register → Transfer $50 → Pay Bill $75 → Verify All Transactions →...)</span>
+                <span class="method-start">312268 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">317321 ms</span>
+              </div> <!-- configuration-method after -->
+          </div> <!-- main-panel-content rounded-window-bottom -->
+        </div> <!-- panel -->
+      </div> <!-- main-panel-root -->
+    </div> <!-- wrapper -->
+  </body>
+<script type="text/javascript" src="testng-reports2.js"></script>
+</html>
