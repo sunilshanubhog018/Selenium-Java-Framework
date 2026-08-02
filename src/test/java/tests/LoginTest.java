@@ -153,20 +153,30 @@ public class LoginTest extends BaseTest {
     @Test(priority = 10, groups = {"smoke", "regression", "login"}, description = "Login with valid credentials")
     @Story("Valid login")
     public void testValidLogin() {
-        // Read credentials from config.properties
-        String username = ConfigReader.get("test.username");
-        String password = ConfigReader.get("test.password");
+        String username = "login_" + System.currentTimeMillis();
+        String password = "Test@1234";
 
+        loginPage.clickRegister();
+        pages.RegisterPage registerPage = new pages.RegisterPage(getDriver());
+        registerPage.waitForUrl("register");
+        registerPage.registerUser(
+                "Login", "Test", "100 Test Street",
+                "Bangalore", "KA", "560001",
+                "9876543210", "123-45-6789",
+                username, password
+        );
+        registerPage.waitForVisible(org.openqa.selenium.By.cssSelector("#rightPanel h1.title"));
+        new AccountsOverviewPage(getDriver()).logout();
+
+        loginPage = new LoginPage(getDriver());
+        loginPage.waitForVisible(org.openqa.selenium.By.name("username"));
         loginPage.login(username, password);
+        loginPage.waitForUrl("overview");
 
-        // After successful login, URL should contain "overview"
-        // and page should show "Accounts Overview"
-        		Assert.assertTrue(
-        		        getDriver().getCurrentUrl().contains("overview"),
-        		        "Should redirect to accounts overview after login! URL: " + getDriver().getCurrentUrl());
+        Assert.assertTrue(
+                getDriver().getCurrentUrl().contains("overview"),
+                "Should redirect to accounts overview after login! URL: " + getDriver().getCurrentUrl());
 
-        // Wait 3 seconds then logout
-        new AccountsOverviewPage(getDriver()).waitForUrl("overview");
         new AccountsOverviewPage(getDriver()).logout();
     }
 }

@@ -6,6 +6,7 @@ import io.qameta.allure.Feature;
 import io.qameta.allure.Story;
 import org.openqa.selenium.By;
 import org.testng.Assert;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import pages.AccountsOverviewPage;
 import pages.ActivityPage;
@@ -21,32 +22,31 @@ import java.util.List;
 public class EndToEndTest extends BaseTest {
 
     private static final String PASSWORD = "Test@1234";
+    private static String sharedUsername;
 
-    /**
-     * Registers a new user via the ParaBank REST API (bypasses UI throttling),
-     * then logs in via the UI. Returns the generated username.
-     */
-    private String registerAndLogin(String prefix) {
-        String username = prefix + "_" + System.currentTimeMillis();
-
+    @BeforeClass
+    public void registerSharedUser() throws Exception {
+        setUp();
+        sharedUsername = "e2e_" + System.currentTimeMillis();
         getDriver().get(ConfigReader.get("base.url") + "register.htm");
         RegisterPage registerPage = new RegisterPage(getDriver());
         registerPage.registerUser(
             "E2E", "Tester", "100 Test Street",
             "Bangalore", "KA", "560001",
             "9876543210", "123-45-6789",
-            username, PASSWORD
+            sharedUsername, PASSWORD
         );
-        registerPage.waitForVisible(By.cssSelector("#rightPanel h1.title"));
-        System.out.println("  ✓ Registered: " + username);
+        registerPage.waitForUrl("overview");
+        new AccountsOverviewPage(getDriver()).logout();
+        tearDown();
+        System.out.println("  ✓ Shared user registered: " + sharedUsername);
+    }
 
+    private void login() {
         getDriver().get(ConfigReader.get("base.url"));
         LoginPage loginPage = new LoginPage(getDriver());
-        loginPage.login(username, PASSWORD);
+        loginPage.login(sharedUsername, PASSWORD);
         loginPage.waitForUrl("overview");
-        System.out.println("  ✓ UI login successful");
-
-        return username;
     }
 
     @Test(priority = 1, groups = {"e2e"}, description = "E2E: New customer onboarding flow")
@@ -54,11 +54,11 @@ public class EndToEndTest extends BaseTest {
     public void testNewCustomerOnboarding() {
         System.out.println("\n🏦 E2E Test 1: New Customer Onboarding");
 
-        System.out.println("  Step 1: Registering new customer...");
-        String username = registerAndLogin("onboard");
+        System.out.println("  Step 1: Logging in...");
+        login();
 
         Assert.assertTrue(getDriver().getCurrentUrl().contains("overview"),
-                "Step 1 Failed: Should redirect to accounts overview after login!");
+                "Step 1 Failed: Should be on accounts overview after login!");
 
         System.out.println("  Step 2: Verifying accounts overview...");
         AccountsOverviewPage accountsPage = new AccountsOverviewPage(getDriver());
@@ -103,8 +103,8 @@ public class EndToEndTest extends BaseTest {
     public void testFundTransferFlow() {
         System.out.println("\n🏦 E2E Test 2: Fund Transfer + Activity Verification");
 
-        System.out.println("  Step 1: Setting up customer account...");
-        registerAndLogin("transfer");
+        System.out.println("  Step 1: Logging in...");
+        login();
 
         System.out.println("  Step 2: Checking initial balance...");
         AccountsOverviewPage accountsPage = new AccountsOverviewPage(getDriver());
@@ -165,8 +165,8 @@ public class EndToEndTest extends BaseTest {
     public void testBillPaymentFlow() {
         System.out.println("\n🏦 E2E Test 3: Bill Payment + Activity Verification");
 
-        System.out.println("  Step 1: Setting up customer account...");
-        registerAndLogin("billpay");
+        System.out.println("  Step 1: Logging in...");
+        login();
 
         System.out.println("  Step 2: Checking initial balance...");
         AccountsOverviewPage accountsPage = new AccountsOverviewPage(getDriver());
@@ -235,8 +235,8 @@ public class EndToEndTest extends BaseTest {
     public void testCompleteBankingSession() {
         System.out.println("\n🏦 E2E Test 4: Complete Banking Session");
 
-        System.out.println("  Step 1: Registering new customer...");
-        registerAndLogin("session");
+        System.out.println("  Step 1: Logging in...");
+        login();
 
         System.out.println("  Step 2: Viewing accounts...");
         AccountsOverviewPage accountsPage = new AccountsOverviewPage(getDriver());

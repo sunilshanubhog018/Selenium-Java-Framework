@@ -6,6 +6,7 @@ import io.qameta.allure.Feature;
 import io.qameta.allure.Story;
 import org.openqa.selenium.By;
 import org.testng.Assert;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import pages.AccountsOverviewPage;
@@ -18,27 +19,34 @@ import utils.ConfigReader;
 @Feature("Transfer Funds")
 public class TransferFundsTest extends BaseTest {
 
+    private static final String PASSWORD = "Test@1234";
+    private static String sharedUsername;
     private TransferFundsPage transferPage;
     private String firstAccountNumber;
 
-    @BeforeMethod
-    public void navigateToTransferFunds() {
-        String username = "tfr_" + System.currentTimeMillis();
-        String password = "Test@1234";
-
-        getDriver().get(ConfigReader.get("base.url"));
-        LoginPage loginPage = new LoginPage(getDriver());
-        loginPage.clickRegister();
-
+    @BeforeClass
+    public void registerSharedUser() throws Exception {
+        setUp();
+        sharedUsername = "tfr_" + System.currentTimeMillis();
+        getDriver().get(ConfigReader.get("base.url") + "register.htm");
         RegisterPage registerPage = new RegisterPage(getDriver());
-        registerPage.waitForUrl("register");
         registerPage.registerUser(
                 "Transfer", "Tester", "100 Bank Lane",
                 "Delhi", "DL", "110001",
                 "9123456789", "111-22-3333",
-                username, password
+                sharedUsername, PASSWORD
         );
         registerPage.waitForUrl("overview");
+        new AccountsOverviewPage(getDriver()).logout();
+        tearDown();
+    }
+
+    @BeforeMethod
+    public void navigateToTransferFunds() {
+        getDriver().get(ConfigReader.get("base.url"));
+        LoginPage loginPage = new LoginPage(getDriver());
+        loginPage.login(sharedUsername, PASSWORD);
+        loginPage.waitForUrl("overview");
 
         AccountsOverviewPage accountsPage = new AccountsOverviewPage(getDriver());
         accountsPage.clickAccountsOverview();
