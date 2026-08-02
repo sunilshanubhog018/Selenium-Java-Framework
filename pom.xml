@@ -111,6 +111,9 @@
                     <suiteXmlFiles>
                         <suiteXmlFile>testng.xml</suiteXmlFile>
                     </suiteXmlFiles>
+                    <!-- Print test names as they run in CI logs -->
+                    <printSummary>true</printSummary>
+                    <useFile>true</useFile>
                 </configuration>
             </plugin>
 

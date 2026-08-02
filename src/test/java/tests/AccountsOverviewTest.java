@@ -6,58 +6,60 @@ import io.qameta.allure.Feature;
 import io.qameta.allure.Story;
 import org.openqa.selenium.By;
 import org.testng.Assert;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import pages.AccountsOverviewPage;
 import pages.LoginPage;
-import pages.RegisterPage;
 import utils.ConfigReader;
+import utils.UserFactory;
 
 @Epic("Banking Application")
 @Feature("Accounts Overview")
 public class AccountsOverviewTest extends BaseTest {
 
     private AccountsOverviewPage accountsPage;
-
     private static final String PASSWORD = "Test@1234";
     private static String sharedUsername;
 
-    @org.testng.annotations.BeforeClass
-    public void registerSharedUser() throws Exception {
+    @BeforeClass(alwaysRun = true)
+    public void registerSharedUser() {
         setUp();
-        sharedUsername = "acc_" + System.currentTimeMillis();
-        getDriver().get(ConfigReader.get("base.url") + "register.htm");
-        RegisterPage registerPage = new RegisterPage(getDriver());
-        registerPage.registerUser(
-                "Account", "Tester", "789 Bank Street",
-                "Mumbai", "MH", "400001",
-                "9988776655", "456-78-9012",
-                sharedUsername, PASSWORD
-        );
-        registerPage.waitForUrl("overview");
-        new AccountsOverviewPage(getDriver()).logout();
-        tearDown();
+        try {
+            sharedUsername = UserFactory.registerUniqueUser(getDriver(), "acc_", PASSWORD);
+        } finally {
+            tearDown();
+        }
     }
 
     @BeforeMethod
     public void navigateToAccountsOverview() {
+        loginWithRetry();
+        accountsPage = new AccountsOverviewPage(getDriver());
+        accountsPage.clickAccountsOverview();
+        accountsPage.waitForUrl("overview");
+    }
+
+    private void loginWithRetry() {
+        RuntimeException last = null;
         for (int attempt = 1; attempt <= 3; attempt++) {
             try {
                 getDriver().get(ConfigReader.get("base.url"));
                 LoginPage loginPage = new LoginPage(getDriver());
                 loginPage.login(sharedUsername, PASSWORD);
                 loginPage.waitForUrl("overview");
-                break;
-            } catch (Exception e) {
-                if (attempt == 3) throw new RuntimeException("Login failed after 3 attempts", e);
+                return;
+            } catch (RuntimeException e) {
+                last = e;
                 System.out.println("  ⚠ Login attempt " + attempt + " failed, retrying...");
-                try { Thread.sleep(2000); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
+                }
             }
         }
-
-        accountsPage = new AccountsOverviewPage(getDriver());
-        accountsPage.clickAccountsOverview();
-        accountsPage.waitForUrl("overview");
+        throw new RuntimeException("Login failed after 3 attempts for user " + sharedUsername, last);
     }
 
     @Test(priority = 1, groups = {"regression", "accounts"}, description = "Verify Accounts Overview page title")

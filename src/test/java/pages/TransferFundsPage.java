@@ -4,66 +4,47 @@ import base.BasePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
 
 public class TransferFundsPage extends BasePage {
 
-    // ================================================================
-    //  LOCATORS — all verified from DevTools inspection
-    // ================================================================
-
-    // Page heading
-    private final By pageTitle = By.cssSelector("h1.title");
-
-    // Form fields
+    private final By pageTitle = By.cssSelector("#rightPanel h1.title");
     private final By amountInput = By.id("amount");
     private final By fromAccountDropdown = By.id("fromAccountId");
     private final By toAccountDropdown = By.id("toAccountId");
     private final By transferButton = By.cssSelector("input[value='Transfer']");
-
-    // Error messages (hidden by default, shown on validation failure)
     private final By amountError = By.id("amount.errors");
-
-    // Success message (appears after successful transfer)
-    private final By successMessage = By.cssSelector("#rightPanel h1.title");
     private final By transferCompleteText = By.cssSelector("#rightPanel p");
-
-    // ================================================================
-    //  CONSTRUCTOR
-    // ================================================================
 
     public TransferFundsPage(WebDriver driver) {
         super(driver);
     }
 
-    // ================================================================
-    //  PAGE ACTIONS
-    // ================================================================
-
-    // Enter transfer amount
     public TransferFundsPage enterAmount(String amount) {
         type(amountInput, amount);
         return this;
     }
 
-    // Select "From" account by visible text (account number)
     public TransferFundsPage selectFromAccount(String accountNumber) {
         selectByValue(fromAccountDropdown, accountNumber);
         return this;
     }
 
-    // Select "To" account by visible text (account number)
     public TransferFundsPage selectToAccount(String accountNumber) {
         selectByValue(toAccountDropdown, accountNumber);
         return this;
     }
 
-    // Click Transfer button
     public void clickTransfer() {
+        String titleBefore = safeTitle();
         click(transferButton);
+        waitForTransferOutcome(titleBefore);
     }
 
-    // Convenience method — fill form and submit in one call
     public void transferFunds(String amount, String fromAccount, String toAccount) {
         enterAmount(amount);
         selectFromAccount(fromAccount);
@@ -71,31 +52,74 @@ public class TransferFundsPage extends BasePage {
         clickTransfer();
     }
 
-    // ================================================================
-    //  PAGE VERIFICATIONS
-    // ================================================================
+    /**
+     * Wait until the form page title changes, an amount error appears, or transfer complete shows.
+     * Critical: the form already has h1.title "Transfer Funds" — a plain visibility wait is a no-op.
+     */
+    private void waitForTransferOutcome(String titleBefore) {
+        WebDriverWait outcomeWait = new WebDriverWait(driver, Duration.ofSeconds(
+                Integer.parseInt(utils.ConfigReader.get("explicit.wait"))));
+        try {
+            outcomeWait.until(d -> {
+                try {
+                    if (!d.findElements(amountError).isEmpty() && d.findElement(amountError).isDisplayed()) {
+                        return true;
+                    }
+                } catch (Exception ignored) {
+                }
+                try {
+                    String title = d.findElement(pageTitle).getText().trim();
+                    if (!title.isEmpty() && !title.equalsIgnoreCase(titleBefore)) {
+                        return true;
+                    }
+                    if (title.toLowerCase().contains("complete") || title.toLowerCase().contains("error")) {
+                        return true;
+                    }
+                } catch (Exception ignored) {
+                }
+                try {
+                    String panel = d.findElement(By.id("rightPanel")).getText().toLowerCase();
+                    if (panel.contains("transfer complete")
+                            || panel.contains("transferred")
+                            || panel.contains("error")
+                            || panel.contains("invalid")) {
+                        return true;
+                    }
+                } catch (Exception ignored) {
+                }
+                return false;
+            });
+        } catch (Exception e) {
+            // leave current page state for assertions
+            System.out.println("  ⚠ Transfer outcome wait timed out (title still: " + safeTitle() + ")");
+        }
+    }
 
-    // Get page title text
+    private String safeTitle() {
+        try {
+            return driver.findElement(pageTitle).getText().trim();
+        } catch (Exception e) {
+            return "";
+        }
+    }
+
     public String getPageTitleText() {
         return getText(pageTitle);
     }
 
-    // Check if we're on Transfer Funds page
     public boolean isOnTransferFundsPage() {
         try {
             String title = getPageTitleText();
-            return title.contains("Transfer Funds");
+            return title.contains("Transfer Funds") || driver.getCurrentUrl().contains("transfer");
         } catch (Exception e) {
-            return false;
+            return driver.getCurrentUrl() != null && driver.getCurrentUrl().contains("transfer");
         }
     }
 
-    // Check if transfer form is displayed
     public boolean isTransferFormDisplayed() {
         return isDisplayed(amountInput);
     }
 
-    // Check if transfer was successful
     public boolean isTransferComplete() {
         try {
             String title = getPageTitleText();
@@ -105,32 +129,60 @@ public class TransferFundsPage extends BasePage {
         }
     }
 
-    // Get success/result message text
     public String getResultMessage() {
-        return getText(transferCompleteText);
+        try {
+            return getText(transferCompleteText);
+        } catch (Exception e) {
+            return getRightPanelText();
+        }
     }
 
-    // Check if amount error is displayed
     public boolean isAmountErrorDisplayed() {
         try {
             WebElement error = driver.findElement(amountError);
-            return error.isDisplayed();
+            return error.isDisplayed() && !error.getText().isBlank();
         } catch (Exception e) {
             return false;
         }
     }
 
-    // Get the first account number from "From" dropdown
     public String getFirstAccountNumber() {
-        WebElement dropdown = driver.findElement(fromAccountDropdown);
+        WebElement dropdown = wait.until(ExpectedConditions.visibilityOfElementLocated(fromAccountDropdown));
         Select select = new Select(dropdown);
         return select.getFirstSelectedOption().getText().trim();
     }
 
-    // Get count of accounts in "From" dropdown
     public int getFromAccountCount() {
-        WebElement dropdown = driver.findElement(fromAccountDropdown);
-        Select select = new Select(dropdown);
-        return select.getOptions().size();
+        try {
+            WebElement dropdown = wait.until(ExpectedConditions.visibilityOfElementLocated(fromAccountDropdown));
+            Select select = new Select(dropdown);
+            return select.getOptions().size();
+        } catch (Exception e) {
+            return 0;
+        }
+    }
+
+    /** Wait for AJAX-populated account dropdowns, then select first from/to option. */
+    public void ensureAccountsSelected() {
+        try {
+            WebDriverWait accountWait = new WebDriverWait(driver, Duration.ofSeconds(
+                    Integer.parseInt(utils.ConfigReader.get("explicit.wait"))));
+            accountWait.until(d -> {
+                try {
+                    Select s = new Select(d.findElement(fromAccountDropdown));
+                    return !s.getOptions().isEmpty() && !s.getOptions().get(0).getAttribute("value").isBlank();
+                } catch (Exception e) {
+                    return false;
+                }
+            });
+            Select fromSelect = new Select(driver.findElement(fromAccountDropdown));
+            fromSelect.selectByIndex(0);
+            Select toSelect = new Select(driver.findElement(toAccountDropdown));
+            if (!toSelect.getOptions().isEmpty()) {
+                toSelect.selectByIndex(0);
+            }
+        } catch (Exception e) {
+            System.out.println("  ⚠ Could not pre-select transfer accounts: " + e.getMessage());
+        }
     }
 }

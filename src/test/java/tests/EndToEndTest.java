@@ -12,9 +12,10 @@ import pages.AccountsOverviewPage;
 import pages.ActivityPage;
 import pages.BillPayPage;
 import pages.LoginPage;
-import pages.RegisterPage;
 import pages.TransferFundsPage;
 import utils.ConfigReader;
+import utils.UserFactory;
+
 import java.util.List;
 
 @Epic("Banking Application")
@@ -24,35 +25,18 @@ public class EndToEndTest extends BaseTest {
     private static final String PASSWORD = "Test@1234";
     private static String sharedUsername;
 
-    @BeforeClass
-    public void registerSharedUser() throws Exception {
+    @BeforeClass(alwaysRun = true)
+    public void registerSharedUser() {
         setUp();
-        sharedUsername = "e2e_" + System.currentTimeMillis();
-        for (int attempt = 1; attempt <= 3; attempt++) {
-            try {
-                getDriver().get(ConfigReader.get("base.url") + "register.htm");
-                RegisterPage registerPage = new RegisterPage(getDriver());
-                registerPage.registerUser(
-                    "E2E", "Tester", "100 Test Street",
-                    "Bangalore", "KA", "560001",
-                    "9876543210", "123-45-6789",
-                    sharedUsername, PASSWORD
-                );
-                registerPage.waitForUrl("overview");
-                new AccountsOverviewPage(getDriver()).logout();
-                System.out.println("  ✓ Shared user registered: " + sharedUsername);
-                break;
-            } catch (Exception e) {
-                if (attempt == 3) throw e;
-                System.out.println("  ⚠ Registration attempt " + attempt + " failed, retrying...");
-                Thread.sleep(3000);
-                sharedUsername = "e2e_" + System.currentTimeMillis();
-            }
+        try {
+            sharedUsername = UserFactory.registerUniqueUser(getDriver(), "e2e_", PASSWORD);
+        } finally {
+            tearDown();
         }
-        tearDown();
     }
 
     private void login() {
+        RuntimeException last = null;
         for (int attempt = 1; attempt <= 3; attempt++) {
             try {
                 getDriver().get(ConfigReader.get("base.url"));
@@ -60,12 +44,17 @@ public class EndToEndTest extends BaseTest {
                 loginPage.login(sharedUsername, PASSWORD);
                 loginPage.waitForUrl("overview");
                 return;
-            } catch (Exception e) {
-                if (attempt == 3) throw new RuntimeException("Login failed after 3 attempts", e);
+            } catch (RuntimeException e) {
+                last = e;
                 System.out.println("  ⚠ Login attempt " + attempt + " failed, retrying...");
-                try { Thread.sleep(2000); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
+                }
             }
         }
+        throw new RuntimeException("Login failed after 3 attempts", last);
     }
 
     @Test(priority = 1, groups = {"e2e"}, description = "E2E: New customer onboarding flow")
@@ -142,13 +131,14 @@ public class EndToEndTest extends BaseTest {
         Assert.assertTrue(transferPage.isOnTransferFundsPage(),
                 "Step 3 Failed: Should be on Transfer Funds page!");
 
+        transferPage.ensureAccountsSelected();
         transferPage.enterAmount("50");
         transferPage.clickTransfer();
-        transferPage.waitForVisible(By.cssSelector("#rightPanel h1.title"));
 
         String transferResult = transferPage.getRightPanelText();
         Assert.assertTrue(
-                transferResult.contains("Transfer Complete") || transferResult.contains("transferred"),
+                transferResult.contains("Transfer Complete") || transferResult.contains("transferred")
+                        || transferPage.isTransferComplete(),
                 "Step 3 Failed: Transfer should complete! Got: " + transferResult);
         System.out.println("  Transfer: SUCCESS");
 
@@ -207,14 +197,12 @@ public class EndToEndTest extends BaseTest {
                 "Bangalore", "KA", "560001",
                 "9876543210", "123456", "100"
         );
-        billPayPage.waitForVisible(By.cssSelector("#rightPanel h1.title"));
 
         String pageText = billPayPage.getRightPanelText();
         Assert.assertTrue(
                 billPayPage.isPaymentSuccessful()
-                || pageText.contains("Bill Payment Complete")
-                || pageText.contains("payment")
-                || pageText.contains("successfully"),
+                        || pageText.contains("Bill Payment Complete")
+                        || pageText.contains("successfully"),
                 "Step 3 Failed: Bill payment should complete! Got: " + pageText);
 
         String confirmText = billPayPage.getResultText();
@@ -271,13 +259,14 @@ public class EndToEndTest extends BaseTest {
         accountsPage.clickTransferFunds();
         TransferFundsPage transferPage = new TransferFundsPage(getDriver());
         transferPage.waitForUrl("transfer");
+        transferPage.ensureAccountsSelected();
         transferPage.enterAmount("50");
         transferPage.clickTransfer();
-        transferPage.waitForVisible(By.cssSelector("#rightPanel h1.title"));
 
         String transferResult = transferPage.getRightPanelText();
         Assert.assertTrue(
-                transferResult.contains("Transfer Complete") || transferResult.contains("transferred"),
+                transferResult.contains("Transfer Complete") || transferResult.contains("transferred")
+                        || transferPage.isTransferComplete(),
                 "Step 3 Failed: Transfer should complete!");
         System.out.println("  Transfer $50: SUCCESS");
 
@@ -290,14 +279,12 @@ public class EndToEndTest extends BaseTest {
                 "Bangalore", "KA", "560001",
                 "9876543210", "987654", "75"
         );
-        billPayPage.waitForVisible(By.cssSelector("#rightPanel h1.title"));
 
         String billPayText = billPayPage.getRightPanelText();
         Assert.assertTrue(
                 billPayPage.isPaymentSuccessful()
-                || billPayText.contains("Bill Payment Complete")
-                || billPayText.contains("payment")
-                || billPayText.contains("successfully"),
+                        || billPayText.contains("Bill Payment Complete")
+                        || billPayText.contains("successfully"),
                 "Step 4 Failed: Bill payment should complete! Got: " + billPayText);
         System.out.println("  Bill Payment $75: SUCCESS");
 

@@ -6,10 +6,21 @@ on:
   pull_request:
     branches: [ main ]
   workflow_dispatch:
+    inputs:
+      suite:
+        description: 'Test suite to run'
+        required: true
+        default: 'full'
+        type: choice
+        options:
+          - full
+          - smoke
 
 jobs:
   run-tests:
     runs-on: ubuntu-latest
+    # Skip full suite when manual run requested smoke only
+    if: github.event_name != 'workflow_dispatch' || github.event.inputs.suite == 'full'
 
     steps:
       - name: Checkout Code
@@ -22,18 +33,24 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      # ✅ Better way to setup Chrome for Selenium
       - name: Setup Chrome
         uses: browser-actions/setup-chrome@v1
         with:
           chrome-version: stable
 
+      - name: Show Chrome version
+        run: google-chrome --version || chromium --version || true
+
       - name: Run All Tests
-        run: mvn clean test
+        env:
+          CI: true
+          # Never wipe the public shared ParaBank database in CI
+          PARABANK_INIT_DB: false
+        run: mvn clean test -B
 
       - name: Generate Allure Report
         if: always()
-        run: mvn allure:report
+        run: mvn allure:report -B
 
       - name: Upload Allure Report
         if: always()
@@ -42,6 +59,7 @@ jobs:
           name: allure-report-${{ github.run_number }}
           path: target/site/allure-report/
           retention-days: 30
+          if-no-files-found: ignore
 
       - name: Upload Extent Report
         if: always()
@@ -50,6 +68,7 @@ jobs:
           name: extent-report-${{ github.run_number }}
           path: test-output/ExtentReport.html
           retention-days: 30
+          if-no-files-found: ignore
 
       - name: Upload TestNG Reports
         if: always()
@@ -60,21 +79,29 @@ jobs:
             target/surefire-reports/
             test-output/
           retention-days: 30
+          if-no-files-found: ignore
 
       - name: Test Summary
         if: always()
         run: |
-          echo "## ✅ Test Execution Complete" >> $GITHUB_STEP_SUMMARY
+          echo "## Test Execution Complete" >> $GITHUB_STEP_SUMMARY
           echo "**Run Number:** ${{ github.run_number }}" >> $GITHUB_STEP_SUMMARY
           echo "**Branch:** ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### 📊 Reports Generated:" >> $GITHUB_STEP_SUMMARY
-          echo "- ✅ Allure Report" >> $GITHUB_STEP_SUMMARY
-          echo "- ✅ TestNG Reports" >> $GITHUB_STEP_SUMMARY
+          if [ -f target/surefire-reports/testng-results.xml ]; then
+            echo "### Surefire results present" >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "### Reports" >> $GITHUB_STEP_SUMMARY
+          echo "- Allure Report artifact" >> $GITHUB_STEP_SUMMARY
+          echo "- Extent Report artifact" >> $GITHUB_STEP_SUMMARY
+          echo "- TestNG Reports artifact" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Note: smoke-tests job runs only on workflow_dispatch with suite=smoke." >> $GITHUB_STEP_SUMMARY
 
   smoke-tests:
     runs-on: ubuntu-latest
-    if: github.event_name == 'workflow_dispatch'
+    # Only on manual dispatch with smoke selected (avoids looking "always skipped" on every push)
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.suite == 'smoke'
 
     steps:
       - name: Checkout Code
@@ -93,7 +120,10 @@ jobs:
           chrome-version: stable
 
       - name: Run Smoke Tests
-        run: mvn clean test -Dsurefire.suiteXmlFiles=testng-smoke.xml
+        env:
+          CI: true
+          PARABANK_INIT_DB: false
+        run: mvn clean test -B -Dsurefire.suiteXmlFiles=testng-smoke.xml
 
       - name: Upload Smoke Extent Report
         if: always()
@@ -102,6 +132,7 @@ jobs:
           name: smoke-extent-report-${{ github.run_number }}
           path: test-output/ExtentReport.html
           retention-days: 7
+          if-no-files-found: ignore
 
       - name: Upload Smoke Test Reports
         if: always()
@@ -110,3 +141,4 @@ jobs:
           name: smoke-reports-${{ github.run_number }}
           path: target/surefire-reports/
           retention-days: 7
+          if-no-files-found: ignore

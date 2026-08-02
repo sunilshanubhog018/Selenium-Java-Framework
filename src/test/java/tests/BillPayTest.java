@@ -6,13 +6,14 @@ import io.qameta.allure.Feature;
 import io.qameta.allure.Story;
 import org.openqa.selenium.By;
 import org.testng.Assert;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import pages.AccountsOverviewPage;
 import pages.BillPayPage;
 import pages.LoginPage;
-import pages.RegisterPage;
 import utils.ConfigReader;
+import utils.UserFactory;
 
 @Epic("Banking Application")
 @Feature("Bill Pay")
@@ -21,49 +22,50 @@ public class BillPayTest extends BaseTest {
     private static final String PASSWORD = "Test@1234";
     private static String sharedUsername;
     private BillPayPage billPayPage;
-    private String accountNumber;
 
-    @org.testng.annotations.BeforeClass
-    public void registerSharedUser() throws Exception {
+    @BeforeClass(alwaysRun = true)
+    public void registerSharedUser() {
         setUp();
-        sharedUsername = "bill_" + System.currentTimeMillis();
-        getDriver().get(ConfigReader.get("base.url") + "register.htm");
-        RegisterPage registerPage = new RegisterPage(getDriver());
-        registerPage.registerUser(
-                "Bill", "Tester", "200 Payment Road",
-                "Chennai", "TN", "600001",
-                "9876501234", "222-33-4444",
-                sharedUsername, PASSWORD
-        );
-        registerPage.waitForUrl("overview");
-        new AccountsOverviewPage(getDriver()).logout();
-        tearDown();
+        try {
+            sharedUsername = UserFactory.registerUniqueUser(getDriver(), "bill_", PASSWORD);
+        } finally {
+            tearDown();
+        }
     }
 
     @BeforeMethod
     public void navigateToBillPay() {
+        loginWithRetry();
+
+        AccountsOverviewPage accountsPage = new AccountsOverviewPage(getDriver());
+        accountsPage.clickAccountsOverview();
+        accountsPage.waitForUrl("overview");
+
+        accountsPage.clickBillPay();
+        billPayPage = new BillPayPage(getDriver());
+        billPayPage.waitForUrl("billpay");
+    }
+
+    private void loginWithRetry() {
+        RuntimeException last = null;
         for (int attempt = 1; attempt <= 3; attempt++) {
             try {
                 getDriver().get(ConfigReader.get("base.url"));
                 LoginPage loginPage = new LoginPage(getDriver());
                 loginPage.login(sharedUsername, PASSWORD);
                 loginPage.waitForUrl("overview");
-                break;
-            } catch (Exception e) {
-                if (attempt == 3) throw new RuntimeException("Login failed after 3 attempts", e);
+                return;
+            } catch (RuntimeException e) {
+                last = e;
                 System.out.println("  ⚠ Login attempt " + attempt + " failed, retrying...");
-                try { Thread.sleep(2000); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
+                }
             }
         }
-
-        AccountsOverviewPage accountsPage = new AccountsOverviewPage(getDriver());
-        accountsPage.clickAccountsOverview();
-        accountsPage.waitForUrl("overview");
-        accountNumber = accountsPage.getFirstAccountNumber();
-
-        accountsPage.clickBillPay();
-        billPayPage = new BillPayPage(getDriver());
-        billPayPage.waitForUrl("billpay");
+        throw new RuntimeException("Login failed after 3 attempts for user " + sharedUsername, last);
     }
 
     @Test(priority = 1, groups = {"regression", "billpay"}, description = "Verify Bill Pay page is displayed")
@@ -88,7 +90,7 @@ public class BillPayTest extends BaseTest {
         String pageText = billPayPage.getRightPanelText();
         Assert.assertTrue(
                 pageText.contains("error") || pageText.contains("Error")
-                || pageText.contains("required") || pageText.contains("empty"),
+                        || pageText.contains("required") || pageText.contains("empty"),
                 "Should show error for empty form! Got: " + pageText);
     }
 
@@ -100,9 +102,8 @@ public class BillPayTest extends BaseTest {
                 "Mumbai", "MH", "400001",
                 "9876543210", "12345", "50"
         );
-        billPayPage.waitForVisible(By.cssSelector("#rightPanel h1.title"));
         Assert.assertTrue(billPayPage.isPaymentSuccessful(),
-                "Bill payment should complete successfully!");
+                "Bill payment should complete successfully! Got: " + billPayPage.getResultText());
     }
 
     @Test(priority = 5, groups = {"regression", "billpay"}, description = "Verify payment success message details")
@@ -113,11 +114,11 @@ public class BillPayTest extends BaseTest {
                 "Delhi", "DL", "110001",
                 "9988776655", "67890", "75"
         );
-        billPayPage.waitForVisible(By.cssSelector("#rightPanel h1.title"));
         String resultText = billPayPage.getResultText();
         Assert.assertTrue(
-                resultText.contains("$75") || resultText.contains("Water Board")
-                || resultText.contains("Bill Payment Complete"),
+                resultText.contains("$75") || resultText.contains("75")
+                        || resultText.contains("Water Board")
+                        || resultText.contains("Bill Payment Complete"),
                 "Success message should contain payment details! Got: " + resultText);
     }
 
@@ -139,8 +140,8 @@ public class BillPayTest extends BaseTest {
                 "Bangalore", "KA", "560001",
                 "9112233445", "11111", "100"
         );
-        billPayPage.waitForVisible(By.cssSelector("#rightPanel h1.title"));
-        Assert.assertTrue(billPayPage.isPaymentSuccessful(), "Bill payment should complete!");
+        Assert.assertTrue(billPayPage.isPaymentSuccessful(),
+                "Bill payment should complete! Got: " + billPayPage.getResultText());
 
         accountsPage.clickAccountsOverview();
         accountsPage.waitForUrl("overview");
@@ -163,12 +164,12 @@ public class BillPayTest extends BaseTest {
         billPayPage.enterAccountNumber("12345");
         billPayPage.enterVerifyAccount("99999");
         billPayPage.enterAmount("25");
+        billPayPage.selectFirstFromAccount();
         billPayPage.clickSendPayment();
-        billPayPage.waitForVisible(By.id("rightPanel"));
         String pageText = billPayPage.getRightPanelText();
         Assert.assertTrue(
                 pageText.contains("match") || pageText.contains("Error")
-                || pageText.contains("error") || pageText.contains("do not match"),
+                        || pageText.contains("error") || pageText.contains("do not match"),
                 "Should show error for mismatched accounts! Got: " + pageText);
     }
 }

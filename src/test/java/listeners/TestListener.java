@@ -24,16 +24,11 @@ import java.util.Date;
 public class TestListener implements ITestListener {
 
     private static final String SCREENSHOT_DIR = "test-output/screenshots/";
-
-    // ThreadLocal — each test gets its own ExtentTest node
-    private static ThreadLocal<ExtentTest> extentTest = new ThreadLocal<>();
-
-    // Shared ExtentReports instance
- // NEW — lazy initialization, called only when needed
+    private static final ThreadLocal<ExtentTest> extentTest = new ThreadLocal<>();
     private static ExtentReports extent;
 
     private static ExtentReports getExtent() {
-        if (extent == null) {              // ← change getExtent() to extent
+        if (extent == null) {
             extent = ExtentManager.getInstance();
         }
         return extent;
@@ -56,59 +51,54 @@ public class TestListener implements ITestListener {
         System.out.println("Failed: " + context.getFailedTests().size());
         System.out.println("Skipped: " + context.getSkippedTests().size());
         System.out.println("========================================");
-
-        // Flush writes report to HTML file
         getExtent().flush();
     }
 
     @Override
     public void onTestStart(ITestResult result) {
         System.out.println("\n▶ Starting Test: " + result.getMethod().getMethodName());
-
-        // Create a new test node in Extent Report
         ExtentTest test = getExtent().createTest(
                 result.getMethod().getMethodName(),
                 result.getMethod().getDescription()
         );
-
-        // Add category tag (class name)
         test.assignCategory(result.getTestClass().getName());
-
-        // Store in ThreadLocal for this thread
         extentTest.set(test);
     }
 
     @Override
     public void onTestSuccess(ITestResult result) {
         System.out.println("✓ Test Passed: " + result.getMethod().getMethodName());
-
-        // Mark test as PASS in report
-        extentTest.get().log(Status.PASS,
-                "Test passed: " + result.getMethod().getMethodName());
+        if (extentTest.get() != null) {
+            extentTest.get().log(Status.PASS,
+                    "Test passed: " + result.getMethod().getMethodName());
+        }
+        extentTest.remove();
     }
 
     @Override
     public void onTestFailure(ITestResult result) {
+        // Retried failures are reported as skip first; only log final failure
         System.out.println("✗ Test Failed: " + result.getMethod().getMethodName());
-        System.out.println("  Reason: " + result.getThrowable().getMessage());
+        Throwable error = result.getThrowable();
+        System.out.println("  Reason: " + (error != null ? error.getMessage() : "unknown"));
 
-        // Mark test as FAIL in report with reason
-        extentTest.get().log(Status.FAIL,
-                "Test failed: " + result.getThrowable().getMessage());
+        if (extentTest.get() != null) {
+            extentTest.get().log(Status.FAIL,
+                    "Test failed: " + (error != null ? error.getMessage() : "unknown"));
 
-        // Capture screenshot and attach to report
-        if (Boolean.parseBoolean(ConfigReader.get("screenshot.on.failure"))) {
-            String screenshotPath = captureScreenshot(result);
-            if (screenshotPath != null) {
-                try {
-                    extentTest.get().fail("Screenshot on failure:",
-                            MediaEntityBuilder.createScreenCaptureFromPath(
-                                    screenshotPath).build());
-                } catch (Exception e) {
-                    System.out.println("  ⚠ Could not attach screenshot to report");
+            if (Boolean.parseBoolean(ConfigReader.get("screenshot.on.failure"))) {
+                String screenshotPath = captureScreenshot(result);
+                if (screenshotPath != null) {
+                    try {
+                        extentTest.get().fail("Screenshot on failure:",
+                                MediaEntityBuilder.createScreenCaptureFromPath(screenshotPath).build());
+                    } catch (Exception e) {
+                        System.out.println("  ⚠ Could not attach screenshot to report");
+                    }
                 }
             }
         }
+        extentTest.remove();
     }
 
     @Override
@@ -123,19 +113,25 @@ public class TestListener implements ITestListener {
     @Override
     public void onTestSkipped(ITestResult result) {
         System.out.println("⊘ Test Skipped: " + result.getMethod().getMethodName());
-
-        // Mark test as SKIP in report
-        extentTest.get().log(Status.SKIP,
-                "Test skipped: " + result.getMethod().getMethodName());
+        // Ensure a node exists (config-method skips may never call onTestStart)
+        if (extentTest.get() == null) {
+            ExtentTest test = getExtent().createTest(
+                    result.getMethod().getMethodName(),
+                    result.getMethod().getDescription()
+            );
+            test.assignCategory(result.getTestClass().getName());
+            extentTest.set(test);
+        }
+        String reason = result.getThrowable() != null
+                ? result.getThrowable().getMessage()
+                : "Test skipped";
+        extentTest.get().log(Status.SKIP, reason);
+        extentTest.remove();
     }
 
-    // ================================================================
-    //  captureScreenshot — saves PNG and returns path
-    // ================================================================
     private String captureScreenshot(ITestResult result) {
         try {
             WebDriver driver = BaseTest.getDriver();
-
             if (driver != null) {
                 TakesScreenshot screenshot = (TakesScreenshot) driver;
                 File srcFile = screenshot.getScreenshotAs(OutputType.FILE);
@@ -143,17 +139,12 @@ public class TestListener implements ITestListener {
                 String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
                 String testName = result.getMethod().getMethodName();
                 String fileName = testName + "_" + timestamp + ".png";
-             // Absolute path for saving the file
-                String destPath = System.getProperty("user.dir") 
+                String destPath = System.getProperty("user.dir")
                         + File.separator + SCREENSHOT_DIR + fileName;
-                
-                // Create directories if needed
+
                 new File(destPath).getParentFile().mkdirs();
-                
                 Files.copy(srcFile.toPath(), Paths.get(destPath));
                 System.out.println("  📸 Screenshot saved: " + destPath);
-
-                // Return absolute path so Extent Report can find it
                 return destPath;
             }
         } catch (IOException e) {
