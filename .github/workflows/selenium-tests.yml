@@ -89,72 +89,111 @@ jobs:
           retention-days: 30
           if-no-files-found: ignore
 
-      # Save latest CI reports into the repo so they appear under reports/ci-latest/
-      # after you run: git pull
-      - name: Publish reports into reports/ci-latest
+      # Each CI run gets its OWN folder — never overwrites previous runs
+      # Layout: reports/ci/run-<number>/  + reports/ci/INDEX.md
+      - name: Publish reports (per-run folder, no overwrite)
         if: always() && github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
         run: |
           set -e
-          DEST="reports/ci-latest"
-          rm -rf "$DEST"
+          RUN_NO="${{ github.run_number }}"
+          DEST="reports/ci/run-${RUN_NO}"
+          INDEX="reports/ci/INDEX.md"
+          UTC_NOW="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+
+          # Never delete other run-* folders — only create this run's directory
           mkdir -p "$DEST/testng" "$DEST/allure" "$DEST/screenshots"
 
-          # Extent
           if [ -f test-output/ExtentReport.html ]; then
             cp test-output/ExtentReport.html "$DEST/ExtentReport.html"
           fi
 
-          # TestNG / Surefire
           if [ -d target/surefire-reports ]; then
             cp -r target/surefire-reports/. "$DEST/testng/"
           fi
 
-          # Allure HTML (if generated)
           if [ -d target/site/allure-report ]; then
             cp -r target/site/allure-report/. "$DEST/allure/" 2>/dev/null || true
           fi
 
-          # Failure screenshots (if any)
           if [ -d test-output/screenshots ]; then
             cp -r test-output/screenshots/. "$DEST/screenshots/" 2>/dev/null || true
           fi
 
-          # Run metadata
+          # Per-run metadata
           {
-            echo "# CI Reports — latest"
+            echo "# CI Report — Run #${RUN_NO}"
             echo ""
             echo "| Field | Value |"
             echo "|-------|-------|"
-            echo "| Run number | ${{ github.run_number }} |"
+            echo "| Run number | ${RUN_NO} |"
             echo "| Commit | \`${{ github.sha }}\` |"
             echo "| Branch | ${{ github.ref_name }} |"
             echo "| Workflow | ${{ github.workflow }} |"
-            echo "| UTC time | $(date -u +%Y-%m-%dT%H:%M:%SZ) |"
+            echo "| Job status | see Actions run #${RUN_NO} |"
+            echo "| UTC time | ${UTC_NOW} |"
+            echo "| Actions URL | https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }} |"
             echo ""
-            echo "## Open locally after \`git pull\`"
+            echo "## Open these files"
             echo ""
-            echo "- Extent: \`reports/ci-latest/ExtentReport.html\`"
-            echo "- TestNG: \`reports/ci-latest/testng/index.html\`"
-            echo "- TestNG emailable: \`reports/ci-latest/testng/emailable-report.html\`"
-            echo "- Allure: \`reports/ci-latest/allure/index.html\` (if present)"
-            echo "- Screenshots: \`reports/ci-latest/screenshots/\`"
+            echo "- Extent: \`ExtentReport.html\`"
+            echo "- TestNG: \`testng/index.html\`"
+            echo "- TestNG emailable: \`testng/emailable-report.html\`"
+            echo "- Allure: \`allure/index.html\` (if present)"
+            echo "- Screenshots: \`screenshots/\`"
           } > "$DEST/README.md"
+
+          # Rebuild index of ALL run folders (newest first)
+          mkdir -p reports/ci
+          {
+            echo "# CI Reports index"
+            echo ""
+            echo "Each CI run on \`main\` creates a **new** folder under \`reports/ci/run-<number>/\`."
+            echo "Previous runs are **never overwritten**."
+            echo ""
+            echo "After CI finishes, pull reports locally:"
+            echo ""
+            echo '```bash'
+            echo 'git pull'
+            echo '```'
+            echo ""
+            echo "| Run | Folder | When (UTC) | Commit |"
+            echo "|-----|--------|------------|--------|"
+            # List run-* dirs by number descending
+            for d in $(ls -d reports/ci/run-* 2>/dev/null | sort -t- -k2 -nr); do
+              name=$(basename "$d")
+              num=${name#run-}
+              when="—"
+              sha="—"
+              if [ -f "$d/README.md" ]; then
+                when=$(grep -m1 '| UTC time |' "$d/README.md" | sed 's/.*| UTC time | //;s/ |//' || true)
+                sha=$(grep -m1 '| Commit |' "$d/README.md" | sed 's/.*| Commit | //;s/ |//;s/`//g' || true)
+                [ -z "$when" ] && when="—"
+                [ -z "$sha" ] && sha="—"
+              fi
+              short_sha=$(echo "$sha" | cut -c1-7)
+              echo "| #${num} | [\`${name}\`](./${name}/) | ${when} | \`${short_sha}\` |"
+            done
+            echo ""
+            echo "Latest run folder: \`reports/ci/run-${RUN_NO}/\`"
+          } > "$INDEX"
+
+          # Pointer file for convenience (text only — does not replace history)
+          echo "run-${RUN_NO}" > reports/ci/LATEST.txt
 
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          # Avoid fighting concurrent pushes
           git pull --rebase origin main || true
 
-          git add -A "$DEST"
+          git add -A reports/ci
           if git diff --staged --quiet; then
             echo "No report file changes to commit."
             exit 0
           fi
 
-          git commit -m "ci: publish latest test reports from run #${{ github.run_number }} [skip ci]"
+          git commit -m "ci: add test reports for run #${RUN_NO} [skip ci]"
           git push origin HEAD:main
-          echo "Reports committed to reports/ci-latest/ on main."
+          echo "Reports saved to reports/ci/run-${RUN_NO}/ (previous runs kept)."
 
       - name: Test Summary
         if: always()
@@ -168,7 +207,9 @@ jobs:
           fi
           echo "### Reports" >> $GITHUB_STEP_SUMMARY
           echo "- GitHub Artifacts (download from Actions UI)" >> $GITHUB_STEP_SUMMARY
-          echo "- **Repo folder:** \`reports/ci-latest/\` (auto-committed on main; run \`git pull\`)" >> $GITHUB_STEP_SUMMARY
+          echo "- **Per-run folder:** \`reports/ci/run-${{ github.run_number }}/\` (never overwrites older runs)" >> $GITHUB_STEP_SUMMARY
+          echo "- **Index:** \`reports/ci/INDEX.md\`" >> $GITHUB_STEP_SUMMARY
+          echo "- After CI: \`git pull\` then open that folder" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "Note: smoke-tests job runs only on workflow_dispatch with suite=smoke." >> $GITHUB_STEP_SUMMARY
 

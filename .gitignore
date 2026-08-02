@@ -22,11 +22,10 @@ screenshots/
 logs/
 *.log
 
-# CI publishes the latest run into the repo for easy viewing after git pull
-# (do not ignore this path)
+# CI publishes each run into reports/ci/run-<number>/ (never overwrites older runs)
 !reports/
-!reports/ci-latest/
-!reports/ci-latest/**
+!reports/ci/
+!reports/ci/**
 
 # OS files
 .DS_Store
