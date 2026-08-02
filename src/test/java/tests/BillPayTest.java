@@ -18,27 +18,43 @@ import utils.ConfigReader;
 @Feature("Bill Pay")
 public class BillPayTest extends BaseTest {
 
+    private static final String PASSWORD = "Test@1234";
+    private static String sharedUsername;
     private BillPayPage billPayPage;
     private String accountNumber;
 
-    @BeforeMethod
-    public void navigateToBillPay() {
-        String username = "bill_" + System.currentTimeMillis();
-        String password = "Test@1234";
-
-        getDriver().get(ConfigReader.get("base.url"));
-        LoginPage loginPage = new LoginPage(getDriver());
-        loginPage.clickRegister();
-
+    @org.testng.annotations.BeforeClass
+    public void registerSharedUser() throws Exception {
+        setUp();
+        sharedUsername = "bill_" + System.currentTimeMillis();
+        getDriver().get(ConfigReader.get("base.url") + "register.htm");
         RegisterPage registerPage = new RegisterPage(getDriver());
-        registerPage.waitForUrl("register");
         registerPage.registerUser(
                 "Bill", "Tester", "200 Payment Road",
                 "Chennai", "TN", "600001",
                 "9876501234", "222-33-4444",
-                username, password
+                sharedUsername, PASSWORD
         );
         registerPage.waitForUrl("overview");
+        new AccountsOverviewPage(getDriver()).logout();
+        tearDown();
+    }
+
+    @BeforeMethod
+    public void navigateToBillPay() {
+        for (int attempt = 1; attempt <= 3; attempt++) {
+            try {
+                getDriver().get(ConfigReader.get("base.url"));
+                LoginPage loginPage = new LoginPage(getDriver());
+                loginPage.login(sharedUsername, PASSWORD);
+                loginPage.waitForUrl("overview");
+                break;
+            } catch (Exception e) {
+                if (attempt == 3) throw new RuntimeException("Login failed after 3 attempts", e);
+                System.out.println("  ⚠ Login attempt " + attempt + " failed, retrying...");
+                try { Thread.sleep(2000); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
+            }
+        }
 
         AccountsOverviewPage accountsPage = new AccountsOverviewPage(getDriver());
         accountsPage.clickAccountsOverview();

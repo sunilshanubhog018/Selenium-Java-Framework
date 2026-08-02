@@ -19,7 +19,26 @@ import java.util.Map;
 
 public class DataDrivenLoginTest extends BaseTest {
 
+    private static final String SHARED_PASSWORD = "Test@1234";
+    private static String sharedUsername;
     private LoginPage loginPage;
+
+    @org.testng.annotations.BeforeClass
+    public void registerSharedUser() throws Exception {
+        setUp();
+        sharedUsername = "dd_" + System.currentTimeMillis();
+        getDriver().get(ConfigReader.get("base.url") + "register.htm");
+        RegisterPage registerPage = new RegisterPage(getDriver());
+        registerPage.registerUser(
+                "Data", "Driven", "123 Test Street",
+                "Mumbai", "MH", "400001",
+                "9876543210", "111-22-3333",
+                sharedUsername, SHARED_PASSWORD
+        );
+        registerPage.waitForUrl("overview");
+        new pages.AccountsOverviewPage(getDriver()).logout();
+        tearDown();
+    }
 
     @BeforeMethod
     public void navigateToLoginPage() {
@@ -57,27 +76,13 @@ public class DataDrivenLoginTest extends BaseTest {
 
         // ---- HANDLE SPECIAL USERNAMES ----
         if (username.equals("CONFIG_USERNAME")) {
-            username = ConfigReader.get("test.username");
-            password = ConfigReader.get("test.password");
+            username = sharedUsername;
+            password = SHARED_PASSWORD;
         }
 
         if (username.equals("REGISTER_NEW")) {
-            String newUsername = "dd_" + System.currentTimeMillis();
-            loginPage.clickRegister();
-            RegisterPage registerPage = new RegisterPage(getDriver());
-            registerPage.waitForUrl("register");
-            registerPage.registerUser(
-                    "Data", "Driven", "123 Test Street",
-                    "Mumbai", "MH", "400001",
-                    "9876543210", "111-22-3333",
-                    newUsername, password
-            );
-            registerPage.waitForUrl("overview");
-            // Registration auto-logs in — verify directly without re-login
-            Assert.assertTrue(getDriver().getCurrentUrl().contains("overview"),
-                    testCaseID + ": Login should succeed!");
-            System.out.println("  ✓ " + testCaseID + " PASSED!");
-            return;
+            username = sharedUsername;
+            password = SHARED_PASSWORD;
         }
 
         // ---- PERFORM LOGIN ----

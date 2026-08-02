@@ -28,25 +28,44 @@ public class EndToEndTest extends BaseTest {
     public void registerSharedUser() throws Exception {
         setUp();
         sharedUsername = "e2e_" + System.currentTimeMillis();
-        getDriver().get(ConfigReader.get("base.url") + "register.htm");
-        RegisterPage registerPage = new RegisterPage(getDriver());
-        registerPage.registerUser(
-            "E2E", "Tester", "100 Test Street",
-            "Bangalore", "KA", "560001",
-            "9876543210", "123-45-6789",
-            sharedUsername, PASSWORD
-        );
-        registerPage.waitForUrl("overview");
-        new AccountsOverviewPage(getDriver()).logout();
+        for (int attempt = 1; attempt <= 3; attempt++) {
+            try {
+                getDriver().get(ConfigReader.get("base.url") + "register.htm");
+                RegisterPage registerPage = new RegisterPage(getDriver());
+                registerPage.registerUser(
+                    "E2E", "Tester", "100 Test Street",
+                    "Bangalore", "KA", "560001",
+                    "9876543210", "123-45-6789",
+                    sharedUsername, PASSWORD
+                );
+                registerPage.waitForUrl("overview");
+                new AccountsOverviewPage(getDriver()).logout();
+                System.out.println("  ✓ Shared user registered: " + sharedUsername);
+                break;
+            } catch (Exception e) {
+                if (attempt == 3) throw e;
+                System.out.println("  ⚠ Registration attempt " + attempt + " failed, retrying...");
+                Thread.sleep(3000);
+                sharedUsername = "e2e_" + System.currentTimeMillis();
+            }
+        }
         tearDown();
-        System.out.println("  ✓ Shared user registered: " + sharedUsername);
     }
 
     private void login() {
-        getDriver().get(ConfigReader.get("base.url"));
-        LoginPage loginPage = new LoginPage(getDriver());
-        loginPage.login(sharedUsername, PASSWORD);
-        loginPage.waitForUrl("overview");
+        for (int attempt = 1; attempt <= 3; attempt++) {
+            try {
+                getDriver().get(ConfigReader.get("base.url"));
+                LoginPage loginPage = new LoginPage(getDriver());
+                loginPage.login(sharedUsername, PASSWORD);
+                loginPage.waitForUrl("overview");
+                return;
+            } catch (Exception e) {
+                if (attempt == 3) throw new RuntimeException("Login failed after 3 attempts", e);
+                System.out.println("  ⚠ Login attempt " + attempt + " failed, retrying...");
+                try { Thread.sleep(2000); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
+            }
+        }
     }
 
     @Test(priority = 1, groups = {"e2e"}, description = "E2E: New customer onboarding flow")

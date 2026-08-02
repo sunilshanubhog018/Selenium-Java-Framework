@@ -28,25 +28,44 @@ public class TransferFundsTest extends BaseTest {
     public void registerSharedUser() throws Exception {
         setUp();
         sharedUsername = "tfr_" + System.currentTimeMillis();
-        getDriver().get(ConfigReader.get("base.url") + "register.htm");
-        RegisterPage registerPage = new RegisterPage(getDriver());
-        registerPage.registerUser(
-                "Transfer", "Tester", "100 Bank Lane",
-                "Delhi", "DL", "110001",
-                "9123456789", "111-22-3333",
-                sharedUsername, PASSWORD
-        );
-        registerPage.waitForUrl("overview");
-        new AccountsOverviewPage(getDriver()).logout();
+        for (int attempt = 1; attempt <= 3; attempt++) {
+            try {
+                getDriver().get(ConfigReader.get("base.url") + "register.htm");
+                RegisterPage registerPage = new RegisterPage(getDriver());
+                registerPage.registerUser(
+                        "Transfer", "Tester", "100 Bank Lane",
+                        "Delhi", "DL", "110001",
+                        "9123456789", "111-22-3333",
+                        sharedUsername, PASSWORD
+                );
+                registerPage.waitForUrl("overview");
+                new AccountsOverviewPage(getDriver()).logout();
+                break;
+            } catch (Exception e) {
+                if (attempt == 3) throw e;
+                System.out.println("  ⚠ Registration attempt " + attempt + " failed, retrying...");
+                Thread.sleep(3000);
+                sharedUsername = "tfr_" + System.currentTimeMillis();
+            }
+        }
         tearDown();
     }
 
     @BeforeMethod
     public void navigateToTransferFunds() {
-        getDriver().get(ConfigReader.get("base.url"));
-        LoginPage loginPage = new LoginPage(getDriver());
-        loginPage.login(sharedUsername, PASSWORD);
-        loginPage.waitForUrl("overview");
+        for (int attempt = 1; attempt <= 3; attempt++) {
+            try {
+                getDriver().get(ConfigReader.get("base.url"));
+                LoginPage loginPage = new LoginPage(getDriver());
+                loginPage.login(sharedUsername, PASSWORD);
+                loginPage.waitForUrl("overview");
+                break;
+            } catch (Exception e) {
+                if (attempt == 3) throw new RuntimeException("Login failed after 3 attempts", e);
+                System.out.println("  ⚠ Login attempt " + attempt + " failed, retrying...");
+                try { Thread.sleep(2000); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
+            }
+        }
 
         AccountsOverviewPage accountsPage = new AccountsOverviewPage(getDriver());
         accountsPage.clickAccountsOverview();

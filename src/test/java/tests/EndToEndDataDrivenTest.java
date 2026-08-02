@@ -27,25 +27,48 @@ import java.util.Map;
 public class EndToEndDataDrivenTest extends BaseTest {
 
     private static final String PASSWORD = "Test@1234";
+    private static String sharedUsername;
 
-    private String registerAndLogin(String prefix) {
-        String username = prefix + "_" + System.currentTimeMillis();
+    @org.testng.annotations.BeforeClass
+    public void registerSharedUser() throws Exception {
+        setUp();
+        sharedUsername = "e2edd_" + System.currentTimeMillis();
+        for (int attempt = 1; attempt <= 3; attempt++) {
+            try {
+                getDriver().get(ConfigReader.get("base.url") + "register.htm");
+                RegisterPage registerPage = new RegisterPage(getDriver());
+                registerPage.registerUser(
+                    "E2E", "Tester", "100 Test Street",
+                    "Bangalore", "KA", "560001",
+                    "9876543210", "123-45-6789",
+                    sharedUsername, PASSWORD
+                );
+                registerPage.waitForUrl("overview");
+                new AccountsOverviewPage(getDriver()).logout();
+                break;
+            } catch (Exception e) {
+                if (attempt == 3) throw e;
+                Thread.sleep(3000);
+                sharedUsername = "e2edd_" + System.currentTimeMillis();
+            }
+        }
+        tearDown();
+    }
 
-        getDriver().get(ConfigReader.get("base.url") + "register.htm");
-        RegisterPage registerPage = new RegisterPage(getDriver());
-        registerPage.registerUser(
-            "E2E", "Tester", "100 Test Street",
-            "Bangalore", "KA", "560001",
-            "9876543210", "123-45-6789",
-            username, PASSWORD
-        );
-        registerPage.waitForVisible(By.cssSelector("#rightPanel h1.title"));
-
-        getDriver().get(ConfigReader.get("base.url"));
-        LoginPage loginPage = new LoginPage(getDriver());
-        loginPage.login(username, PASSWORD);
-        loginPage.waitForUrl("overview");
-        return username;
+    private void login() {
+        for (int attempt = 1; attempt <= 3; attempt++) {
+            try {
+                getDriver().get(ConfigReader.get("base.url"));
+                LoginPage loginPage = new LoginPage(getDriver());
+                loginPage.login(sharedUsername, PASSWORD);
+                loginPage.waitForUrl("overview");
+                return;
+            } catch (Exception e) {
+                if (attempt == 3) throw new RuntimeException("Login failed after 3 attempts", e);
+                System.out.println("  ⚠ Login attempt " + attempt + " failed, retrying...");
+                try { Thread.sleep(2000); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
+            }
+        }
     }
 
     @BeforeMethod
@@ -93,8 +116,7 @@ public class EndToEndDataDrivenTest extends BaseTest {
         System.out.println("\nRunning: " + tcId + " - " + scenarioName);
         System.out.println("  Description: " + description);
 
-        // Register fresh user via API and login
-        registerAndLogin(tcId != null ? tcId.toLowerCase() : "e2e");
+        login();
 
         // ---- TRANSFER ----
         if (transferAmount != null && !transferAmount.isEmpty()) {
