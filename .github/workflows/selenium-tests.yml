@@ -16,6 +16,10 @@ on:
           - full
           - smoke
 
+# Needed so CI can commit latest reports back into reports/ci-latest/
+permissions:
+  contents: write
+
 jobs:
   run-tests:
     runs-on: ubuntu-latest
@@ -25,6 +29,10 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
+        with:
+          # Full history so report commit can push cleanly to main
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up JDK 21
         uses: actions/setup-java@v4
@@ -81,6 +89,73 @@ jobs:
           retention-days: 30
           if-no-files-found: ignore
 
+      # Save latest CI reports into the repo so they appear under reports/ci-latest/
+      # after you run: git pull
+      - name: Publish reports into reports/ci-latest
+        if: always() && github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        run: |
+          set -e
+          DEST="reports/ci-latest"
+          rm -rf "$DEST"
+          mkdir -p "$DEST/testng" "$DEST/allure" "$DEST/screenshots"
+
+          # Extent
+          if [ -f test-output/ExtentReport.html ]; then
+            cp test-output/ExtentReport.html "$DEST/ExtentReport.html"
+          fi
+
+          # TestNG / Surefire
+          if [ -d target/surefire-reports ]; then
+            cp -r target/surefire-reports/. "$DEST/testng/"
+          fi
+
+          # Allure HTML (if generated)
+          if [ -d target/site/allure-report ]; then
+            cp -r target/site/allure-report/. "$DEST/allure/" 2>/dev/null || true
+          fi
+
+          # Failure screenshots (if any)
+          if [ -d test-output/screenshots ]; then
+            cp -r test-output/screenshots/. "$DEST/screenshots/" 2>/dev/null || true
+          fi
+
+          # Run metadata
+          {
+            echo "# CI Reports — latest"
+            echo ""
+            echo "| Field | Value |"
+            echo "|-------|-------|"
+            echo "| Run number | ${{ github.run_number }} |"
+            echo "| Commit | \`${{ github.sha }}\` |"
+            echo "| Branch | ${{ github.ref_name }} |"
+            echo "| Workflow | ${{ github.workflow }} |"
+            echo "| UTC time | $(date -u +%Y-%m-%dT%H:%M:%SZ) |"
+            echo ""
+            echo "## Open locally after \`git pull\`"
+            echo ""
+            echo "- Extent: \`reports/ci-latest/ExtentReport.html\`"
+            echo "- TestNG: \`reports/ci-latest/testng/index.html\`"
+            echo "- TestNG emailable: \`reports/ci-latest/testng/emailable-report.html\`"
+            echo "- Allure: \`reports/ci-latest/allure/index.html\` (if present)"
+            echo "- Screenshots: \`reports/ci-latest/screenshots/\`"
+          } > "$DEST/README.md"
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          # Avoid fighting concurrent pushes
+          git pull --rebase origin main || true
+
+          git add -A "$DEST"
+          if git diff --staged --quiet; then
+            echo "No report file changes to commit."
+            exit 0
+          fi
+
+          git commit -m "ci: publish latest test reports from run #${{ github.run_number }} [skip ci]"
+          git push origin HEAD:main
+          echo "Reports committed to reports/ci-latest/ on main."
+
       - name: Test Summary
         if: always()
         run: |
@@ -92,9 +167,8 @@ jobs:
             echo "### Surefire results present" >> $GITHUB_STEP_SUMMARY
           fi
           echo "### Reports" >> $GITHUB_STEP_SUMMARY
-          echo "- Allure Report artifact" >> $GITHUB_STEP_SUMMARY
-          echo "- Extent Report artifact" >> $GITHUB_STEP_SUMMARY
-          echo "- TestNG Reports artifact" >> $GITHUB_STEP_SUMMARY
+          echo "- GitHub Artifacts (download from Actions UI)" >> $GITHUB_STEP_SUMMARY
+          echo "- **Repo folder:** \`reports/ci-latest/\` (auto-committed on main; run \`git pull\`)" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "Note: smoke-tests job runs only on workflow_dispatch with suite=smoke." >> $GITHUB_STEP_SUMMARY
 

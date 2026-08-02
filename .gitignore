@@ -14,13 +14,19 @@ build/
 *.swp
 *.swo
 
-# Test reports & generated output
+# Test reports & generated output (local runs only)
 test-output/
 allure-results/
 allure-report/
 screenshots/
 logs/
 *.log
+
+# CI publishes the latest run into the repo for easy viewing after git pull
+# (do not ignore this path)
+!reports/
+!reports/ci-latest/
+!reports/ci-latest/**
 
 # OS files
 .DS_Store
