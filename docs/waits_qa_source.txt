@@ -1,0 +1,324 @@
+
+===== PAGE 1 =====
+Selenium Waits
+ Interview Questions & Answers
+ Week 2 — Selenium Core Concepts | QA Automation Study Plan
+Basic / Conceptual
+Q1. What are Selenium Waits and why are they needed?
+Answer:
+Selenium Waits are mechanisms that pause test execution until a condition is met or a timeout expires. They
+are needed because modern web apps are dynamic — elements load asynchronously via AJAX/JavaScript.
+Without waits, Selenium throws NoSuchElementException or ElementNotInteractableException when it tries
+to interact with elements that haven't loaded yet.
+■ Interview Tip: Always mention flaky tests and asynchronous loading as the core reason.
+Q2. What are the three types of Selenium Waits?
+Answer:
+1. Implicit Wait — Global wait applied to all findElement() calls for the session.
+2. Explicit Wait — Waits for a specific condition on a specific element using ExpectedConditions.
+3. Fluent Wait — Advanced Explicit Wait with configurable polling interval and ignored exceptions.
+■ Interview Tip: Be prepared to code any of these on the spot.
+Q3. What is Implicit Wait? What are its limitations?
+Answer:
+Implicit Wait tells WebDriver to poll the DOM for a set duration when finding an element. Set once using:
+driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+Limitations:
+ Applies globally — cannot target specific elements
+ Cannot wait for specific conditions (clickable, visible, etc.)
+ Slows tests — waits full duration even for genuinely absent elements
+ Conflicts with Explicit Wait — must never be mixed
+■ Interview Tip: Mentioning the mixing conflict shows depth of understanding.
+Q4. What is Explicit Wait? How is it better than Implicit Wait?
+Answer:
+Explicit Wait waits for a specific condition on a specific element before proceeding.
+Code: WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+wait.until(ExpectedConditions.elementToBeClickable(By.id("btn")));
+
+===== PAGE 2 =====
+Better because:
+ Condition-based — precise and reliable
+ Per-element scope — no global performance impact
+ 30+ pre-built ExpectedConditions available
+ Faster — stops as soon as condition is met
+■ Interview Tip: Always say Explicit Wait is the recommended/preferred approach.
+Q5. What is Fluent Wait? When would you use it over Explicit Wait?
+Answer:
+Fluent Wait is an advanced Explicit Wait that lets you configure:
+ Maximum timeout duration
+ Custom polling interval (how often to check)
+ Exceptions to ignore during polling
+Use Fluent Wait when:
+ Element loads very slowly or intermittently
+ You need custom polling frequency (e.g., every 2s instead of 500ms)
+ You need a custom condition that ExpectedConditions doesn't cover
+ You need to suppress specific exceptions during polling
+■ Interview Tip: Give a real-world example — OTP field, slow API response, or file upload result.
+Intermediate
+Q6. Why should you never mix Implicit and Explicit Waits?
+Answer:
+When both are set, WebDriver uses both timeout clocks simultaneously. This causes:
+ Unpredictable wait durations — may wait longer than either timeout alone
+ Unreliable test behavior — hard to debug timing issues
+ The Explicit Wait may use the longer of the two durations
+Rule: Always use ONLY Explicit Wait. Remove all implicit waits from your framework.
+■ Interview Tip: This is a very common trap question — knowing this earns credibility.
+Q7. What is the difference between visibilityOfElementLocated and
+presenceOfElementLocated?
+Answer:
+presenceOfElementLocated — Element is present in the DOM (may be hidden, display:none).
+visibilityOfElementLocated — Element is present in DOM AND visible on screen (not hidden, has
+width/height > 0).
+Use presenceOfElementLocated when you only need the element in DOM.
+Use visibilityOfElementLocated when the element must actually be visible to the user.
+
+===== PAGE 3 =====
+■ Interview Tip: Relate this to Example 1 — element in DOM but hidden with display:none.
+Q8. What is the difference between Dynamic Loading Example 1 and Example 2 in
+the-internet?
+Answer:
+Example 1 (/dynamic_loading/1):
+ The #finish element EXISTS in the DOM from page load
+ It is hidden using display:none
+ After clicking Start, display:none is removed to reveal it
+Example 2 (/dynamic_loading/2):
+ The #finish element does NOT exist in the DOM initially
+ After clicking Start, it is dynamically CREATED and injected into DOM
+For both cases, visibilityOfElementLocated works correctly.
+■ Interview Tip: This shows you understand DOM manipulation vs CSS visibility.
+Q9. How does Fluent Wait's lambda return mechanism work?
+Answer:
+Fluent Wait polls using a Function lambda. The rule is:
+ Return the element (non-null value) — wait STOPS, returns the element
+ Return null — wait CONTINUES polling on next interval
+Example:
+fluentWait.until(d -> {
+WebElement el = d.findElement(By.id("finish"));
+return el.isDisplayed() ? el : null; // null = keep polling
+});
+This gives you complete control to write any custom wait condition.
+■ Interview Tip: Demonstrating the null-return pattern shows advanced Fluent Wait mastery.
+Q10. What ExpectedCondition would you use to wait for a loading spinner to disappear?
+Answer:
+Use invisibilityOfElementLocated:
+wait.until(ExpectedConditions.invisibilityOfElementLocated(By.id("loading")));
+This waits until the spinner element becomes invisible or is removed from DOM. Always use this BEFORE
+waiting for the result element — otherwise the spinner may overlap the result and cause stale/incorrect
+references.
+■ Interview Tip: The spinner-first pattern is a professional best practice worth mentioning.
+Scenario-Based
+
+===== PAGE 4 =====
+Q11. A test keeps failing with TimeoutException even though the element appears on screen.
+What do you check?
+Answer:
+1. Check if Implicit + Explicit waits are mixed — remove implicit wait
+2. Verify the locator (ID, CSS, XPath) — inspect element to confirm it matches
+3. Check if a spinner/overlay is blocking the element
+4. Confirm the ExpectedCondition is correct — e.g., element may be in DOM but not visible (use visibilityOf
+not presence)
+5. Check if element is inside an iframe — need to switch frame first
+6. Increase timeout temporarily to confirm it's a timing issue
+■ Interview Tip: A systematic checklist answer shows a senior tester mindset.
+Q12. How would you handle an element that appears only sometimes and loads very slowly?
+Answer:
+Use Fluent Wait with:
+ Long timeout (e.g., 30-60 seconds)
+ Slow polling interval (e.g., every 3-5 seconds to reduce CPU)
+ NoSuchElementException ignored
+new FluentWait<>(driver)
+.withTimeout(Duration.ofSeconds(60))
+.pollingEvery(Duration.ofSeconds(5))
+.ignoring(NoSuchElementException.class)
+.until(d -> d.findElement(By.id("result")));
+■ Interview Tip: Mention polling interval tuning for performance — shows framework thinking.
+Q13. Why is Thread.sleep() bad practice in Selenium tests?
+Answer:
+1. Hardcoded duration — always waits the full time even if element loads in 1 second
+2. Makes test suite slow — multiplied across hundreds of tests
+3. Still fails if element takes longer than the sleep duration
+4. Non-deterministic — works on dev machine, fails on slow CI server
+5. Masks real issues — test passes by luck, not by design
+Always replace Thread.sleep() with appropriate Explicit Wait.
+■ Interview Tip: The CI server point shows you think about real-world automation pipelines.
+Q14. In your banking domain experience, where would you apply Fluent Wait specifically?
+Answer:
+Banking-specific scenarios ideal for Fluent Wait:
+ OTP generation — OTP field appears after server-side SMS trigger (slow)
+
+===== PAGE 5 =====
+ Transaction confirmation — balance update after payment processing
+ Statement generation — PDF download link appears after backend processing
+ KYC verification status — status changes after document processing
+ Fund transfer result — success/failure message after API call completes
+These have unpredictable load times — Fluent Wait's custom polling handles them best.
+■ Interview Tip: Connecting waits to your banking domain adds strong real-world credibility.
+Quick Revision Cheatsheet
+Wait Type
+Set Where
+Condition
+Polling
+Ignore Exc.
+Use When
+Implicit
+Driver level
+None
+~250ms
+No
+Simple apps only
+Explicit
+Per element
+Built-in EC
+500ms
+No
+Standard scenarios
+Fluent
+Per element
+Custom lambda
+Custom
+Yes
+Slow/dynamic elements
+Practice Scenarios — Full Code
+These are the two complete working test implementations for the Dynamic Loading practice exercise. Study
+them alongside the interview questions to reinforce hands-on understanding.
+Scenario 1 — Explicit Wait (WaitsDemo.java)
+URL: https://the-internet.herokuapp.com/dynamic_loading/1
+Element EXISTS in DOM from start but is hidden (display:none). After clicking Start, spinner appears then
+element becomes visible.
+package week2.seleniumcore;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
+import org.testng.annotations.*;
+import java.time.Duration;
+public class WaitsDemo {
+WebDriver driver;
+WebDriverWait wait;
+@BeforeMethod
+public void setup() {
+// Initialize ChromeDriver — launches real Chrome browser
+driver = new ChromeDriver();
+// Maximize window — ensures all elements are in viewport
+driver.manage().window().maximize();
+
+===== PAGE 6 =====
+// Explicit Wait — polls every 500ms up to 15 seconds
+wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+}
+@Test
+public void testDynamicLoading() {
+// Navigate to Example 1 — element hidden in DOM with display:none
+driver.get("https://the-internet.herokuapp.com/dynamic_loading/1");
+// Wait for Start button — elementToBeClickable = visible + enabled
+// CSS: #start selects the div, 'button' selects the button inside it
+WebElement startButton = wait.until(
+ExpectedConditions.elementToBeClickable(By.cssSelector("#start button"))
+);
+// Click Start — triggers spinner + loading sequence
+startButton.click();
+// Wait for spinner to disappear — MUST do this before checking result
+wait.until(
+ExpectedConditions.invisibilityOfElementLocated(By.id("loading"))
+);
+// Wait for #finish div to become visible (display:none removed)
+WebElement resultText = wait.until(
+ExpectedConditions.visibilityOfElementLocated(By.id("finish"))
+);
+// Assert text — fails with clear message if mismatch
+Assert.assertEquals(resultText.getText(), "Hello World!");
+System.out.println("Text verified: " + resultText.getText());
+}
+@AfterMethod
+public void teardown() {
+// Null check — prevents NPE if setup() failed before driver init
+if (driver != null) driver.quit();
+}
+}
+Scenario 2 — Fluent Wait (FluentWaitDemo.java)
+URL: https://the-internet.herokuapp.com/dynamic_loading/1
+Same page — demonstrates Fluent Wait with custom polling interval (1s) and custom lambda condition instead
+of pre-built ExpectedConditions.
+package week2.seleniumcore;
+import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+===== PAGE 7 =====
+import org.openqa.selenium.support.ui.FluentWait;
+import org.openqa.selenium.support.ui.Wait;
+import org.testng.Assert;
+import org.testng.annotations.*;
+import java.time.Duration;
+public class FluentWaitDemo {
+WebDriver driver;
+@BeforeMethod
+public void setup() {
+// Initialize ChromeDriver — launches real Chrome browser
+driver = new ChromeDriver();
+// Maximize window — prevents layout issues in smaller viewports
+driver.manage().window().maximize();
+}
+@Test
+public void testWithFluentWait() {
+// Navigate to Example 1 — same page, different wait strategy
+driver.get("https://the-internet.herokuapp.com/dynamic_loading/1");
+// Configure Fluent Wait:
+// withTimeout(20s) — max wait before TimeoutException
+// pollingEvery(1s) — check condition every 1 second
+// ignoring(NoSuchElement) — suppress exception during polling,
+// retry on next poll cycle instead
+Wait fluentWait = new FluentWait<>(driver)
+.withTimeout(Duration.ofSeconds(20))
+.pollingEvery(Duration.ofSeconds(1))
+.ignoring(NoSuchElementException.class);
+// Lambda: finds button every 1s until found, then clicks directly
+fluentWait.until(
+d -> d.findElement(By.cssSelector("#start button"))
+).click();
+// Custom condition lambda — KEY difference from Explicit Wait:
+// return el → condition met, wait STOPS and returns element
+// return null → condition not met, wait CONTINUES to next poll
+WebElement result = fluentWait.until(
+d -> {
+WebElement el = d.findElement(By.id("finish"));
+return el.isDisplayed() ? el : null;
+}
+);
+// Assert text — same verification as Explicit Wait scenario
+Assert.assertEquals(result.getText(), "Hello World!");
+System.out.println("Fluent Wait verified: " + result.getText());
+}
+
+===== PAGE 8 =====
+@AfterMethod
+public void teardown() {
+// Always quit browser — placed in @AfterMethod for guaranteed cleanup
+if (driver != null) driver.quit();
+}
+}
+Key Differences Between the Two Scenarios
+Aspect
+WaitsDemo (Explicit)
+FluentWaitDemo (Fluent)
+Condition style
+Pre-built ExpectedConditions
+Custom lambda function
+Polling interval
+Default 500ms
+Custom — 1 second
+Exception handling
+Not configurable
+ignoring(NoSuchElementException)
+Stop condition
+Handled internally
+Return element or null
+Spinner handling
+invisibilityOfElementLocated
+Handled in lambda (isDisplayed)
+Best for
+Standard test scenarios
+Slow / unpredictable elements

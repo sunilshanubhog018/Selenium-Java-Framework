@@ -8,13 +8,18 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.edge.EdgeDriverService;
 import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
 import utils.ConfigReader;
+import utils.WaitHelper;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.Duration;
 
 public class BaseTest {
@@ -55,9 +60,9 @@ public class BaseTest {
 
         try {
             tempDriver.get("https://parabank.parasoft.com/parabank/admin.htm");
-            Thread.sleep(2000);
+            WaitHelper.waitForAdminInitButton(tempDriver);
             tempDriver.findElement(By.cssSelector("button[value='INIT']")).click();
-            Thread.sleep(3000);
+            WaitHelper.waitForAdminInitSettled(tempDriver);
             System.out.println("✓ ParaBank database initialized successfully");
         } catch (Exception e) {
             System.out.println("⚠ Database initialization skipped: " + e.getMessage());
@@ -104,10 +109,15 @@ public class BaseTest {
                 break;
 
             case "edge":
+                // Microsoft retired msedgedriver.azureedge.net — Selenium Manager (4.27)
+                // still hits that host and fails on many networks. Prefer local driver, then WDM.
+                setupEdgeDriver();
                 EdgeOptions edgeOptions = new EdgeOptions();
                 edgeOptions.addArguments("--no-sandbox");
                 edgeOptions.addArguments("--disable-dev-shm-usage");
                 edgeOptions.addArguments("--window-size=1920,1080");
+                edgeOptions.addArguments("--disable-gpu");
+                edgeOptions.addArguments("--remote-allow-origins=*");
                 if (headless) {
                     edgeOptions.addArguments("--headless=new");
                 }
@@ -148,6 +158,52 @@ public class BaseTest {
                 driver.remove();
                 wait.remove();
             }
+        }
+    }
+
+    /**
+     * Resolves msedgedriver without relying on the broken azureedge.net CDN used by
+     * Selenium Manager 4.27. Order:
+     * 1) -Dwebdriver.edge.driver / config edge.driver.path
+     * 2) project drivers/msedgedriver.exe (checked in for offline/local use)
+     * 3) WebDriverManager (uses msedgedriver.microsoft.com)
+     */
+    private void setupEdgeDriver() {
+        String configured = System.getProperty("webdriver.edge.driver");
+        if (configured == null || configured.isBlank()) {
+            try {
+                configured = ConfigReader.get("edge.driver.path");
+            } catch (RuntimeException ignored) {
+                // optional key
+            }
+        }
+
+        Path driverPath = null;
+        if (configured != null && !configured.isBlank()) {
+            driverPath = Paths.get(configured.trim());
+        } else {
+            Path local = Paths.get("drivers", "msedgedriver.exe");
+            if (Files.isRegularFile(local)) {
+                driverPath = local.toAbsolutePath().normalize();
+            }
+        }
+
+        if (driverPath != null && Files.isRegularFile(driverPath)) {
+            System.setProperty(EdgeDriverService.EDGE_DRIVER_EXE_PROPERTY, driverPath.toString());
+            System.out.println("ℹ Edge driver: " + driverPath);
+            return;
+        }
+
+        try {
+            WebDriverManager.edgedriver().setup();
+            System.out.println("ℹ Edge driver: WebDriverManager");
+        } catch (Exception e) {
+            throw new RuntimeException(
+                    "Could not resolve msedgedriver. Microsoft's old CDN (azureedge.net) is down; "
+                            + "download matching Edge driver from https://developer.microsoft.com/en-us/microsoft-edge/tools/webdriver/ "
+                            + "into drivers/msedgedriver.exe or set edge.driver.path / -Dwebdriver.edge.driver. "
+                            + "Cause: " + e.getMessage(),
+                    e);
         }
     }
 }

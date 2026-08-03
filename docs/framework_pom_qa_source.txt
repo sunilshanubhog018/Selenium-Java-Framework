@@ -1,0 +1,622 @@
+
+===== PAGE 1 =====
+SDET Interview Preparation
+ Week 3: Framework Design + Page Object Model
+ Topics: POM, BasePage, BaseTest, ConfigReader, ExcelReader, Screenshot Utilities
+ PART 1 — FUNDAMENTALS (Blue Level)
+Q1. What is Page Object Model (POM) in Selenium?
+Page Object Model is a design pattern where each web page in the application has a corresponding Java
+class. This class contains the locators (element identifiers) and the methods (actions) for that page. Tests
+interact with the page through these methods instead of directly using Selenium commands.
+// LoginPage.java
+public class LoginPage extends BasePage {
+private final By usernameInput = By.name("username");
+private final By loginButton = By.cssSelector("input[value='Log In']");
+public void login(String user, String pass) {
+type(usernameInput, user);
+type(passwordInput, pass);
+click(loginButton);
+}
+}
+Q2. What is the difference between BasePage and BaseTest?
+BasePage is the parent class for all Page Objects. It contains reusable Selenium methods like click(), type(),
+getText() that all pages inherit. BaseTest is the parent class for all Test classes. It handles browser setup
+(@BeforeMethod) and teardown (@AfterMethod).
+■ Banking example: LoginPage extends BasePage (uses click/type methods). LoginTest extends BaseTest
+(uses driver, setUp/tearDown).
+Q3. Why do we declare locators as 'private final By' in page objects?
+private: Only the page class should access its own locators. Tests should call page methods (login()) not
+locators directly (By.name('username')). final: Locator values never change after assignment — they are
+constants. By type: Stores just the address of the element, not the element itself. This avoids stale element
+exceptions.
+// Correct approach
+private final By usernameInput = By.name("username");
+// Wrong approach — finds element immediately, causes StaleElementException
+private WebElement usernameInput = driver.findElement(By.name("username"));
+Q4. What is ConfigReader and why is it needed?
+
+===== PAGE 2 =====
+ConfigReader is a utility class that reads key=value pairs from config.properties file. Without it, you'd
+hardcode URLs, browser names, and credentials in Java — meaning a single change requires editing
+multiple files. With ConfigReader, you change ONE line in config.properties and the entire framework picks it
+up.
+// Without ConfigReader — bad practice
+driver.get("https://parabank.parasoft.com"); // hardcoded in 50 files!
+// With ConfigReader — good practice
+driver.get(ConfigReader.get("base.url")); // reads from config
+Q5. Explain the static block in ConfigReader.
+The static block runs exactly ONCE when the class is first used. It opens config.properties, loads all
+key=value pairs into a Properties object in memory, then closes the file. All subsequent calls to
+ConfigReader.get() read from memory — no file I/O. This is efficient because the file is read only once
+regardless of how many tests call ConfigReader.
+static {
+try {
+FileInputStream file = new FileInputStream("config.properties");
+properties = new Properties();
+properties.load(file);
+file.close();
+} catch (IOException e) {
+throw new RuntimeException("Config load failed: " + e.getMessage());
+}
+}
+Q6. What is ExcelReader and how does it support data-driven testing?
+ExcelReader uses Apache POI to read test data from .xlsx files. In data-driven testing, test scenarios
+(username, password, expected result) are stored in Excel rows instead of hardcoded in Java. The same
+@Test method runs once per Excel row, executing 33 scenarios with one method.
+// @DataProvider reads Excel and feeds data to the test
+@DataProvider(name = "loginData")
+public Object[][] getLoginData() {
+return ExcelReader.readExcelAsArray("LoginTestData.xlsx", "Sheet1");
+}
+// Test runs once per row automatically
+@Test(dataProvider = "loginData")
+public void testLogin(String user, String pass, String expected) { ... }
+Q7. What is a TestNG Listener and what does ITestListener do?
+A TestNG Listener is a class that monitors test execution events. ITestListener is an interface with methods
+like onTestStart(), onTestSuccess(), onTestFailure(), onTestSkipped(). You implement these methods to add
+custom behavior — like capturing screenshots when tests fail or logging test results.
+public class TestListener implements ITestListener {
+@Override
+public void onTestFailure(ITestResult result) {
+// Automatically capture screenshot on any test failure
+captureScreenshot(result);
+
+===== PAGE 3 =====
+}
+}
+Q8. Why do we use @BeforeMethod and @AfterMethod in BaseTest?
+@BeforeMethod runs BEFORE every @Test method — it opens a fresh browser. @AfterMethod runs
+AFTER every @Test method — it closes the browser. This ensures test isolation: each test gets a clean
+browser with no cookies or session from previous tests. If test 1 logs in, test 2 starts fresh and won't be
+affected.
+■ Banking example: If Test 1 logs in as admin and Test 2 tests invalid login, without @BeforeMethod they'd
+share the same browser — Test 2 would already be logged in, causing a false pass.
+Q9. What is the difference between implicit wait and explicit wait?
+Implicit wait: Applied globally to ALL findElement calls. The driver waits up to N seconds for any element
+before throwing NoSuchElementException. Set once in setUp(). Explicit wait: Applied to SPECIFIC
+conditions. WebDriverWait waits for a particular condition (visible, clickable) on a particular element for N
+seconds. More precise than implicit wait.
+// Implicit wait — applies to ALL elements
+driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+// Explicit wait — applies to SPECIFIC element + condition
+WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+wait.until(ExpectedConditions.elementToBeClickable(loginButton)).click();
+Q10. How does the @DataProvider annotation work in TestNG?
+@DataProvider is a method that returns Object[][] (2D array). Each inner array represents one test run's
+parameters. TestNG automatically calls the @Test method once for each row, passing the row values as
+method parameters. The test count in reports equals the number of rows.
+// Returns 3 rows → test runs 3 times
+@DataProvider(name = "users")
+public Object[][] getData() {
+return new Object[][]{
+{"admin", "admin123", "pass"},
+{"wronguser", "wrongpass", "fail"},
+{"", "", "fail"}
+};
+}
+Q11. What is method chaining in Page Objects and why is it useful?
+Method chaining is when each action method returns 'this' (the page object itself), allowing multiple method
+calls in a single statement. It makes test code more readable and concise.
+// With method chaining (returns this)
+loginPage.enterUsername("user")
+.enterPassword("pass")
+.clickLogin();
+// Without method chaining (verbose)
+loginPage.enterUsername("user");
+loginPage.enterPassword("pass");
+
+===== PAGE 4 =====
+loginPage.clickLogin();
+Q12. Why should Page Objects NOT contain assertions?
+Page Objects should only perform actions and return data — never assert. Assertions belong in test classes.
+Reason: if login() had Assert.assertTrue(success) inside it, you couldn't reuse login() for negative tests where
+failure is expected. Keeping assertions out of pages makes them reusable for both positive and negative
+scenarios.
+// WRONG — assertion in page object
+public void login(String user, String pass) {
+type(usernameInput, user);
+clickLogin();
+Assert.assertTrue(isLoggedIn()); // Should NOT be here!
+}
+// CORRECT — assertion in test class only
+@Test
+public void testLogin() {
+loginPage.login("user", "pass");
+Assert.assertTrue(loginPage.isLoggedIn()); // Correct place
+}
+
+===== PAGE 5 =====
+PART 2 — SENIOR / FRAMEWORK LEVEL (Red Level)
+Q1. Design a POM framework for a banking application from scratch. Walk through your
+architecture decisions.
+A production banking POM framework has these layers: 1. base/ — BasePage (reusable Selenium methods),
+BaseTest (browser lifecycle) 2. pages/ — One class per page: LoginPage, AccountsPage, TransferPage,
+BillPayPage 3. tests/ — Test classes extending BaseTest, one per page 4. utils/ — ConfigReader
+(environment config), ExcelReader (test data), ScreenshotUtils 5. listeners/ — TestListener (screenshot on
+failure, logging) 6. resources/ — config.properties (URLs, credentials, timeouts), testdata/ (Excel files) 7.
+testng.xml — Suite configuration, parallel settings, listener registration
+SeleniumBankingFramework/
+■■■ base/BasePage.java ← click(), type(), getText()
+■■■ base/BaseTest.java ← setUp(), tearDown(), @BeforeSuite
+■■■ pages/LoginPage.java ← locators + actions for login
+■■■ tests/LoginTest.java ← @Test methods with assertions
+■■■ utils/ConfigReader ← reads config.properties
+■■■ utils/ExcelReader ← Apache POI, reads .xlsx
+■■■ listeners/TestListener.java
+■ In our ParaBank banking framework, we chose this structure because each banking feature (login,
+accounts, transfer, bill pay) maps to a separate page object, making it easy for team members to own specific
+pages without conflicts.
+Q2. How do you handle a flaky test environment like a shared public test server?
+This is a real problem in banking projects. Our approach: 1. Database initialization: @BeforeSuite hits the
+admin API to reset the database before the suite runs 2. Dynamic test data: Each test registers a unique user
+(username + System.currentTimeMillis()) to avoid conflicts with other teams 3. Retry mechanism: Configure
+rerunFailingTestsCount in Maven Surefire plugin 4. Environment-specific config: Separate config files for
+DEV/QA/UAT so tests point to isolated environments 5. Health check: Before suite, verify the environment is
+up with a simple HTTP check
+@BeforeSuite
+public void initializeDatabase() {
+// Reset ParaBank DB before ALL tests run
+driver.get(adminUrl);
+driver.findElement(By.cssSelector("button[value='INIT']")).click();
+}
+// Dynamic username prevents duplicate conflicts
+String username = "test_" + System.currentTimeMillis();
+Q3. Explain how you implemented data-driven testing for login scenarios in your banking
+framework.
+We used Apache POI + TestNG @DataProvider. The Excel file has columns: TestCaseID, Category,
+Description, Username, Password, Expected, Execute. The Execute column acts as a run flag — setting it to
+'No' skips that test case without deleting it. Special values in Username: CONFIG_USERNAME reads from
+config.properties, REGISTER_NEW registers a fresh user. This handles both credential types in one Excel
+file. Categories covered: Positive E2E (login → transfer → verify), Negative Empty Fields, Invalid Credentials,
+Special Characters, Boundary values.
+
+===== PAGE 6 =====
+@DataProvider(name = "loginData")
+public Object[][] getLoginData() {
+List> all = ExcelReader.readExcel(filePath, "Sheet1");
+List filtered = new ArrayList<>();
+for (Map row : all) {
+// Execute column controls which tests run
+if ("Yes".equalsIgnoreCase(row.get("Execute"))) {
+filtered.add(new Object[]{row.get("TestCaseID"),
+row.get("Username"), row.get("Password"),
+row.get("Expected")});
+}
+}
+return filtered.toArray(new Object[0][0]);
+}
+■ In banking QA, test data management is critical. Excel-based data-driven testing lets business analysts
+add test cases without touching Java code — they just add rows to the spreadsheet.
+Q4. How does your screenshot listener work? How do you get the driver from the listener?
+TestListener implements ITestListener. In onTestFailure(), we get the test class instance via
+result.getInstance(), cast it to BaseTest, and call getDriver() to get the WebDriver. We then cast driver to
+TakesScreenshot and capture the screenshot as a FILE. The filename includes the test method name and
+timestamp for uniqueness.
+@Override
+public void onTestFailure(ITestResult result) {
+Object testInstance = result.getInstance();
+WebDriver driver = ((BaseTest) testInstance).getDriver();
+TakesScreenshot ts = (TakesScreenshot) driver;
+File src = ts.getScreenshotAs(OutputType.FILE);
+String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+String path = "test-output/screenshots/" + result.getMethod().getMethodName()
++ "_" + timestamp + ".png";
+Files.copy(src.toPath(), Paths.get(path));
+}
+■ In banking test automation, screenshot evidence is required for audit trails. RBI and banking regulators
+require proof that regression tests were executed — screenshots serve as compliance documentation.
+Q5. What is the difference between having two @BeforeMethod methods — one in BaseTest
+and one in LoginTest?
+BaseTest @BeforeMethod (setUp): Runs FIRST. Handles browser setup — reads browser from config,
+creates driver, sets timeouts. Same for ALL test classes. LoginTest @BeforeMethod (navigateToLoginPage):
+Runs SECOND (TestNG guarantees parent first). Handles page-specific setup — navigates to the login URL,
+creates the LoginPage object. This separation means BaseTest stays generic (works for any website) while
+each test class handles its own navigation (AccountsTest navigates differently than LoginTest).
+// Execution order for every test in LoginTest:
+// 1. BaseTest.setUp() → opens browser
+// 2. LoginTest.navigateToLoginPage() → goes to ParaBank, creates loginPage
+// 3. @Test method → actual test
+
+===== PAGE 7 =====
+// 4. BaseTest.tearDown() → closes browser
+Q6. How would you make the framework support parallel execution?
+For thread-safe parallel execution: 1. Replace protected WebDriver driver with ThreadLocal 2. Use
+driver.set() in setUp() and driver.get() for access 3. Each thread gets its own driver instance — no shared
+state 4. Thread-specific download directories (already done with Thread.currentThread().getId()) 5. Configure
+testng.xml with parallel='methods' and thread-count 6. Ensure page objects receive driver via constructor
+(already done — no static driver)
+// Thread-safe driver
+private static ThreadLocal driver = new ThreadLocal<>();
+public static WebDriver getDriver() { return driver.get(); }
+@BeforeMethod
+public void setUp() {
+driver.set(new ChromeDriver(options));
+}
+@AfterMethod
+public void tearDown() {
+if (driver.get() != null) {
+driver.get().quit();
+driver.remove(); // Important — prevents memory leak
+}
+}
+Q7. Behavioral: Describe a situation where a test was passing but the feature was actually
+broken.
+In our ParaBank framework, the testValidLogin test was passing even when we entered 'wronguser' and
+'wrongpass'. The database was corrupted and accepting any credentials. Root cause: The test only checked
+URL.contains('overview') — it didn't verify the logged-in user's name or account data. Lesson: Assertions
+must be meaningful. Checking URL alone is insufficient — we added verification of account data visible on
+the overview page to confirm we're in the right account. In real banking projects, we also cross-verify login
+against the database to ensure the correct user's data is shown.
+■ This is a common interview scenario — tests that pass for the wrong reasons. In banking, a false pass on
+login could mean security is broken.
+Q8. Behavioral: How did you handle the unstable ParaBank public environment in your
+framework?
+The public ParaBank instance is shared by thousands of people worldwide, causing database corruption. We
+handled this in 3 ways: 1. @BeforeSuite database initialization: Automatically hits the admin page and clicks
+Initialize before any test runs 2. Dynamic usernames with timestamps: 'user_' + System.currentTimeMillis()
+ensures no duplicate conflicts 3. Removed impossible-to-pass tests: We removed negative credential tests
+from the Excel file when the environment accepts any credentials — these are environment defects, not
+automation defects In real banking projects, we'd use a dedicated isolated QA environment with a fresh
+database snapshot before each run.
+
+===== PAGE 8 =====
+■ RAPID FIRE — Framework Design
+Q: What design pattern does POM follow? A: Factory + Facade pattern — hides Selenium complexity behind
+meaningful method names
+Q: Where do locators go in POM? A: In Page Objects only — never in test classes
+Q: Where do assertions go in POM? A: In Test classes only — never in Page Objects
+Q: What does super(driver) do in a page constructor? A: Calls BasePage constructor to initialize driver and
+WebDriverWait
+Q: Why use ConfigReader instead of hardcoding values? A: Single place to change — switching environments
+needs only config file update
+Q: What does Apache POI do? A: Reads and writes Excel (.xlsx) files in Java
+Q: What is the difference between readExcel() and readExcelAsArray()? A: readExcel() returns List with
+column names; readExcelAsArray() returns Object[][] for @DataProvider
+Q: How do you register a TestListener in testng.xml? A:
+
+===== PAGE 9 =====
+PART 3 — PRACTICE TESTS
+ Test 1: Test 1 — POM Basics (Easy)
+1. What does POM stand for in Selenium automation?
+A) Page Object Manager
+B) Page Object Model
+C) Page Oriented Method
+D) Page Output Module
+2. Which class should contain locators in a POM framework?
+A) Test class
+B) BaseTest
+C) Page Object class
+D) TestNG listener
+3. What is the return type of readExcelAsArray() method?
+A) List
+B) String[][]
+C) Object[][]
+D) Map
+4. In the code below, what does super(driver) do?
+public LoginPage(WebDriver driver) { super(driver); }
+A) Creates a new driver
+B) Calls BasePage constructor
+C) Opens the browser
+D) Sets implicit wait
+5. Which annotation makes a method run before every @Test method?
+A) @BeforeClass
+B) @BeforeSuite
+C) @BeforeMethod
+D) @BeforeTest
+6. In a banking POM framework, where should Assert.assertTrue() be placed?
+A) In BasePage methods
+B) In Page Object methods
+C) In Test class methods
+D) In ConfigReader
+7. What does ConfigReader.get('base.url') return?
+A) The browser name
+B) The timeout value
+C) The application URL from config.properties
+D) The username
+8. Which of the following is the CORRECT locator declaration in a Page Object?
+A) public WebElement btn = driver.findElement(By.id('btn'));
+B) private final By btn = By.id('btn');
+C) static By btn = By.id('btn');
+D) protected String btn = 'btn';
+9. What does the TestListener's onTestFailure() method do in our framework?
+
+===== PAGE 10 =====
+A) Stops the test run
+B) Restarts the browser
+C) Captures a screenshot
+D) Skips remaining tests
+10. Which Apache POI class is used to read .xlsx files?
+A) HSSFWorkbook
+B) XSSFWorkbook
+C) OPCPackage
+D) SXSSFWorkbook
+
+===== PAGE 11 =====
+Test 2: Test 2 — Framework Structure (Easy)
+1. In our banking framework, which package contains BasePage.java?
+A) pages
+B) utils
+C) base
+D) tests
+2. What is the purpose of the 'Execute' column in LoginTestData.xlsx?
+A) Shows test priority
+B) Controls whether a test case runs
+C) Stores the expected result
+D) Counts test executions
+3. Which method in ConfigReader reads a value by key?
+A) ConfigReader.load(key)
+B) ConfigReader.get(key)
+C) ConfigReader.read(key)
+D) ConfigReader.fetch(key)
+4. What does @DataProvider(name='loginData') do?
+A) Creates test data
+B) Provides test parameters to @Test methods
+C) Reads from database
+D) Generates random data
+5. In the banking framework, how is a unique username created for each test run?
+A) UUID.randomUUID()
+B) Math.random()
+C) 'user_' + System.currentTimeMillis()
+D) RandomStringUtils
+6. What does the static block in ConfigReader do?
+static { properties.load(file); }
+A) Runs before every method call
+B) Runs once when the class is first loaded
+C) Runs after each test
+D) Runs in parallel with tests
+7. Which ITestListener method logs when a test is skipped?
+A) onTestStart()
+B) onTestFailure()
+C) onTestSkipped()
+D) onTestIgnored()
+8. What is the correct way to declare a protected driver in BaseTest?
+A) private WebDriver driver;
+B) public WebDriver driver;
+C) protected WebDriver driver;
+D) static WebDriver driver;
+9. In our framework, what does navigateToLoginPage() in LoginTest do?
+A) Opens the browser
+B) Sets timeouts
+
+===== PAGE 12 =====
+C) Navigates to ParaBank URL and creates LoginPage
+D) Registers a new user
+10. Which method in ExcelReader returns data suitable for @DataProvider?
+A) readExcel()
+B) readExcelAsMap()
+C) readExcelAsArray()
+D) readSheet()
+
+===== PAGE 13 =====
+Test 3: Test 3 — Page Objects & Waits (Medium)
+1. What problem does the following code cause?
+private WebElement loginBtn = driver.findElement(By.id('login'));
+A) Compilation error
+B) NullPointerException always
+C) StaleElementException when page hasn't loaded
+D) No problem — valid code
+2. In BasePage.click(By locator), why use elementToBeClickable instead of visibilityOfElementLocated?
+A) It's faster
+B) Elements can be visible but not yet clickable (disabled, loading)
+C) visibilityOfElementLocated doesn't work with By locators
+D) No difference
+3. What does the following code return?
+return wait.until(ExpectedConditions.visibilityOfElementLocated(locator)).getText().trim();
+A) The element's HTML
+B) The visible text with whitespace removed
+C) The element's CSS class
+D) The element's ID
+4. In a banking transfer test, after clicking Transfer, what should you wait for?
+A) Thread.sleep(5000)
+B) Page title to change
+C) Success/error message to become visible
+D) Browser to close
+5. What is the correct way to select 'Savings' from an account type dropdown?
+By dropdown = By.id('accountType');
+A) driver.findElement(dropdown).click();
+B) new Select(driver.findElement(dropdown)).selectByVisibleText('Savings');
+C) driver.findElement(dropdown).sendKeys('Savings');
+D) dropdown.selectByValue('Savings');
+6. Why is try-catch used in the isDisplayed() method in BasePage?
+A) To catch assertion errors
+B) To return false when element is not found instead of throwing exception
+C) To handle browser crashes
+D) Required by Selenium API
+7. A new ParaBank user registers and is auto-logged in. To test login separately, you must:
+A) Close and reopen browser
+B) Click Log Out, then navigate to login page
+C) Clear cookies manually
+D) Use a different browser
+8. What does 'method chaining' mean in Page Objects?
+loginPage.enterUsername('u').enterPassword('p').clickLogin();
+A) Calling methods from different classes
+B) Each method returns 'this' allowing chained calls
+C) Methods that chain database calls
+D) Static method calls
+9. In a POM framework, why shouldn't the login() convenience method assert success?
+
+===== PAGE 14 =====
+A) Assertions are slow
+B) The method should be reusable for both valid and invalid login tests
+C) TestNG doesn't support assertions in page objects
+D) Assertions cause compilation errors in page classes
+10. What does getCellType() handle in ExcelReader.getCellValue()?
+A) File encoding
+B) Different cell types: STRING, NUMERIC, BOOLEAN, FORMULA, BLANK
+C) Cell colors and formatting
+D) Merged cells
+
+===== PAGE 15 =====
+Test 4: Test 4 — Advanced Framework (Medium)
+1. Why use ThreadLocal instead of protected WebDriver for parallel execution?
+A) ThreadLocal is faster than regular variables
+B) Each thread gets its own copy, preventing test interference
+C) Regular WebDriver doesn't support parallel execution
+D) ThreadLocal uses less memory
+2. What is the execution order for a test in LoginTest?
+BaseTest has @BeforeMethod setUp()
+LoginTest has @BeforeMethod navigateToLoginPage()
+A) navigateToLoginPage() → setUp() → @Test → tearDown()
+B) setUp() → navigateToLoginPage() → @Test → tearDown()
+C) Both run simultaneously
+D) Only the child class @BeforeMethod runs
+3. In the @BeforeSuite initializeDatabase() method, why is headless mode used?
+A) Headless is faster
+B) The temp browser for DB init doesn't need to be visible
+C) Headless required for admin pages
+D) Regular mode causes errors
+4. What is the role of 'Execute' column filtering in the DataProvider?
+if ('Yes'.equalsIgnoreCase(row.get('Execute')))
+A) Shows test results
+B) Allows selective test execution without deleting rows from Excel
+C) Marks tests as automated
+D) Sets test priority
+5. A banking test registers user 'acc_1774202677689'. What ensures uniqueness?
+A) Random number generator
+B) System.currentTimeMillis() appended to prefix
+C) UUID
+D) Auto-increment counter
+6. In TestListener, why cast testInstance to BaseTest?
+WebDriver driver = ((BaseTest) testInstance).getDriver();
+A) BaseTest has the getDriver() method that exposes the driver
+B) All TestNG tests extend BaseTest
+C) To avoid ClassCastException
+D) WebDriver requires casting
+7. What happens to TC004 (dependsOnMethods='testValidRegistration') if testValidRegistration FAILS?
+A) TC004 runs anyway
+B) TC004 is skipped automatically by TestNG
+C) TC004 fails with the same error
+D) TestNG retries testValidRegistration
+8. In config.properties: headless=false
+On GitHub Actions: CI=true
+Which code correctly handles both?
+A) options.addArguments('--headless');
+B) if (Boolean.parseBoolean(ConfigReader.get('headless'))) { addHeadless(); }
+C) if (Boolean.parseBoolean(System.getenv('CI'))) { addHeadless(); }
+D) Both B and C combined — config flag OR CI environment variable
+
+===== PAGE 16 =====
+9. Why does ConfigReader use Properties.getProperty(key).trim()?
+A) trim() converts String to int
+B) Removes accidental whitespace that would cause key mismatches
+C) Required by Properties API
+D) Trim improves performance
+10. Which testng.xml setting enables parallel test execution by methods?
+A)
+B)
+C)
+D)
+
+===== PAGE 17 =====
+Test 5: Test 5 — Banking Framework Scenarios (Hard)
+1. During test execution, 15 out of 29 data-driven login tests fail with:
+'Got: Accounts Overview' for invalid credentials.
+What is the most likely root cause?
+A) Locator for error message is wrong
+B) The shared test environment database accepts any username/password
+C) ExcelReader is reading wrong column
+D) @DataProvider is not filtering correctly
+2. A @BeforeMethod registers a new user then navigates to accounts page.
+Test suddenly fails: 'Error! An internal error has occurred.'
+Best explanation?
+A) Locator for accounts table is wrong
+B) ParaBank database is corrupted from too many registrations by multiple users
+C) Network timeout exceeded
+D) Wrong browser version
+3. testTransferAndVerifyBalance() checks initial balance, transfers $100, checks final balance.
+Initial: $515.50, Final: $515.50. Test asserts finalBal < initial and FAILS.
+Why is balance unchanged after transfer?
+A) Transfer failed silently
+B) Amount field was empty
+C) ParaBank is a demo — same-account transfer doesn't change total balance
+D) Balance takes 24 hours to update
+4. You need to add a new banking page 'LoanRequestPage' to the framework.
+What is the CORRECT order of steps?
+A) Write tests → Create page object → Add locators
+B) Inspect HTML → Create LoanRequestPage extends BasePage → Add locators/methods → Create
+LoanRequestTest extends BaseTest
+C) Create BaseTest subclass → Add assertions → Add locators
+D) Copy LoginPage → Rename → Change test data
+5. In parallel execution with 3 threads running simultaneously:
+Thread 1 downloads statement.pdf
+Thread 2 downloads receipt.pdf
+Both save to same downloads/ folder.
+What is the correct fix?
+A) Use synchronized methods
+B) Run tests sequentially instead
+C) Use thread-specific directories: downloads/ + Thread.currentThread().getId()
+D) Download to temp folder and move after
+6. The following test passes but the feature is broken:
+@Test
+public void testValidLogin() {
+loginPage.login(user, pass);
+Assert.assertTrue(driver.getCurrentUrl().contains('overview'));
+}
+Why might this give a false pass?
+A) The URL check is incorrect
+B) The environment accepts any credentials, showing 'overview' even for wrong users
+C) getCurrentUrl() returns wrong value
+D) login() method has a bug
+
+===== PAGE 18 =====
+7. ExcelReader.getCellValue() for a cell containing 123 (numeric) should return '123' not '123.0'.
+Which code achieves this?
+A) return String.valueOf(cell.getNumericCellValue());
+B) return cell.getStringCellValue();
+C) double v = cell.getNumericCellValue();
+if (v == Math.floor(v)) return String.valueOf((long)v);
+D) return Integer.toString((int)cell.getNumericCellValue());
+8. A banking suite with 50 tests takes 40 minutes sequentially.
+You enable parallel='methods' thread-count='5' in testng.xml.
+Expected new duration?
+A) 8 minutes (40/5)
+B) 5 minutes
+C) 8-12 minutes (depends on test dependencies and setup overhead)
+D) Same — parallel doesn't help UI tests
+9. TestListener screenshot fails with ClassCastException:
+((BaseTest) testInstance).getDriver()
+What is the most likely cause?
+A) driver is null
+B) Test class does not extend BaseTest
+C) getDriver() method doesn't exist
+D) Screenshot directory not created
+10. You need to run the same 50-test banking suite against DEV, QA, and UAT environments.
+The BEST approach using your framework is:
+A) Create 3 separate test projects
+B) Change config.properties base.url before each run
+C) Create config-dev.properties, config-qa.properties, config-uat.properties and pass environment as Maven
+parameter: mvn test -Denv=qa
+D) Hardcode all 3 URLs and switch via comments
+
+===== PAGE 19 =====
+■ ANSWER KEY
+Test 1:
+Q1: B Q2: C Q3: C Q4: B Q5: C Q6: C Q7: C Q8: B Q9: C Q10: B
+Test 2:
+Q1: C Q2: B Q3: B Q4: B Q5: C Q6: B Q7: C Q8: C Q9: C Q10: C
+Test 3:
+Q1: C Q2: B Q3: B Q4: C Q5: B Q6: B Q7: B Q8: B Q9: B Q10: B
+Test 4:
+Q1: B Q2: B Q3: B Q4: B Q5: B Q6: A Q7: B Q8: D Q9: B Q10: B
+Test 5:
+Q1: B Q2: B Q3: C Q4: B Q5: C Q6: B Q7: C Q8: C Q9: B Q10: C

@@ -1,9 +1,13 @@
 package utils;
 
 import org.openqa.selenium.io.FileHandler;
+import org.openqa.selenium.support.ui.FluentWait;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.Duration;
+import java.util.function.Function;
 
 public final class Utils {
 
@@ -60,18 +64,29 @@ public final class Utils {
     //  FILE DOWNLOAD UTILITIES
     // ================================================================
 
-    /** Poll-based wait for downloaded file (checks .crdownload gone) */
+    /**
+     * Wait for a downloaded file using FluentWait (condition-based), not Thread.sleep.
+     * Polls until file exists, has size &gt; 0, and Chrome .crdownload is gone.
+     */
     public static File waitForDownload(String downloadDir, String fileName, int timeoutSec) {
         File file = new File(downloadDir + File.separator + fileName);
-        long end = System.currentTimeMillis() + (timeoutSec * 1000L);
-        while (System.currentTimeMillis() < end) {
-            if (file.exists() && file.length() > 0) {
-                File partial = new File(file.getAbsolutePath() + ".crdownload");
-                if (!partial.exists()) return file;
-            }
-            try { Thread.sleep(500); } catch (InterruptedException ignored) {}
+        try {
+            return new FluentWait<>(file)
+                    .withTimeout(Duration.ofSeconds(timeoutSec))
+                    .pollingEvery(Duration.ofMillis(500))
+                    .ignoring(Exception.class)
+                    .until((Function<File, File>) f -> {
+                        if (f.exists() && f.length() > 0) {
+                            File partial = new File(f.getAbsolutePath() + ".crdownload");
+                            if (!partial.exists()) {
+                                return f;
+                            }
+                        }
+                        return null;
+                    });
+        } catch (Exception e) {
+            return file.exists() ? file : null;
         }
-        return file.exists() ? file : null;
     }
 
     // ================================================================

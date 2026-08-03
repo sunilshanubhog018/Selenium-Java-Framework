@@ -1,0 +1,310 @@
+
+===== PAGE 1 =====
+Rest Assured API Automation — Interview Q&A
+Confidential — Interview Prep
+Page 1
+ Rest Assured API Automation
+ Interview Questions & Answers
+ Easy · Medium · Difficult / Real-World
+ With clear answers for interview preparation
+Topics
+Rest Assured, HTTP, JSON, Auth, Framework Design, Banking scenarios
+Levels
+Easy (15) · Medium (15) · Difficult (15)
+Total Q&A
+45
+How to use
+Try answering first, then read the answer. Practice coding questions in IDE.
+This guide focuses on practical interview answers: short definitions, code patterns, and real-world design
+thinking used in API automation roles.
+
+===== PAGE 2 =====
+Rest Assured API Automation — Interview Q&A
+Confidential — Interview Prep
+Page 2
+Contents
+1. Easy Level — Fundamentals & Syntax
+2. Medium Level — Practical Automation Skills
+3. Difficult / Real-World — Framework, Security, Banking Scenarios
+4. Quick Interview Tips
+Tip: Interviewers often start Easy, then dig into Medium design, and finish with a real-world scenario. Prepare
+one framework story end-to-end.
+
+===== PAGE 3 =====
+Rest Assured API Automation — Interview Q&A
+Confidential — Interview Prep
+Page 3
+ SECTION 1 — EASY LEVEL
+Basics of Rest Assured, HTTP methods, simple validations. Aim for clear, short answers with a small code
+snippet when asked.
+Q1. What is Rest Assured?
+Answer:
+Rest Assured is a Java library used to automate and test REST APIs. It provides a BDD-style (given/when/then)
+fluent API to send HTTP requests and validate responses (status code, headers, body, cookies, etc.).
+Q2. Why do we use Rest Assured for API testing?
+Answer:
+It makes API testing simple in Java: readable syntax, strong JSON/XML support, easy assertions, integration with
+TestNG/JUnit, serialization with POJOs, and good support for authentication and schema validation.
+Q3. What is the basic structure of a Rest Assured test?
+Answer:
+given() — set preconditions (headers, params, body, auth)
+when() — perform the HTTP action (get, post, put, delete, patch)
+then() — assert status, headers, body, time, etc.
+Q4. Write a simple GET request example.
+Answer:
+given()
+  .when()
+  .get("https://api.example.com/users/1")
+  .then()
+  .statusCode(200);
+Q5. How do you validate status code?
+Answer:
+Use .then().statusCode(200) or .assertThat().statusCode(equalTo(200)).
+Q6. How do you print the response body?
+Answer:
+Use .then().log().body() or extract: String body = response.getBody().asString();
+System.out.println(body);
+Q7. What is the difference between GET and POST?
+Answer:
+GET retrieves data and should not change server state (idempotent, no body typically). POST creates/submits data,
+usually sends a request body, and may create a new resource.
+
+===== PAGE 4 =====
+Rest Assured API Automation — Interview Q&A
+Confidential — Interview Prep
+Page 4
+Q8. How do you send query parameters?
+Answer:
+Use .queryParam("page", 1) or .queryParams(map) inside given().
+Q9. How do you send path parameters?
+Answer:
+Use .pathParam("id", 10) and URL like /users/{id}.
+Q10. How do you set headers in Rest Assured?
+Answer:
+Use .header("Content-Type", "application/json") or .headers(map).
+Q11. How do you send a JSON body in POST?
+Answer:
+Pass a String, Map, or POJO:
+given().contentType(ContentType.JSON).body(jsonString).when().post("/users");
+Q12. What is Content-Type and Accept header?
+Answer:
+Content-Type tells the server the format of the request body (e.g. application/json). Accept tells the server what
+response format the client wants.
+Q13. How do you extract a value from JSON response?
+Answer:
+Use JsonPath: String name = response.jsonPath().getString("data.name"); or in then(): .body("data.name",
+equalTo("John")).
+Q14. What is Hamcrest in Rest Assured?
+Answer:
+Hamcrest provides matchers used in assertions, e.g. equalTo, hasItem, notNullValue, greaterThan. Rest Assured
+uses them heavily in body and status validations.
+Q15. How do you log request and response?
+Answer:
+given().log().all() logs request; .then().log().all() logs response. Also .log().ifValidationFails().
+
+===== PAGE 5 =====
+Rest Assured API Automation — Interview Q&A
+Confidential — Interview Prep
+Page 5
+ SECTION 2 — MEDIUM LEVEL
+POJOs, auth, specs, schema, data-driven tests. Show that you can build maintainable tests, not only one-off
+scripts.
+Q1. Explain given(), when(), then() with a real example.
+Answer:
+given()
+  .baseUri("https://reqres.in")
+  .header("Content-Type", "application/json")
+  .body("{\"name\":\"morpheus\",\"job\":\"leader\"}")
+.when()
+  .post("/api/users")
+.then()
+  .statusCode(201)
+  .body("name", equalTo("morpheus"));
+Q2. How do you validate nested JSON fields?
+Answer:
+Use dotted JsonPath: .body("data.user.address.city", equalTo("London")). For arrays: data[0].id or
+data.findAll { it.active == true }.name.
+Q3. How do you validate a JSON array size?
+Answer:
+Use .body("data.size()", equalTo(6)) or .body("data", hasSize(6)).
+Q4. What is serialization and deserialization in Rest Assured?
+Answer:
+Serialization: Java object (POJO) → JSON/XML for request body.
+Deserialization: response JSON/XML → Java object.
+Example: .body(userPojo) and response.as(User.class).
+Q5. How do you create and use a POJO with Rest Assured?
+Answer:
+Create a class with fields, getters/setters (or Lombok). Send with .body(pojo) and read with User u =
+response.as(User.class). Requires Jackson/Gson on classpath.
+Q6. How do you handle Basic Authentication?
+Answer:
+given().auth().preemptive().basic("user", "pass") or .auth().basic("user", "pass"). Preemptive sends
+credentials before server challenge.
+Q7. How do you send Bearer / OAuth2 token?
+Answer:
+given().auth().oauth2(token) or .header("Authorization", "Bearer " + token).
+
+===== PAGE 6 =====
+Rest Assured API Automation — Interview Q&A
+Confidential — Interview Prep
+Page 6
+Q8. How do you set base URI and base path globally?
+Answer:
+RestAssured.baseURI = "https://api.example.com";
+RestAssured.basePath = "/v1";
+Or use RequestSpecification for cleaner frameworks.
+Q9. What is RequestSpecification and ResponseSpecification?
+Answer:
+RequestSpecification reuses common request setup (URI, headers, auth). ResponseSpecification reuses common
+response expectations (status, content-type). They reduce duplication across tests.
+Q10. How do you validate response time?
+Answer:
+.then().time(lessThan(2000L)) (milliseconds). Useful for performance smoke checks, not full load testing.
+Q11. How do you do JSON schema validation?
+Answer:
+Use json-schema-validator module: .then().body(matchesJsonSchemaInClasspath("user-schema.json")). Ensures
+response structure matches contract.
+Q12. How do you upload a file (multipart)?
+Answer:
+given().multiPart("file", new File("data.csv")).when().post("/upload"). Can also send form fields with
+multiPart.
+Q13. How do you extract cookies and reuse them?
+Answer:
+Map<String, String> cookies = response.getCookies(); or String session =
+response.getCookie("SESSIONID"); then next request: .cookies(cookies).
+Q14. Difference between extract().path() and jsonPath().get()?
+Answer:
+Both read values from response. extract().path("id") works in the fluent chain. jsonPath() is used after storing
+Response. Functionally similar for JSON paths.
+Q15. How do you write data-driven API tests with TestNG?
+Answer:
+Use @DataProvider to supply payloads/expected results, or read from Excel/CSV/JSON. Each row runs the same
+Rest Assured flow with different input and assertions.
+
+===== PAGE 7 =====
+Rest Assured API Automation — Interview Q&A
+Confidential — Interview Prep
+Page 7
+ SECTION 3 — DIFFICULT / REAL-WORLD
+Framework design, tokens, flaky async APIs, security, parallel runs, banking-style defect scenarios. Answer
+with structure: problem → approach → trade-offs.
+Q1. Design a scalable Rest Assured framework for a banking API project.
+Answer:
+Recommended layers:
+1) Config (env, base URL, secrets via env vars)
+2) Specs (Request/ResponseSpecification per service)
+3) API clients / service methods (LoginAPI, AccountAPI)
+4) POJOs / builders for payloads
+5) Tests (TestNG groups: smoke, regression)
+6) Utilities (auth token manager, wait/retry, DB checks)
+7) Reporting (Allure/Extent) + CI (Jenkins/GitHub Actions)
+Keep tests thin; put HTTP details in clients. Never hardcode tokens or PAN/PII.
+Q2. How do you handle dynamic auth token expiry in long suites?
+Answer:
+Central TokenManager: fetch token once, cache with expiry time, refresh if expired or on 401. Thread-safe
+singleton/map per user role. Attach token via RequestSpecification filter or filter that injects Authorization header.
+Avoid login in every test unless testing login itself.
+Q3. API returns 200 but business status is FAILED in body. How do you assert?
+Answer:
+HTTP status alone is not enough. Assert both transport and business fields, e.g. .statusCode(200).body("status",
+equalTo("SUCCESS")) and errorCode/message when failed. Document this as a known API pattern in framework utils.
+Q4. How do you test idempotency of PUT/DELETE in payment APIs?
+Answer:
+Send the same PUT/DELETE twice with same idempotency key/resource id. First call: expect create/update success.
+Second: expect same final state (no duplicate side effects), matching status/body. Verify via GET resource state and
+optionally DB/ledger entry count = 1.
+Q5. How do you chain dependent APIs (create user → get user → update → delete)?
+Answer:
+In one test or ordered tests: create, extract id/token with extract().path("id"), pass to next calls. Prefer single
+end-to-end test for journey, plus isolated unit-like API tests. Use @AfterMethod to cleanup created data even on
+failure.
+Q6. How do you handle flaky APIs (eventual consistency / async processing)?
+Answer:
+Avoid fixed Thread.sleep. Use polling utility: retry GET until condition (status=COMPLETED) with timeout and
+interval. Soft-assert intermediate states. Mark true environmental flakes separately from product bugs. Contract tests
+should still be deterministic where possible.
+
+===== PAGE 8 =====
+Rest Assured API Automation — Interview Q&A
+Confidential — Interview Prep
+Page 8
+Q7. How do you mask sensitive data in logs (tokens, account numbers)?
+Answer:
+Custom Rest Assured Filter to redact Authorization headers and fields like pan, cvv, accountNumber before log.
+Disable full body log in CI for prod-like envs. Use synthetic test data. Align with banking security/compliance
+guidelines.
+Q8. Compare Rest Assured vs Postman/Newman vs Karate for enterprise use.
+Answer:
+Rest Assured: best for Java teams, strong coding control, CI-native, POJO reuse.
+Postman/Newman: fast exploratory + collections; weaker complex logic vs code.
+Karate: DSL + Gherkin-like, good parallel and mocks; different skillset.
+Pick Rest Assured when Java ecosystem, custom logic, and shared libraries matter.
+Q9. How do you validate encryption/signature headers in secure APIs?
+Answer:
+Compute expected signature (HMAC/RSA) in utility using shared secret/private key from secure vault (not repo).
+Send signed headers. On response, verify signature if API signs responses. Separate crypto unit tests from API flow
+tests. Never print keys in logs.
+Q10. How do you do contract testing with Rest Assured?
+Answer:
+JSON Schema validation for structure; optionally Pact/Spring Cloud Contract. Assert required fields, types, enums.
+Run consumer contract suite in CI on provider changes. Version APIs (/v1, /v2) and keep backward-compatible
+assertions for older clients.
+Q11. Write approach: 401 vs 403 vs 404 vs 429 in automation assertions.
+Answer:
+401 Unauthorized: missing/invalid auth — assert after bad/expired token.
+403 Forbidden: authenticated but not allowed — use user without role.
+404 Not Found: wrong resource id — assert message without leaking data.
+429 Too Many Requests: optional rate-limit tests; assert Retry-After if present; don't hammer shared envs in CI.
+Q12. How do you run Rest Assured tests in parallel safely?
+Answer:
+TestNG parallel methods/classes with thread-safe clients (no shared mutable static state). Unique test data per
+thread (UUID emails, account ids). Isolate auth tokens per role/thread. Avoid shared DB cleanup races. Configure
+connection pool limits so parallel runs don't DOS the API.
+Q13. Real-world scenario: Payment API is slow only in UAT. What do you do?
+Answer:
+1) Measure baseline with .time() and APM if available.
+2) Separate functional assertions from SLA thresholds per env.
+3) Use wider timeout in UAT config, stricter in pre-prod.
+4) Log correlation-id/trace-id from headers for debugging.
+5) Report env issue vs product bug; don't only increase sleep.
+
+===== PAGE 9 =====
+Rest Assured API Automation — Interview Q&A
+Confidential — Interview Prep
+Page 9
+Q14. How do you integrate DB validation with Rest Assured tests?
+Answer:
+After API call, query DB (JDBC) to verify persistence (balance, status). Keep SQL in repository layer. Use
+transactions/test data factory. For microservices, prefer API-side verification if DB is not accessible; or use test
+containers in lower envs.
+Q15. Explain a production bug you would catch with API automation (banking example).
+Answer:
+Example: transfer API returns 201 but debit happens twice on retry without idempotency key. Automated test: call
+transfer twice with same Idempotency-Key; assert single debit via GET balance/ledger. This protects customers from
+double charge — classic high-severity defect.
+
+===== PAGE 10 =====
+Rest Assured API Automation — Interview Q&A
+Confidential — Interview Prep
+Page 10
+SECTION 4 — Quick Interview Tips
+ Always explain WHY, not only syntax — interviewers score design thinking.
+ For coding rounds: start with given/when/then, then mention specs, POJOs, data-driven.
+ Banking domain: stress security, PII masking, idempotency, auth roles, auditability.
+ Be honest about tools you used (TestNG, Jenkins, Allure, Jackson).
+ Prepare 1 framework diagram and 1 end-to-end flow you built.
+Sample 60-second framework pitch
+"I built a Rest Assured + TestNG framework with environment config, reusable RequestSpecifications, service
+classes for each API domain, POJO payloads, a token manager for OAuth, JSON schema checks on critical
+contracts, data-driven regression from JSON/Excel, Allure reporting, and CI parallel runs. Tests assert both HTTP
+and business status, and sensitive fields are redacted from logs."
+Must-practice coding snippets
+1) GET + status + body assert
+2) POST with POJO + extract id
+3) Bearer auth header
+4) Query + path params together
+5) RequestSpecification reuse
+6) JsonPath list/filter
+7) Schema validation
+8) End-to-end create → get → delete
+ End of document — Good luck with your interview preparation.

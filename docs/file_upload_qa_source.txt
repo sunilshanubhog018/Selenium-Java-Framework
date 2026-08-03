@@ -1,0 +1,404 @@
+
+===== PAGE 1 =====
+File Upload, Download & Screenshots
+Interview Q&A | SDET 4+ Yrs | Target: 18-22 LPA
+PART 1: FUNDAMENTALS (All Levels)
+Q1. How do you upload a file in Selenium WebDriver?
+The most reliable approach is using sendKeys() on an <input type="file"> element. You pass the absolute file
+path directly without clicking the element first. This bypasses the OS file dialog, making it cross-browser,
+headless-compatible, and Grid-safe.
+WebElement upload = driver.findElement(By.id("file-upload"));
+upload.sendKeys("/path/to/file.pdf");
+driver.findElement(By.id("file-submit")).click();
+Q2. Why should you NOT click the file input before sendKeys()?
+Clicking a file input opens the OS native file dialog. Selenium can only interact with the browser DOM, not OS-level
+dialogs. If the dialog opens, sendKeys() won't work and the test gets stuck. sendKeys() directly sets the file path on the
+element, bypassing the dialog entirely.
+Q3. How do you handle a hidden file input element?
+Modern UIs hide the <input type="file"> behind styled buttons or drag-drop zones. You use JavascriptExecutor
+to make the element visible before calling sendKeys().
+JavascriptExecutor js = (JavascriptExecutor) driver;
+WebElement input = driver.findElement(By.cssSelector("input[type='file']"));
+js.executeScript(
+    "arguments[0].style.display='block';" +
+    "arguments[0].style.visibility='visible';", input);
+input.sendKeys("/path/to/file.pdf");
+Q4. How do you configure Chrome to auto-download files to a specific directory?
+You use ChromeOptions with experimental preferences to set the download directory and disable the download prompt.
+ChromeOptions options = new ChromeOptions();
+HashMap<String, Object> prefs = new HashMap<>();
+prefs.put("download.default_directory", "/path/to/downloads");
+prefs.put("download.prompt_for_download", false);
+prefs.put("plugins.always_open_pdf_externally", true);
+options.setExperimentalOption("prefs", prefs);
+Q5. How do you verify that a file was successfully downloaded?
+You poll the download directory for the expected filename with a timeout. Check both file existence and that its size is
+greater than zero (a 0-byte file means download failed or is incomplete). For critical tests, also verify the file content - e.g.,
+read a CSV to confirm expected headers, or use PDFBox to verify PDF text content.
+Q6. What are the different screenshot types supported in Selenium?
+Selenium supports three output types: OutputType.FILE (saves as temp file, copy to desired location),
+OutputType.BASE64 (Base64 string, good for embedding in reports), and OutputType.BYTES (byte array, good for
+Allure @Attachment). Selenium 4 added element-level screenshots via WebElement.getScreenshotAs(). For full-page
+screenshots beyond the viewport, Firefox has native support via getFullPageScreenshotAs(), while Chrome requires CDP
+commands.
+Q7. How do you take a screenshot of a specific WebElement?
+This is a Selenium 4 feature. Call getScreenshotAs() directly on the WebElement.
+
+===== PAGE 2 =====
+WebElement element = driver.findElement(By.id("error-msg"));
+File shot = element.getScreenshotAs(OutputType.FILE);
+FileUtils.copyFile(shot, new File("element_screenshot.png"));
+Q8. How do you implement automatic screenshots on test failure?
+Use a TestNG ITestListener. Override the onTestFailure() method to capture a screenshot. Get the WebDriver instance
+from the test class and save with a unique name (test name + timestamp).
+@Override
+public void onTestFailure(ITestResult result) {
+    WebDriver driver = ((BaseTest) result.getInstance()).getDriver();
+    File src = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+    String name = result.getName() + "_" + System.currentTimeMillis() + ".png";
+    FileUtils.copyFile(src, new File("screenshots/failures/" + name));
+}
+Q9. What is the difference between Robot class and sendKeys() for file upload?
+sendKeys() works at the DOM level - it sets the file path directly on the input element. Robot class works at the OS level -
+it simulates keyboard events to type into the native file dialog. sendKeys() is preferred because it's cross-platform, works
+in headless mode, works on Selenium Grid, and is more reliable. Robot class should only be used as a last resort when
+there is no standard <input type="file"> element (e.g., Flash-based or custom plugin uploads).
+Q10. How do you upload multiple files in Selenium?
+If the input has the multiple attribute, you send all file paths separated by \n (newline).
+WebElement input = driver.findElement(By.id("multi-upload"));
+input.sendKeys("/docs/file1.pdf\n/docs/file2.pdf\n/docs/file3.jpg");
+
+===== PAGE 3 =====
+PART 2: SENIOR / FRAMEWORK LEVEL (4+ Yrs, 18-22 LPA)
+Framework Design & Architecture
+Q11. How would you design a reusable file upload utility in your framework?
+I'd create a FileUploadUtils class with methods that handle different upload scenarios. It would try sendKeys() first (most
+reliable), fall back to JS-unhide + sendKeys() if element is hidden, and only use Robot as last resort. The utility would also
+validate the file exists before attempting upload, handle timeouts, and integrate with the framework's logging/reporting.
+public class FileUploadUtils {
+    public static void upload(WebDriver driver, By locator, String filePath) {
+        File file = new File(filePath);
+        if (!file.exists()) throw new RuntimeException("File not found: " + filePath);
+        
+        WebElement input = driver.findElement(locator);
+        if (!input.isDisplayed()) {
+            ((JavascriptExecutor) driver).executeScript(
+                "arguments[0].style.display='block';" +
+                "arguments[0].style.visibility='visible';", input);
+        }
+        input.sendKeys(file.getAbsolutePath());
+    }
+}
+Q12. Design a download verification framework that works in CI/CD pipelines.
+The framework needs: (1) A configurable download directory created per test to avoid conflicts in parallel execution.
+(2) Polling-based wait for file with configurable timeout. (3) File content verification strategies (size, extension, CSV
+headers, PDF text). (4) Cleanup in @AfterMethod. (5) Headless-compatible Chrome/Firefox prefs.
+public class DownloadVerifier {
+    private String downloadDir;
+    private int timeoutSec;
+    
+    public DownloadVerifier(String dir, int timeout) {
+        this.downloadDir = dir;
+        this.timeoutSec = timeout;
+        new File(dir).mkdirs();
+    }
+    
+    public File waitForFile(String pattern) {
+        long end = System.currentTimeMillis() + (timeoutSec * 1000L);
+        while (System.currentTimeMillis() < end) {
+            File[] matches = new File(downloadDir).listFiles(
+                (d, name) -> name.matches(pattern));
+            if (matches != null && matches.length > 0 && matches[0].length() > 0)
+                return matches[0];
+            try { Thread.sleep(500); } catch (InterruptedException e) { }
+        }
+        throw new TimeoutException("File not downloaded: " + pattern);
+    }
+}
+Edge Cases & Troubleshooting
+Q13. File upload works locally but fails on Selenium Grid. How do you debug?
+This is a common issue. On Grid, the file path you provide is local to your machine, not the remote node. Solutions: (1)
+Use ((RemoteWebDriver) driver).setFileDetector(new LocalFileDetector()) - this serializes the file and sends it to the
+remote node. (2) Ensure the file exists on the remote node. (3) Robot/AutoIt won't work at all on Grid - only sendKeys()
+with LocalFileDetector.
+
+===== PAGE 4 =====
+// Required for file upload on Selenium Grid
+RemoteWebDriver remoteDriver = (RemoteWebDriver) driver;
+remoteDriver.setFileDetector(new LocalFileDetector());
+// Now sendKeys will work - file is sent to the remote node
+WebElement upload = remoteDriver.findElement(By.id("file-upload"));
+upload.sendKeys("/local/path/to/document.pdf");
+Q14. Downloads are flaky in your CI pipeline. How do you stabilize them?
+Several strategies: (1) Unique download directories per test thread using thread ID or UUID to avoid race conditions in
+parallel execution. (2) Wait for .crdownload/.part files to disappear instead of just checking target file existence - a
+partial download can match the filename. (3) Retry mechanism with exponential backoff for network-dependent
+downloads. (4) File size threshold - wait until file size stops changing for 2 consecutive checks. (5) Clean download
+directory in @BeforeMethod, not @AfterMethod, to ensure clean state.
+Q15. How do you handle file upload validation - wrong format, size exceeded, etc.?
+I write negative test cases for each validation: (1) Upload a .exe when only PDF/JPG is allowed - verify error message. (2)
+Upload a 20MB file when max is 5MB - verify size error. (3) Upload empty (0-byte) file - verify handling. (4) Upload file
+with special characters in name. (5) Try to submit form without attaching any file. These are critical in banking for KYC
+document validation.
+Q16. Your screenshot files are eating up CI/CD storage. How do you manage this?
+Framework-level solutions: (1) Capture only on failure (not success) using ITestListener. (2) Compress screenshots or
+reduce quality before saving. (3) Attach to Allure report as Base64 bytes instead of separate files - report is
+self-contained and archived together. (4) Retention policy - delete screenshots older than N days via CI cleanup step.
+(5) Cloud storage - upload to S3/GCS with lifecycle policy for auto-deletion.
+Real Banking Scenarios
+Q17. Describe an end-to-end test for a KYC document upload flow in banking.
+The test flow: (1) Login as customer, navigate to KYC section. (2) Select document type (Aadhaar/PAN/Passport). (3)
+Upload front image using sendKeys(). (4) Upload back image. (5) Verify preview thumbnails appear. (6) Submit for
+verification. (7) Assert success toast/message. (8) Navigate to documents list, verify uploaded documents appear with
+'Pending Verification' status. (9) Login as admin/operations, verify documents are visible in the review queue. Negative
+tests: wrong format, expired ID, file too large, duplicate upload.
+Q18. How would you test downloading a bank account statement for a specific date range?
+Steps: (1) Configure Chrome download prefs. (2) Navigate to statements page. (3) Select date range and account. (4)
+Click 'Download Statement'. (5) Wait for PDF to download using polling. (6) Verify filename contains account number and
+date range. (7) Use Apache PDFBox to extract text and verify: account holder name, account number, date range in
+header, transaction entries, opening/closing balance. (8) For CSV format: parse and verify column headers, row count
+matches UI table, total debit/credit matches summary shown on screen.
+Parallel Execution
+Q19. How do you handle downloads when tests run in parallel?
+Each thread needs its own download directory to avoid file collision. Generate unique paths using thread ID or test
+method name.
+
+===== PAGE 5 =====
+@BeforeMethod
+public void setUp(Method method) {
+    // Unique download dir per test
+    String uniqueDir = System.getProperty("user.dir") + "/downloads/"
+        + method.getName() + "_" + Thread.currentThread().getId();
+    new File(uniqueDir).mkdirs();
+    
+    ChromeOptions options = new ChromeOptions();
+    HashMap<String, Object> prefs = new HashMap<>();
+    prefs.put("download.default_directory", uniqueDir);
+    prefs.put("download.prompt_for_download", false);
+    options.setExperimentalOption("prefs", prefs);
+    driver.set(new ChromeDriver(options));
+}
+Q20. Screenshots in parallel tests sometimes capture the wrong browser. How do you fix this?
+The issue is using a shared static WebDriver reference. In parallel execution, each thread needs its own driver. Use
+ThreadLocal<WebDriver> to ensure thread safety. The screenshot listener should get the driver from the specific test
+instance (via ITestResult.getInstance()), not from a static field. Also ensure each thread saves screenshots with unique
+names (include thread ID or test name) to avoid file overwrites.
+Behavioral Questions
+Q21. Tell me about a time when file upload/download automation was challenging.
+In a banking project, the KYC upload module used a third-party drag-and-drop plugin with no standard file input. I first
+tried Robot class but it failed on our Linux CI server. I inspected the JS code and found the plugin accepted files via a
+hidden input created dynamically. I used a combination of JavascriptExecutor to trigger the input creation, then
+sendKeys() to set the file. This approach was cross-platform and worked in headless mode. I documented the pattern and
+it became the standard approach for the team.
+Rapid Fire
+Question
+Answer
+TakesScreenshot returns what types?
+FILE, BASE64, BYTES
+Can you upload files in headless mode?
+Yes, using sendKeys() (not Robot)
+Element screenshot available since?
+Selenium 4
+Full page screenshot - Firefox vs Chrome?
+Firefox: native API. Chrome: CDP command
+How to upload on Selenium Grid?
+LocalFileDetector + sendKeys()
+Chrome pref for auto-download?
+download.prompt_for_download = false
+Firefox pref for download dir?
+browser.download.folderList = 2 + browser.download.dir
+Best screenshot listener in TestNG?
+ITestListener.onTestFailure()
+How to avoid download conflicts in parallel?
+Unique directory per thread
+.crdownload file means?
+Chrome is still downloading (partial file)
+
+===== PAGE 6 =====
+PART 3: FIVE PRACTICE TESTS (Full Code)
+Practice Test 1: File Upload & Verification
+// FileUploadTest.java - extends BaseTest
+@Test(description = "Verify single file upload on the-internet")
+public void testFileUpload() {
+    driver.get("https://the-internet.herokuapp.com/upload");
+    
+    // Create a test file dynamically
+    String testFilePath = System.getProperty("user.dir") + "/test-data/sample.txt";
+    File testFile = new File(testFilePath);
+    testFile.getParentFile().mkdirs();
+    try {
+        new FileWriter(testFile).append("Test upload content").close();
+    } catch (IOException e) { throw new RuntimeException(e); }
+    
+    // Upload the file
+    WebElement uploadInput = driver.findElement(By.id("file-upload"));
+    uploadInput.sendKeys(testFile.getAbsolutePath());
+    
+    // Submit
+    driver.findElement(By.id("file-submit")).click();
+    
+    // Verify
+    WebElement result = driver.findElement(By.id("uploaded-files"));
+    Assert.assertEquals(result.getText().trim(), "sample.txt", 
+        "Uploaded filename mismatch!");
+    
+    String header = driver.findElement(By.tagName("h3")).getText();
+    Assert.assertEquals(header, "File Uploaded!", "Success header not displayed!");
+    
+    // Cleanup
+    testFile.delete();
+}
+Practice Test 2: File Download & Verification
+// FileDownloadTest.java - extends BaseTest with download config
+@Test(description = "Download a file and verify it exists")
+public void testFileDownload() {
+    driver.get("https://the-internet.herokuapp.com/download");
+    
+    // Get first available download link
+    WebElement downloadLink = driver.findElement(
+        By.cssSelector("a[href*='download/']"));
+    String fileName = downloadLink.getText();
+    
+    // Click to download
+    downloadLink.click();
+    
+    // Wait for download to complete (poll every second)
+    File downloadedFile = new File(downloadPath + File.separator + fileName);
+    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+    wait.until(d -> downloadedFile.exists() && downloadedFile.length() > 0);
+    
+    // Verify
+    Assert.assertTrue(downloadedFile.exists(), "File not found: " + fileName);
+    Assert.assertTrue(downloadedFile.length() > 0, "File is empty: " + fileName);
+    System.out.println("Downloaded: " + fileName + " (" + downloadedFile.length() + " bytes)");
+    
+    // Cleanup
+    downloadedFile.delete();
+}
+Practice Test 3: Screenshot Types (Viewport, Element, Base64)
+
+===== PAGE 7 =====
+// ScreenshotTest.java - extends BaseTest
+@Test(description = "Test all screenshot types")
+public void testScreenshotTypes() {
+    driver.get("https://the-internet.herokuapp.com/challenging_dom");
+    
+    // 1. Viewport screenshot
+    File viewportShot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+    File viewportDest = new File("screenshots/viewport_test.png");
+    viewportDest.getParentFile().mkdirs();
+    try { FileUtils.copyFile(viewportShot, viewportDest); } 
+    catch (IOException e) { Assert.fail("Viewport screenshot failed: " + e.getMessage()); }
+    Assert.assertTrue(viewportDest.exists(), "Viewport screenshot not saved!");
+    Assert.assertTrue(viewportDest.length() > 0, "Viewport screenshot is empty!");
+    
+    // 2. Element screenshot (Selenium 4)
+    WebElement table = driver.findElement(By.tagName("table"));
+    File elementShot = table.getScreenshotAs(OutputType.FILE);
+    File elementDest = new File("screenshots/table_element.png");
+    try { FileUtils.copyFile(elementShot, elementDest); } 
+    catch (IOException e) { Assert.fail("Element screenshot failed: " + e.getMessage()); }
+    Assert.assertTrue(elementDest.exists(), "Element screenshot not saved!");
+    
+    // 3. Base64 screenshot
+    String base64 = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BASE64);
+    Assert.assertNotNull(base64, "Base64 screenshot is null!");
+    Assert.assertTrue(base64.length() > 100, "Base64 screenshot too small!");
+    
+    // 4. Bytes screenshot
+    byte[] bytes = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+    Assert.assertTrue(bytes.length > 0, "Bytes screenshot is empty!");
+    
+    System.out.println("All screenshot types verified successfully!");
+}
+Practice Test 4: Screenshot on Dynamic Content Load
+
+===== PAGE 8 =====
+// DynamicScreenshotTest.java - extends BaseTest
+@Test(description = "Screenshot before and after dynamic loading")
+public void testDynamicContentScreenshot() {
+    driver.get("https://the-internet.herokuapp.com/dynamic_loading/2");
+    
+    // Screenshot BEFORE loading
+    File beforeShot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+    try {
+        new File("screenshots").mkdirs();
+        FileUtils.copyFile(beforeShot, new File("screenshots/before_load.png"));
+    } catch (IOException e) { Assert.fail(e.getMessage()); }
+    
+    // Click Start button
+    driver.findElement(By.cssSelector("#start button")).click();
+    
+    // Wait for content to load
+    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+    WebElement result = wait.until(
+        ExpectedConditions.visibilityOfElementLocated(By.cssSelector("#finish h4")));
+    
+    // Screenshot AFTER loading
+    File afterShot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+    try {
+        FileUtils.copyFile(afterShot, new File("screenshots/after_load.png"));
+    } catch (IOException e) { Assert.fail(e.getMessage()); }
+    
+    // Verify loaded text
+    Assert.assertEquals(result.getText(), "Hello World!", "Dynamic content mismatch!");
+    
+    // Verify both screenshots exist and are different sizes (content changed)
+    File before = new File("screenshots/before_load.png");
+    File after = new File("screenshots/after_load.png");
+    Assert.assertTrue(before.exists() && after.exists(), "Screenshots missing!");
+    Assert.assertNotEquals(before.length(), after.length(), 
+        "Screenshots should differ after content loads!");
+}
+Practice Test 5: Upload Validation (Negative Test)
+
+===== PAGE 9 =====
+// FileUploadNegativeTest.java - extends BaseTest
+@Test(description = "Upload without selecting file - verify error handling")
+public void testUploadWithoutFile() {
+    driver.get("https://the-internet.herokuapp.com/upload");
+    
+    // Click submit WITHOUT uploading any file
+    driver.findElement(By.id("file-submit")).click();
+    
+    // Verify error page/message appears
+    // the-internet shows "Internal Server Error" for empty upload
+    String pageSource = driver.getPageSource();
+    // The site returns an error page when no file is selected
+    Assert.assertTrue(
+        pageSource.contains("Internal Server Error") || 
+        pageSource.contains("No file") ||
+        driver.getCurrentUrl().contains("upload"),
+        "Expected error handling for empty upload!");
+    
+    // Screenshot the error state for evidence
+    File errorShot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+    try {
+        new File("screenshots").mkdirs();
+        FileUtils.copyFile(errorShot, new File("screenshots/upload_error.png"));
+    } catch (IOException e) { System.err.println("Screenshot failed: " + e.getMessage()); }
+}
+@Test(description = "Verify file upload with special characters in filename")
+public void testUploadSpecialCharFilename() {
+    driver.get("https://the-internet.herokuapp.com/upload");
+    
+    // Create file with spaces in name
+    String testFilePath = System.getProperty("user.dir") + "/test-data/my file (1).txt";
+    File testFile = new File(testFilePath);
+    testFile.getParentFile().mkdirs();
+    try {
+        new FileWriter(testFile).append("Special char filename test").close();
+    } catch (IOException e) { throw new RuntimeException(e); }
+    
+    // Upload
+    WebElement upload = driver.findElement(By.id("file-upload"));
+    upload.sendKeys(testFile.getAbsolutePath());
+    driver.findElement(By.id("file-submit")).click();
+    
+    // Verify
+    String uploadedName = driver.findElement(By.id("uploaded-files")).getText().trim();
+    Assert.assertEquals(uploadedName, "my file (1).txt",
+        "Special character filename not preserved!");
+    
+    testFile.delete();
+}

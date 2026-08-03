@@ -67,10 +67,11 @@ public final class UserFactory {
                 if (!panel.isEmpty()) {
                     System.out.println("    rightPanel=[" + panel + "]");
                 }
+                // Explicit wait recovery instead of Thread.sleep backoff
                 try {
-                    Thread.sleep(2000L * attempt);
-                } catch (InterruptedException ie) {
-                    Thread.currentThread().interrupt();
+                    WaitHelper.recoverToRegisterForm(driver);
+                } catch (Exception recoverEx) {
+                    // next attempt will navigate again
                 }
             }
         }

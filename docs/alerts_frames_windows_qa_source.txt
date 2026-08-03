@@ -1,0 +1,467 @@
+
+===== PAGE 1 =====
+Selenium Java — Week 2
+ Alerts, Frames & Multiple Windows
+ Interview Q&A + 5 Practice Tests
+Selenium 4.27.0 | Java 21 | TestNG 7.9.0
+Color
+Level
+Target
+Blue Background
+Fundamentals (Q1-Q20)
+Concept clarity — asked at all levels
+Red Background
+Senior / Framework (Q21-Q50)
+4+ years, ■18-22 LPA, framework design & debugging
+
+===== PAGE 2 =====
+PART 1: Fundamentals (Asked at All Levels)
+These questions test your core understanding. Even at 4+ years, interviewers may start here to establish a baseline before
+going deeper.
+Alerts — Fundamentals
+Q1: What are JavaScript alerts in Selenium? How many types are there?
+JavaScript alerts are browser-level native dialogs created by JS functions. There are 3 types: (1) Simple Alert — alert()
+— has only OK button, displays a message. (2) Confirm Alert — confirm() — has OK and Cancel buttons. (3) Prompt
+Alert — prompt() — has an input text field plus OK and Cancel buttons. All three are handled using the Alert interface
+via driver.switchTo().alert().
+Q2: How do you handle alerts in Selenium WebDriver?
+Step 1: Switch to the alert using driver.switchTo().alert() which returns an Alert object. Step 2: Use Alert interface
+methods — getText() to read the message, accept() to click OK, dismiss() to click Cancel, sendKeys("text") to type
+into a Prompt. Step 3: After accept/dismiss, focus automatically returns to the main page. Always use
+ExpectedConditions.alertIsPresent() with WebDriverWait before switching.
+Q3: What is the difference between accept() and dismiss()?
+accept() clicks the OK button on any alert type. dismiss() clicks the Cancel button — it only makes a meaningful
+difference on Confirm and Prompt alerts. On a Simple alert (which only has OK), both will close it, but accept() is the
+correct method to use. For Prompt alerts, dismiss() discards any text entered via sendKeys().
+Q4: What is NoAlertPresentException? How do you avoid it?
+NoAlertPresentException is thrown when you call driver.switchTo().alert() but no alert exists on the page. This often
+happens when the alert hasn't appeared yet after a click. The fix is to use WebDriverWait with
+ExpectedConditions.alertIsPresent() which waits until the alert appears and then returns the Alert object.
+Q5: Can Selenium handle file upload/download dialogs?
+No. File dialogs are OS-level native dialogs, not browser JavaScript alerts. For file upload, use sendKeys() directly on
+the input[type='file'] element — this bypasses the OS dialog entirely. For complex cases, use Robot class (Java) or
+AutoIT (Windows). For file download, configure browser preferences to auto-download without a dialog.
+Q6: What is the difference between a JavaScript alert and a custom modal?
+A JS alert is a native browser dialog created by alert(), confirm(), or prompt(). You cannot inspect it in DevTools, cannot
+use findElement() on it, and must use driver.switchTo().alert(). A custom modal (SweetAlert, Bootstrap modal) is an
+HTML <div> element styled to look like a popup. Handle it with regular findElement(). Key test: If you can right-click and
+Inspect Element on it, it's a custom modal.
+Frames — Fundamentals
+Q7: What is an iframe? Why does Selenium need special handling?
+An iframe (inline frame) embeds a completely separate HTML document inside the current page. It has its own DOM
+tree. Selenium's WebDriver can only interact with one document context at a time. By default it sees the main page's
+DOM. To interact with elements inside an iframe, you must switch using driver.switchTo().frame().
+Q8: What are the 3 ways to switch to a frame? Which is best?
+(1) By index: frame(0) — 0-based position, risky if page changes. (2) By name/id: frame("frameName") — uses name
+or id attribute. (3) By WebElement: frame(element) — locate the iframe first, then pass it. By WebElement is the best
+because you can use any locator strategy and it works even when name/id is dynamic.
+Q9: Difference between defaultContent() and parentFrame()?
+
+===== PAGE 3 =====
+defaultContent() jumps all the way back to the top-level main page regardless of nesting depth. parentFrame() goes
+up exactly one level. Example: Main → Frame A → Frame B. From Frame B: parentFrame() → Frame A,
+defaultContent() → Main. In practice, defaultContent() is used more often because it's predictable.
+Q10: How do you handle nested frames?
+Switch level by level — you cannot jump directly to an inner frame. switchTo().frame("outerFrame") first, then
+switchTo().frame("innerFrame"). To come back: parentFrame() goes up one level, or defaultContent() jumps to main
+page.
+Q11: What happens if you forget to switch back from a frame?
+All findElement() calls search only within that frame's DOM. You get NoSuchElementException for main page
+elements — even though they exist. Always call defaultContent() when done inside a frame. This is one of the most
+common frame-related bugs.
+Q12: What does frameToBeAvailableAndSwitchToIt() do?
+It's an ExpectedCondition that does two things in one call: (1) Waits until the frame is available. (2) Automatically
+switches into it. No separate switchTo().frame() needed after. It accepts name (String), index (int), or By locator.
+Windows — Fundamentals
+Q13: What is a window handle in Selenium?
+A window handle is a unique string identifier for each open window/tab. getWindowHandle() returns the current
+window's handle. getWindowHandles() returns a Set<String> of all handles. Selenium uses these to track and switch
+between windows.
+Q14: How do you switch to a new window after a click?
+(1) Store original: String original = getWindowHandle(). (2) Click the link. (3) Wait: numberOfWindowsToBe(2). (4) Get
+all handles: getWindowHandles(). (5) Iterate to find new handle (!= original). (6) switchTo().window(newHandle). This is
+the most common window interview question.
+Q15: Difference between close() and quit()?
+close() closes only the currently focused window. Session stays alive. quit() closes ALL windows and kills the
+session. After close(), you MUST switchTo().window(survivingHandle) or you get NoSuchWindowException.
+Q16: What is newWindow() in Selenium 4?
+Selenium 4 added switchTo().newWindow(WindowType.WINDOW) and WindowType.TAB. Opens a new empty
+window/tab AND switches to it automatically. Cleaner than the old approach of JavaScript window.open() + handle
+iteration.
+Q17: Why does getWindowHandles() return a Set?
+Handles are unique — no duplicates — so Set is the correct data structure. But Set is unordered. If you need indexed
+access, convert: new ArrayList<>(getWindowHandles()). Safest pattern: store original handle before click, iterate to find
+new one.
+Q18: What is NoSuchWindowException?
+Thrown when you switch to a handle that no longer exists — usually because that window was already closed. Common
+after calling close() without switching. Fix: verify handle exists in getWindowHandles() before switching.
+Q19: How do you switch to a window by its title?
+No direct API. Iterate all handles, switchTo().window(handle) each one, check getTitle(), break on match. This is
+commonly built as a utility method in frameworks.
+Q20: What is the common thread across alerts, frames, and windows?
+All three use driver.switchTo() — .alert(), .frame(), .window(). All three have matching ExpectedConditions —
+alertIsPresent(), frameToBeAvailableAndSwitchToIt(), numberOfWindowsToBe(). Selenium can only be in one context
+
+===== PAGE 4 =====
+at a time. This is the "context switching" API.
+
+===== PAGE 5 =====
+PART 2: Senior & Framework Level (4+ Years, ■18-22 LPA)
+These questions test how you designed it, how you debugged it, and how it works in your real framework.
+Interviewers at this level expect framework patterns, utility classes, parallel execution awareness, and real project stories.
+Framework Design & Utility Patterns
+Q21: How did you handle alerts in your framework? Did you write a utility class?
+Yes. I created an AlertHelper utility class with reusable static methods: acceptAlert(driver), dismissAlert(driver),
+getAlertText(driver), sendTextToAlert(driver, text), and isAlertPresent(driver). Each method internally uses
+WebDriverWait with alertIsPresent() — so no test class ever calls switchTo().alert() directly. This centralizes the wait
+logic and exception handling. If alert behavior changes (say timeout needs adjustment), I change it in one place. The
+isAlertPresent() method returns a boolean using try-catch — useful for conditional flows where an alert may or may not
+appear.
+Q22: Show me how your AlertHelper utility class looks.
+Structure: public class AlertHelper { public static void acceptAlert(WebDriver driver) { WebDriverWait wait = new
+WebDriverWait(driver, Duration.ofSeconds(10)); Alert alert = wait.until(ExpectedConditions.alertIsPresent());
+alert.accept(); } public static boolean isAlertPresent(WebDriver driver) { try { driver.switchTo().alert(); return true; } catch
+(NoAlertPresentException e) { return false; } } // similar methods for dismiss, getText, sendKeys }. Tests call:
+AlertHelper.acceptAlert(driver); — clean and readable.
+Q23: How did you handle frames in your Page Object Model (POM)?
+Two approaches I've used: Approach 1 — Frame-aware Page Object: The page class has a private method
+switchToFrame() called at the start of methods that interact with frame elements, and switchToMain() at the end. The
+caller (test) never knows about frames. Approach 2 — Separate Page Objects: Main page and iframe content get
+separate POM classes. The main page's method switches to the frame and returns the frame's Page Object. Example:
+PaymentGatewayPage pgPage = homePage.switchToPaymentFrame(); — this is cleaner for complex iframes like
+embedded payment gateways where the frame has its own full page structure.
+Q24: How did you build a reusable WindowHelper in your framework?
+My WindowHelper has: switchToNewWindow(driver) — stores current handle, waits for new window, switches to it,
+returns new handle. switchToWindowByTitle(driver, title) — iterates all handles and matches by title.
+closeAndReturn(driver, originalHandle) — closes current window and switches back. closeAllExcept(driver,
+mainHandle) — iterates and closes all non-main windows. All methods use proper waits. Tests call:
+WindowHelper.switchToNewWindow(driver); — no handle iteration logic in test classes.
+Q25: How do you handle frames and windows in a Page Object Model without breaking encapsulation?
+The key principle: the test should never know about frame/window switching. The Page Object hides it. Example: In
+a banking app, the FundTransferPage might have an embedded OTP iframe. The page class method enterOTP(String
+otp) internally does: switchTo().frame(), enters the OTP, switchTo().defaultContent() — the test just calls
+fundTransferPage.enterOTP("123456"). Similarly for windows: clickTermsLink() internally handles the new window,
+reads content, closes it, and returns data. Encapsulation means the test reads like business logic, not Selenium API
+calls.
+
+===== PAGE 6 =====
+Unexpected Alerts & Edge Cases
+Q26: How does your framework handle unexpected alerts that appear mid-test?
+Two strategies: (1) Global UnexpectedAlertBehaviour capability: Set ChromeOptions capability
+ACCEPT_AND_NOTIFY or DISMISS_AND_NOTIFY so the browser auto-handles unexpected alerts and logs a
+warning. (2) TestNG ITestListener or @AfterMethod: In the afterMethod, check isAlertPresent() and dismiss any
+lingering alert so it doesn't cascade-fail the next test. (3) WebDriverEventListener (Selenium 3) or decorators: Wrap
+the driver to intercept exceptions caused by unexpected alerts. In banking projects, session timeout alerts often pop up
+unexpectedly — this is a real problem.
+Q27: A test is flaky — it passes locally but fails in CI. You suspect an alert timing issue. How do you debug?
+Step 1: Check if CI runs headless — some alerts behave differently in headless mode. Step 2: Add screenshot capture
+in @AfterMethod to see browser state on failure. Step 3: Check if the alert is timing-dependent — maybe CI is
+faster/slower and the alert appears at a different time. Step 4: Verify the WebDriverWait timeout is sufficient for CI
+(network latency). Step 5: Check if it's an unexpected alert (session timeout, cookie consent) that only appears in CI.
+Step 6: Look at the exception — if it's UnhandledAlertException, an alert was present when the test tried something
+else. Add alertIsPresent() check before the failing step.
+Q28: How do you handle a situation where an alert may or may not appear?
+Use a conditional check with a short timeout: try { new WebDriverWait(driver,
+Duration.ofSeconds(3)).until(ExpectedConditions.alertIsPresent()).accept(); } catch (TimeoutException e) { // No alert —
+continue normally }. The short timeout (3 sec) avoids slowing down the test when no alert appears. I wrap this in a utility
+method: AlertHelper.acceptIfPresent(driver). Common in banking apps where confirmation dialogs appear based on
+transfer amount thresholds.
+Q29: What is UnhandledAlertBehaviour capability? What options does it have?
+UnhandledAlertBehaviour is a capability that tells WebDriver what to do when an unexpected alert appears during a
+command. Options: ACCEPT — auto-click OK. DISMISS — auto-click Cancel. ACCEPT_AND_NOTIFY — auto-click
+OK and throw UnhandledAlertException. DISMISS_AND_NOTIFY — auto-click Cancel and throw exception. IGNORE
+— do nothing (will throw exception on next command). Set via: ChromeOptions options = new ChromeOptions();
+options.setUnhandledPromptBehaviour(UnexpectedAlertBehaviour.DISMISS_AND_NOTIFY);
+Q30: An element inside an iframe has a dynamic id that changes every page load. How do you handle it?
+Several strategies: (1) Use a stable parent locator — find a nearby element with a stable attribute and traverse with
+XPath: //div[@class='stable-class']//input. (2) Use CSS attribute substring matchers: [id*='partial-stable-part']. (3) Use
+relative locators (Selenium 4): near(), below(), toRightOf() a stable element. (4) For the frame itself with dynamic id:
+locate it by WebElement using a stable attribute like src, class, or title —
+driver.switchTo().frame(driver.findElement(By.cssSelector("iframe[title='Payment Form']"))).
+Parallel Execution & Thread Safety
+Q31: How do you make window handle switching thread-safe in parallel execution?
+The key: never store handles in shared/static variables. In parallel execution (TestNG parallel="methods"), each
+thread has its own WebDriver instance (via ThreadLocal<WebDriver>). Window handles are driver-specific, so they're
+naturally isolated per thread. The risk comes when you use static utility methods — make sure they accept WebDriver
+as a parameter and don't store state in static fields. Each test's getWindowHandle() returns handles specific to that test's
+browser instance. ThreadLocal pattern ensures complete isolation.
+Q32: Your framework runs tests in parallel and some tests open new windows. Tests are interfering with
+each other. Why?
+Most likely cause: WebDriver is not ThreadLocal. If driver is a shared static variable, all parallel threads share one
+browser. One test's close() kills another test's window. Fix: Use ThreadLocal<WebDriver> in BaseTest: private static
+ThreadLocal<WebDriver> driverThread = new ThreadLocal<>(). Each thread gets its own browser instance, completely
+isolated. Second possible cause: tests depend on a specific number of windows — another test's window confuses
+
+===== PAGE 7 =====
+numberOfWindowsToBe() count.
+Q33: How do you handle frames when running in parallel with ThreadLocal driver?
+No special handling needed beyond the standard ThreadLocal pattern. Since each thread has its own WebDriver,
+switching to a frame in Thread 1 doesn't affect Thread 2. The important thing is that all frame operations (switchTo,
+defaultContent) happen on the ThreadLocal driver instance, not a shared reference. In my framework, BaseTest
+provides getDriver() which returns driverThread.get(), and all Page Objects and utilities use this method.
+
+===== PAGE 8 =====
+Real Banking Project Scenarios
+Q34: In your banking project, where did you encounter iframes? How did you handle them?
+Three main areas: (1) Payment gateway integration — Razorpay/PayU card entry form is an iframe embedded in our
+checkout page. I created a PaymentFramePage POM that switches into the iframe, fills card details, and switches back.
+The iframe id was dynamic, so I used By.cssSelector("iframe[name*='razorpay']"). (2) KYC verification module —
+third-party Aadhaar/PAN verification widget loaded in an iframe. (3) Document viewer — account statements displayed
+in an embedded PDF viewer iframe. For all three, the pattern was the same: wait for frame, switch in, interact, switch
+back to defaultContent.
+Q35: Tell me about a real debugging scenario involving frames or windows in your project.
+We had a flaky test in the fund transfer flow. The OTP iframe took 2-3 seconds to load after clicking 'Send OTP'. Our
+initial code used switchTo().frame("otp-frame") without a wait — it worked 80% of the time locally but failed 50% in CI
+(slower environment). The fix was simple: replaced direct switchTo().frame() with
+frameToBeAvailableAndSwitchToIt() with a 15-second timeout. Lesson: never assume a frame is immediately
+available. Another issue: after entering OTP inside the frame, the next step tried to click 'Confirm Transfer' on the main
+page but got NoSuchElementException — forgot to call defaultContent(). Added it to the POM method as a finally block.
+Q36: How do you handle session timeout alerts in a long banking test suite?
+Banking apps typically show a session timeout alert after 10-15 minutes of inactivity. In a large test suite, if a test takes
+long or the suite pauses between tests, this alert appears and blocks everything. My approach: (1) @BeforeMethod
+checks isAlertPresent() and dismisses any stale alert. (2) @AfterMethod also cleans up alerts. (3) Keep session alive
+— some frameworks call a lightweight API endpoint or refresh a hidden element between tests. (4)
+UnhandledAlertBehaviour.DISMISS_AND_NOTIFY as a safety net. The most robust approach is a combination of all
+four.
+Q37: How do you automate a flow where a payment gateway opens in a new window with its own iframe?
+This is a combined scenario — very common in banking. Steps: (1) Store originalWindow = getWindowHandle(). (2)
+Click 'Pay Now' — payment gateway opens in new window. (3) Wait for numberOfWindowsToBe(2), switch to new
+window. (4) Inside the new window, wait for frameToBeAvailableAndSwitchToIt("card-frame"). (5) Fill card details inside
+the iframe. (6) switchTo().defaultContent() inside the payment window. (7) Click 'Submit Payment'. (8) Wait for payment
+window to close — numberOfWindowsToBe(1). (9) switchTo().window(originalWindow). (10) Verify payment success on
+original page. In POM: PaymentGatewayPage handles steps 4-7 internally.
+Q38: How do you handle OTP/2FA popups that appear as alerts vs modals vs separate windows in different
+environments?
+In my banking project, the OTP mechanism varied by environment: Dev used a simple JS prompt() alert. QA used a
+custom Bootstrap modal. UAT redirected to a separate OTP page in a new tab. I created an OTPHandler interface with
+implementations for each type: AlertOTPHandler, ModalOTPHandler, WindowOTPHandler. A factory method picks the
+right implementation based on the environment config. Each implementation knows how to switch context, enter OTP,
+and return. The test just calls: otpHandler.enterOTP("123456") — environment-specific logic is abstracted away.
+Advanced Technical Questions
+Q39: How do you handle a TinyMCE/CKEditor rich text editor in Selenium?
+Rich text editors use an iframe with a contenteditable div. Three critical points: (1) clear() doesn't work — throws
+InvalidElementStateException on contenteditable elements. (2) click() may fail — formatted text (bold, links) inside the
+editor can intercept clicks with ElementClickInterceptedException. (3) The most reliable approach: switch to iframe, use
+JavascriptExecutor to set content: js.executeScript("document.getElementById('tinymce').innerText = 'text'"), and read
+with js.executeScript("return document.getElementById('tinymce').innerText"). This bypasses all TinyMCE's internal
+DOM management issues.
+Q40: What is ElementClickInterceptedException in context of frames? How did you solve it?
+
+===== PAGE 9 =====
+This occurs when another element overlays the target element, blocking the click. In iframes, it commonly happens with
+rich text editors where formatted content (<strong>, <a>, <em> tags) inside the editor body intercepts clicks meant for
+the contenteditable div. Solutions: (1) JavaScript click: js.executeScript("arguments[0].click()", element). (2)
+JavaScript to set content directly — skip clicking entirely. (3) Actions class: moveToElement() then click(). (4) Scroll
+into view first. For TinyMCE specifically, JavaScript is the only reliable approach — I stopped fighting with click() and
+sendKeys() in production code.
+Q41: How do you verify content inside an iframe for visual regression or screenshot testing?
+You can take screenshots inside a frame context. After switchTo().frame(), call
+element.getScreenshotAs(OutputType.FILE) on the frame's body element for an element-level screenshot, or
+driver.getScreenshotAs() for the full viewport (which will show the frame content since that's the current context). For
+visual regression: switch to frame, capture screenshot, compare with baseline using tools like Applitools or ashot.
+Important: defaultContent() before taking screenshots of the main page.
+Q42: Explain the difference between driver.switchTo().frame() and JavaScript's window.frames[].
+driver.switchTo().frame() is Selenium's API — it shifts the WebDriver's document context to the frame's DOM. After
+this, all Selenium commands operate within the frame. window.frames[] is a JavaScript DOM API — accessible via
+JavascriptExecutor. You could use js.executeScript("return window.frames[0].document.getElementById('x').innerText")
+to read content across frames without switching. However, due to same-origin policy, JavaScript cannot access
+cross-origin iframes. Selenium's frame() method works regardless of origin because it operates at the browser
+automation protocol level, not JavaScript level.
+Q43: How do you handle a scenario where an iframe's src loads asynchronously via JavaScript?
+Some SPAs dynamically inject iframes after page load using JavaScript. The iframe element may exist in the DOM but
+its content hasn't loaded. frameToBeAvailableAndSwitchToIt() handles the "frame exists" part, but you may also need
+to wait for content inside the frame. Pattern: (1) Wait and switch to frame. (2) Inside the frame, use WebDriverWait for a
+specific element to be present — this confirms the frame's content has loaded. (3) Then interact. For dynamic iframes
+that are added/removed from DOM: use presenceOfElementLocated(By.cssSelector("iframe[src*='expected-src']"))
+before switching.
+
+===== PAGE 10 =====
+Behavioral & "Tell Me About a Time..." Questions
+Q44: Tell me about a time your tests were flaky due to window handling. What did you do?
+Situation: In our net banking regression suite, a test that verified loan EMI calculator results was flaky — passing 70%
+of the time. Root cause: The EMI calculator opened in a new tab, but getWindowHandles() sometimes returned the
+handles before the new tab fully loaded. The test switched to the new tab and immediately tried getTitle() — which
+returned empty or the old title. Fix: Added a two-part wait: (1) numberOfWindowsToBe(2) to ensure the tab exists. (2)
+After switching, wait.until(ExpectedConditions.titleContains("EMI Calculator")) before interacting. Flakiness dropped to
+0%. Lesson: numberOfWindowsToBe() only guarantees the window exists, not that its content has loaded.
+Q45: How do you mentor junior team members on frame/window handling?
+I emphasize the mental model: Selenium has a flashlight — it can only illuminate one document at a time. You point it
+at frames, windows, or the main page using switchTo(). I give them the rule: if findElement() fails with
+NoSuchElementException and you're sure the locator is correct, check which context you're in — are you inside a
+frame? Are you in the right window? I created a debugging checklist for the team: (1) Print driver.getTitle() (2) Print
+driver.getCurrentUrl() (3) Check getWindowHandles().size() (4) Try defaultContent() before findElement(). This simple
+checklist catches 90% of context-related issues.
+Q46: You're reviewing a junior's PR and see they're using Thread.sleep(3000) before switchTo().alert(). What
+feedback do you give?
+I'd explain: Thread.sleep() is a hard wait — it always waits 3 seconds even if the alert appears in 200ms, wasting time.
+If the alert takes 4 seconds, the test fails. Replace with: WebDriverWait + ExpectedConditions.alertIsPresent() —
+this polls every 500ms and returns as soon as the alert appears, with a configurable timeout. I'd also point them to our
+AlertHelper utility class so they don't write raw switchTo().alert() in test code at all. Finally, I'd set up a code review
+checklist item: no Thread.sleep() in production test code — use explicit waits.
+Q47: Your team lead asks you to design a framework that handles alerts, frames, and windows. Walk me
+through your design.
+Utility layer: Three helper classes — AlertHelper, FrameHelper, WindowHelper — with static methods that accept
+WebDriver as parameter. Each method has internal WebDriverWait with configurable timeout from a config file. POM
+layer: Page Objects use helpers internally. Tests never call switchTo() directly. Exception handling: Custom
+exceptions like FrameSwitchFailedException that wrap Selenium exceptions with context (which frame, which page).
+Logging: Every switch operation logs: "Switching to frame: payment-iframe on page: FundTransfer". BaseTest
+cleanup: @AfterMethod handles lingering alerts, switches to defaultContent(), closes extra windows. Thread safety:
+ThreadLocal<WebDriver>, no static state in helpers. Config: Timeout values in config.properties, not hardcoded.
+Rapid Fire — Quick Conceptual Questions
+Q48: Can you interact with elements across two frames simultaneously?
+No. Selenium can only be in one context at a time. Switch to Frame A → work → defaultContent → switch to Frame B →
+work. No parallel frame access.
+Q49: Frame inside a frame inside a window opened by a click — what's the full switching sequence?
+getWindowHandle() → click → numberOfWindowsToBe(2) → iterate to new handle → switchTo().window(newHandle)
+→ switchTo().frame("outer") → switchTo().frame("inner") → interact → defaultContent() → close() →
+switchTo().window(original).
+Q50: What Selenium 4 features improved alert/frame/window handling over Selenium 3?
+Windows: newWindow(WindowType.WINDOW/TAB) — open + switch in one call. Relative locators: Help find
+elements near dynamic frame content. CDP integration: Chrome DevTools Protocol allows handling auth dialogs and
+network-level events. W3C standardization: More consistent behavior across browsers. Alerts and frames API
+remained largely the same — the improvements were mostly in window management and developer tools integration.
+
+===== PAGE 11 =====
+PART 3: Five Practice Tests (Updated & Verified)
+All tests use WebDriverWait + ExpectedConditions — no Thread.sleep(). Extend BaseTest.java.
+Class Header & Imports
+package week2.seleniumcore;
+import base.BaseTest;
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.WindowType;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
+import org.testng.annotations.Test;
+import java.time.Duration;
+import java.util.Set;
+public class AlertsFramesWindowsTest extends BaseTest {
+Test 1: Simple Alert — Accept & Verify Result
+Concepts: switchTo().alert(), alertIsPresent(), getText(), accept()
+@Test(description = "Trigger simple JS alert, accept it, verify result text")
+public void test01_SimpleAlert() {
+    driver.get("https://the-internet.herokuapp.com/javascript_alerts");
+    // Click button to trigger simple alert
+    driver.findElement(By.xpath("//button[text()='Click for JS Alert']")).click();
+    // Wait for alert and switch to it
+    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+    Alert alert = wait.until(ExpectedConditions.alertIsPresent());
+    // Verify alert message
+    Assert.assertEquals(alert.getText(), "I am a JS Alert", "Alert message mismatch");
+    // Accept (click OK)
+    alert.accept();
+    // Verify result on page
+    String result = driver.findElement(By.id("result")).getText();
+    Assert.assertEquals(result, "You successfully clicked an alert",
+            "Result text mismatch after accepting alert");
+}
+Test 2: Confirm Alert — Dismiss (Cancel) & Verify
+Concepts: confirm alert, dismiss() for Cancel button
+@Test(description = "Trigger confirm alert, dismiss (Cancel), verify result")
+public void test02_ConfirmAlert_Dismiss() {
+    driver.get("https://the-internet.herokuapp.com/javascript_alerts");
+    // Click button to trigger confirm alert
+    driver.findElement(By.xpath("//button[text()='Click for JS Confirm']")).click();
+    // Wait for alert
+    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+    Alert alert = wait.until(ExpectedConditions.alertIsPresent());
+    // Verify alert message
+    Assert.assertEquals(alert.getText(), "I am a JS Confirm",
+            "Confirm alert message mismatch");
+    // Dismiss (click Cancel)
+    alert.dismiss();
+
+===== PAGE 12 =====
+    // Verify result shows Cancel was clicked
+    String result = driver.findElement(By.id("result")).getText();
+    Assert.assertEquals(result, "You clicked: Cancel",
+            "Result text mismatch after dismissing confirm");
+}
+Test 3: Prompt Alert — sendKeys() & Accept
+Concepts: prompt alert, sendKeys() to type, accept()
+@Test(description = "Trigger prompt alert, type text, accept, verify result")
+public void test03_PromptAlert_SendKeys() {
+    driver.get("https://the-internet.herokuapp.com/javascript_alerts");
+    // Click button to trigger prompt alert
+    driver.findElement(By.xpath("//button[text()='Click for JS Prompt']")).click();
+    // Wait for alert
+    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+    Alert alert = wait.until(ExpectedConditions.alertIsPresent());
+    // Verify alert message
+    Assert.assertEquals(alert.getText(), "I am a JS prompt",
+            "Prompt alert message mismatch");
+    // Type text into prompt and accept
+    alert.sendKeys("Selenium Automation");
+    alert.accept();
+    // Verify result shows the entered text
+    String result = driver.findElement(By.id("result")).getText();
+    Assert.assertEquals(result, "You entered: Selenium Automation",
+            "Result text mismatch after prompt input");
+}
+
+===== PAGE 13 =====
+Test 4: iFrame — TinyMCE Editor with JavascriptExecutor
+Concepts: frameToBeAvailableAndSwitchToIt(), JavascriptExecutor, defaultContent()
+@Test(description = "Switch to iframe, set text in TinyMCE, switch back, verify")
+public void test04_FrameInteraction() {
+    driver.get("https://the-internet.herokuapp.com/iframe");
+    // Wait for iframe and switch into it
+    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+    wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt("mce_0_ifr"));
+    // Use JavaScript to set content (most reliable for TinyMCE)
+    JavascriptExecutor js = (JavascriptExecutor) driver;
+    js.executeScript(
+        "document.getElementById('tinymce').innerText = "
+        + "'Hello from Selenium inside an iframe!'");
+    // Verify content using JavaScript
+    String content = (String) js.executeScript(
+        "return document.getElementById('tinymce').innerText");
+    Assert.assertTrue(content.contains("Hello from Selenium"),
+            "Typed text not found. Actual content: " + content);
+    // Switch back to main page
+    driver.switchTo().defaultContent();
+    // Verify main page element is accessible
+    WebElement heading = driver.findElement(By.tagName("h3"));
+    Assert.assertTrue(heading.getText().contains("iFrame"),
+            "Main page heading not found after switching back from frame");
+}
+Test 5: Multiple Windows — Switch, Verify, Close & Return
+Concepts: getWindowHandle(), getWindowHandles(), numberOfWindowsToBe(), close(), switchTo().window()
+@Test(description = "Open new window, verify content, close, return to original")
+public void test05_MultipleWindows() {
+    driver.get("https://the-internet.herokuapp.com/windows");
+    // Store original window handle BEFORE clicking
+    String originalWindow = driver.getWindowHandle();
+    // Click link that opens new window
+    driver.findElement(By.linkText("Click Here")).click();
+    // Wait for 2 windows to be open
+    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+    wait.until(ExpectedConditions.numberOfWindowsToBe(2));
+    // Find and switch to the new window
+    Set allWindows = driver.getWindowHandles();
+    for (String handle : allWindows) {
+        if (!handle.equals(originalWindow)) {
+            driver.switchTo().window(handle);
+            break;
+        }
+    }
+    // Verify new window content
+    Assert.assertEquals(driver.getTitle(), "New Window",
+            "New window title mismatch");
+    String heading = driver.findElement(By.tagName("h3")).getText();
+    Assert.assertEquals(heading, "New Window", "New window heading mismatch");
+    // Close new window and switch back to original
+    driver.close();
+    driver.switchTo().window(originalWindow);
+    // Verify we're back on original page
+    Assert.assertEquals(driver.getTitle(), "The Internet",
+            "Original page title mismatch after returning");
+    WebElement link = driver.findElement(By.linkText("Click Here"));
+    Assert.assertTrue(link.isDisplayed(), "Original page link not found");
+}
+
+===== PAGE 14 =====
+NOTE: All tests use WebDriverWait + ExpectedConditions for synchronization. No Thread.sleep() — these are CI/CD ready.

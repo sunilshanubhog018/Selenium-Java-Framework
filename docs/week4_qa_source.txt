@@ -1,0 +1,635 @@
+
+===== PAGE 1 =====
+SDET Interview Preparation
+ Week 4: Framework Enhancement + Data-Driven Testing
+ Topics: Parallel Execution, Extent Reports, Log4j, CI/CD, E2E Testing
+ PART 1 - FUNDAMENTALS (Blue Level)
+Q1. What is TestNG parallel execution and why is it needed?
+TestNG parallel execution allows multiple test methods to run simultaneously across different threads.
+Without parallel execution, tests run one after another (sequential). With parallel execution, multiple tests run
+at the same time, reducing total execution time significantly.
+Why needed: A suite of 50 tests taking 40 minutes sequentially can complete in 10-15 minutes with 3 parallel
+threads.
+testng.xml:
+This runs 3 tests simultaneously instead of one at a time.
+Q2. What is ThreadLocal and why is it used in parallel execution?
+ThreadLocal is a Java class that provides thread-local variables. Each thread accessing a ThreadLocal
+variable gets its own independent copy. Without ThreadLocal, multiple threads share the same WebDriver
+instance, causing tests to interfere with each other.
+// WITHOUT ThreadLocal (NOT thread-safe)
+protected WebDriver driver; // shared by all threads!
+// WITH ThreadLocal (thread-safe)
+private static ThreadLocal driver = new ThreadLocal<>();
+public static WebDriver getDriver() { return driver.get(); }
+// Each thread gets its OWN driver
+Q3. What is Extent Reports and what does it generate?
+Extent Reports is a reporting library that generates beautiful HTML reports for test execution. It shows
+pass/fail/skip counts, test logs, screenshots attached to failed tests, system information, and execution
+timeline. The report is a single HTML file that can be shared with managers and stakeholders.
+ExtentSparkReporter reporter = new ExtentSparkReporter('report.html');
+reporter.config().setTheme(Theme.DARK);
+ExtentReports extent = new ExtentReports();
+extent.attachReporter(reporter);
+ExtentTest test = extent.createTest('testLoginValid');
+test.log(Status.PASS, 'Login successful');
+extent.flush(); // writes report to disk
+
+===== PAGE 2 =====
+Q4. What is the Singleton pattern used in ExtentManager?
+Singleton ensures only ONE instance of ExtentReports is created for the entire test suite. All tests write to the
+same report. Without Singleton, each test class would create its own report, resulting in multiple incomplete
+reports instead of one comprehensive report.
+public class ExtentManager {
+private static ExtentReports extent;
+public static ExtentReports getInstance() {
+if (extent == null) { // create only if null
+extent = createInstance();
+}
+return extent; // same instance every time
+}
+}
+Q5. What is CI/CD and what tool did you use?
+CI/CD stands for Continuous Integration / Continuous Delivery. CI automatically builds and tests code every
+time a developer pushes to GitHub. CD automatically deploys to environments after tests pass. We used
+GitHub Actions for CI/CD — it triggers our test suite automatically on every push and runs tests on a Linux
+machine with headless Chrome.
+.github/workflows/maven.yml:
+on:
+push:
+branches: [ main ]
+jobs:
+test:
+runs-on: ubuntu-latest
+steps:
+- uses: actions/checkout@v4
+- name: Run tests
+run: mvn clean test
+env:
+CI: true
+Q6. What is headless browser execution and when is it used?
+Headless mode runs Chrome without a visible browser window. The browser runs in the background — no
+GUI. This is required in CI/CD environments like GitHub Actions because they are Linux servers with no
+display. Headless is also faster than visible mode.
+ChromeOptions options = new ChromeOptions();
+options.addArguments('--headless=new'); // no visible window
+options.addArguments('--no-sandbox'); // required on Linux CI
+options.addArguments('--disable-dev-shm-usage'); // prevent crashes
+// Auto-detect CI environment:
+boolean headless = Boolean.parseBoolean(System.getenv('CI'));
+// GitHub Actions sets CI=true automatically
+Q7. What is data-driven testing and how did you implement it?
+
+===== PAGE 3 =====
+Data-driven testing separates test data from test logic. The same test method runs multiple times with
+different data from an external source (Excel, CSV, database). We used Apache POI to read .xlsx files and
+TestNG @DataProvider to feed the data to tests.
+@DataProvider(name = 'loginData')
+public Object[][] getLoginData() {
+return ExcelReader.readExcelAsArray(
+'LoginTestData.xlsx', 'Sheet1');
+}
+@Test(dataProvider = 'loginData')
+public void testLogin(String tcId, String user,
+String pass, String expected) {
+// runs once per Excel row automatically
+}
+Q8. What is the Execute column in your Excel test data?
+The Execute column acts as a run-flag for each test case. When set to 'Yes', the test runs. When set to 'No',
+the test is skipped. This allows QA teams to disable specific test cases without deleting them — useful when
+a scenario is failing due to known environment issues.
+// DataProvider filters by Execute column:
+for (Map row : allData) {
+if ('Yes'.equalsIgnoreCase(row.get('Execute'))) {
+filteredData.add(new Object[]{
+row.get('Username'),
+row.get('Password'),
+row.get('Expected')
+});
+}
+}
+Q9. What is @BeforeSuite and how did you use it?
+@BeforeSuite runs exactly ONCE before all tests in the entire suite. We used it to initialize the ParaBank
+database before any test runs — clicking the Initialize button on the admin page to reset the database to a
+clean state.
+@BeforeSuite
+public void initializeDatabase() {
+WebDriver tempDriver = new ChromeDriver(headlessOptions);
+tempDriver.get(adminUrl);
+tempDriver.findElement(
+By.cssSelector("button[value='INIT']")
+).click();
+tempDriver.quit(); // close temp browser
+System.out.println('Database initialized!');
+}
+Q10. What is driver.remove() and why is it important in parallel execution?
+driver.remove() removes the driver reference from ThreadLocal after the test completes. Without it, the
+ThreadLocal variable holds a reference to the closed browser session, causing a memory leak. In parallel
+execution with many tests, this can crash the JVM with OutOfMemoryError.
+
+===== PAGE 4 =====
+@AfterMethod
+public void tearDown() {
+if (driver.get() != null) {
+driver.get().quit(); // closes browser
+driver.remove(); // removes from ThreadLocal
+wait.remove(); // removes wait too
+}
+}
+Q11. What Chrome arguments are essential for running on Linux CI/CD?
+Linux CI servers have no display and limited shared memory. Without specific Chrome arguments, Chrome
+crashes immediately. These arguments stabilize Chrome on Linux:
+--no-sandbox: Disables Chrome's sandbox (required on Linux)
+--disable-dev-shm-usage: Uses /tmp instead of /dev/shm (prevents crashes)
+--headless=new: Runs without display
+--disable-gpu: Disables GPU hardware acceleration
+--remote-debugging-port=0: Avoids port conflicts
+chromeOptions.addArguments('--no-sandbox');
+chromeOptions.addArguments('--disable-dev-shm-usage');
+chromeOptions.addArguments('--headless=new');
+chromeOptions.addArguments('--disable-gpu');
+chromeOptions.addArguments('--remote-debugging-port=0');
+chromeOptions.addArguments('--window-size=1920,1080');
+Q12. What is extent.flush() and when must it be called?
+extent.flush() writes the in-memory report data to the HTML file on disk. Without calling flush(), the HTML file
+remains empty or incomplete. It must be called AFTER all tests complete — in the onFinish() method of
+TestListener (ITestListener). If flush() is not called, no report is generated even if all tests ran.
+@Override
+public void onFinish(ITestContext context) {
+// Must call flush() here — after ALL tests complete
+extent.flush(); // writes ExtentReport.html to disk
+// Without this line — report file is empty!
+}
+
+===== PAGE 5 =====
+PART 2 - SENIOR / FRAMEWORK LEVEL (Red Level)
+Q1. You have 50 tests taking 40 minutes. How would you reduce execution time to 10 minutes?
+Implement parallel execution with 4 threads using ThreadLocal WebDriver:
+1. Make driver ThreadLocal (private static ThreadLocal)
+2. Update testng.xml: parallel='methods' thread-count='4'
+3. Ensure all page object methods use getDriver() not shared driver
+4. Use dynamic test data (unique usernames per thread) to avoid DB conflicts
+5. Remove unnecessary Thread.sleep() — replace with explicit waits
+Result: 50 tests / 4 threads = ~12-13 minutes. Further optimization with --headless=new reduces browser
+startup time too.
+testng.xml:
+BaseTest.java:
+private static ThreadLocal driver = new ThreadLocal<>();
+// Each test uses its own isolated driver instance
+Q2. Walk through how Extent Reports integrates with your TestNG framework.
+Integration works through ITestListener interface:
+1. ExtentManager creates ONE ExtentReports instance (Singleton)
+2. TestListener implements ITestListener
+3. onTestStart() creates a new ExtentTest node for each test
+4. We store ExtentTest in ThreadLocal (parallel-safe)
+5. onTestSuccess/Failure/Skip updates the node status
+6. onTestFailure captures screenshot and attaches to report
+7. onFinish calls extent.flush() to write HTML file
+Key insight: ExtentTest (individual test node) uses ThreadLocal, but ExtentReports (the report itself) is
+shared — this is intentional. All threads write to ONE report but each writes to their OWN node.
+// ThreadLocal for parallel-safe test nodes
+private static ThreadLocal extentTest = new ThreadLocal<>();
+// Shared report (Singleton)
+private static ExtentReports extent = ExtentManager.getInstance();
+onTestStart() → extentTest.set(extent.createTest(name));
+onTestSuccess() → extentTest.get().log(Status.PASS, msg);
+onTestFailure() → extentTest.get().log(Status.FAIL, msg);
+onFinish() → extent.flush();
+Q3. How do you handle unstable test environments like ParaBank public instance?
+
+===== PAGE 6 =====
+ParaBank's public instance is shared globally — other users corrupt the database. Our strategies:
+1. @BeforeSuite DB initialization: Hits admin.htm and clicks Initialize before any test runs
+2. Dynamic usernames: 'user_' + System.currentTimeMillis() ensures unique users per run
+3. Fallback mechanism: If fresh registration fails, fall back to a known stable config user
+4. Graceful handling: Remove Assert from registration — don't crash the test if DB is temporarily unhealthy
+5. Skip known-bad tests: Mark negative credential tests as known-fail when DB accepts any credentials
+In production: Use isolated QA environment with DB snapshot reset before each CI run.
+@BeforeSuite
+public void initializeDatabase() {
+// Reset DB before all tests
+driver.get(adminUrl + 'admin.htm');
+driver.findElement(By.cssSelector("button[value='INIT']")
+).click();
+}
+// Fallback in E2E tests:
+if (!title.contains('Welcome')) {
+// Registration failed - use config user
+loginPage.login(ConfigReader.get('test.username'), ...);
+}
+Q4. Explain how your CI/CD pipeline works end to end.
+Our GitHub Actions pipeline:
+1. Developer pushes code to GitHub (main branch)
+2. GitHub Actions triggers automatically (.github/workflows/maven.yml)
+3. Spins up Ubuntu Linux runner on Azure infrastructure
+4. Checks out code, sets up Java 21, installs Chrome
+5. Runs 'mvn clean test' — Maven reads testng.xml and runs all suites
+6. Chrome runs in headless mode (CI=true env variable detected automatically)
+7. Test results: 52 tests run in ~12 minutes
+8. Artifacts uploaded: test-output/ folder with screenshots
+9. If any test fails: Build shows FAILURE with exit code 1
+10. Slack/email notification (optional) for failures
+This ensures every code push is automatically validated — no manual testing needed.
+# Auto CI trigger:
+on:
+push:
+branches: [ main ]
+# Headless auto-detection:
+boolean headless = Boolean.parseBoolean(System.getenv('CI'));
+// GitHub Actions sets CI=true → headless runs automatically
+Q5. What is the difference between parallel='methods' and parallel='classes' in testng.xml?
+
+===== PAGE 7 =====
+parallel='methods': Each individual @Test method runs in its own thread. Maximum parallelism — 3 threads
+run 3 different test methods simultaneously, even from different classes.
+parallel='classes': Each test CLASS runs in its own thread. All methods within a class run sequentially on the
+same thread.
+For our banking framework, we use parallel='methods' because:
+- Each test is independent (registers fresh user)
+- No shared state between tests
+- Maximum speed improvement
+Use parallel='classes' when tests within a class have dependencies (login once, then run multiple tests).
+# methods: 3 individual tests run at same time
+→ testValidLogin (thread 1)
+→ testValidRegistration (thread 2)
+→ testTransfer (thread 3)
+# classes: 3 test classes run at same time
+→ All LoginTest methods (thread 1)
+→ All RegisterTest methods (thread 2)
+→ All AccountsTest methods (thread 3)
+Q6. How does your framework handle test failures — screenshot capture to report attachment?
+Complete failure handling chain:
+1. Test fails → TestNG calls onTestFailure(ITestResult result)
+2. TestListener.captureScreenshot() called
+3. Get driver: BaseTest.getDriver() (static ThreadLocal — thread-safe)
+4. Cast to TakesScreenshot → screenshot as FILE
+5. Save to: test-output/screenshots/testName_timestamp.png (absolute path)
+6. Return absolute path to onTestFailure
+7. MediaEntityBuilder.createScreenCaptureFromPath(path) attaches screenshot to ExtentTest node
+8. Report shows: test name + failure reason + screenshot embedded in HTML
+Absolute paths are critical — relative paths break when report is opened outside project folder.
+private String captureScreenshot(ITestResult result) {
+WebDriver driver = BaseTest.getDriver(); // thread-safe
+TakesScreenshot ts = (TakesScreenshot) driver;
+File src = ts.getScreenshotAs(OutputType.FILE);
+String path = System.getProperty('user.dir')
++ '/test-output/screenshots/'
++ testName + '_' + timestamp + '.png';
+Files.copy(src.toPath(), Paths.get(path));
+return path; // absolute path for report
+}
+Q7. Behavioral: Describe a challenge you faced with CI/CD and how you fixed it.
+
+===== PAGE 8 =====
+Challenge: Chrome crashed on first test startup on GitHub Actions — showing 'Chrome instance exited' error.
+All 52 tests were skipped because the very first @BeforeMethod failed.
+Root cause: GitHub Actions Linux runner had insufficient memory for Chrome's default startup.
+Fix applied:
+1. Added --disable-gpu argument (Chrome was trying to use GPU on headless Linux)
+2. Added --remote-debugging-port=0 (avoided port conflicts)
+3. Added --disable-extensions (reduced startup overhead)
+4. Added rerunFailingTestsCount=1 in Maven Surefire (auto-retry first failure)
+Lesson: CI environments need extra Chrome stability flags that aren't needed on local Windows machines.
+Always test your framework on Linux headless before assuming it will work on CI.
+Q8. Behavioral: How did you ensure your 52-test suite was maintainable and scalable?
+Three key design decisions for maintainability:
+1. POM separation: Locators and actions in page objects, assertions in test classes. If ParaBank changes a
+button's ID, I update ONE locator in ONE page object — not 20 test methods.
+2. ConfigReader: All environment-specific values (URL, browser, timeouts) in one config.properties file.
+Switching from QA to UAT environment = change ONE property.
+3. Dynamic test data: 'user_' + System.currentTimeMillis() ensures no test depends on pre-existing data.
+Tests are self-contained — can run in any order, any environment.
+For scaling: Adding a new test = create page object method + add @Test. Framework scales to 500 tests
+without changing architecture.
+RAPID FIRE - Framework Enhancement
+Q: What does parallel='methods' do? A: Runs each @Test method in a separate thread simultaneously
+Q: Why use ThreadLocal for WebDriver? A: Each parallel thread gets its OWN isolated driver instance — no
+sharing
+Q: What is extent.flush()? A: Writes the in-memory report data to the HTML file on disk
+Q: Why is driver.remove() critical? A: Prevents memory leaks by removing the driver from ThreadLocal after
+each test
+Q: What CI=true does in our framework? A: Automatically enables headless Chrome without changing
+config.properties
+Q: What does rerunFailingTestsCount=1 do? A: Maven Surefire automatically retries failed tests once before
+marking as failed
+Q: Where is ExtentReport.html saved? A: project-root/test-output/ExtentReport.html
+Q: What is @BeforeSuite used for? A: Runs ONCE before all tests — we use it to initialize the ParaBank
+database
+
+===== PAGE 9 =====
+PART 3 - PRACTICE TESTS
+ Test 1: Parallel Execution Basics (Easy)
+1. What attribute in testng.xml enables parallel execution?
+A) sequential='false'
+B) parallel='methods'
+C) threading='true'
+D) concurrent='yes'
+2. ThreadLocal ensures:
+A) All threads share one driver
+B) Each thread gets its own driver instance
+C) Driver is created once globally
+D) Driver is never destroyed
+3. In our framework, driver.remove() is called in:
+A) @BeforeMethod
+B) @BeforeSuite
+C) @AfterMethod
+D) @AfterSuite
+4. What Chrome argument is required to run on Linux CI with no display?
+A) --no-gpu
+B) --silent
+C) --headless=new
+D) --background
+5. ExtentReports uses which design pattern?
+A) Factory
+B) Observer
+C) Singleton
+D) Strategy
+6. extent.flush() should be called in:
+A) onTestStart()
+B) onTestFailure()
+C) onStart()
+D) onFinish()
+7. What does parallel='classes' do?
+A) Runs each method in parallel
+B) Runs each class in its own thread
+C) Runs all tests sequentially
+D) Disables parallel execution
+8. In GitHub Actions, what env variable is automatically set to 'true'?
+A) GITHUB=true
+B) CI=true
+C) ACTIONS=true
+D) RUNNER=true
+9. Which TestNG annotation runs code ONCE before all tests?
+A) @BeforeClass
+
+===== PAGE 10 =====
+B) @BeforeTest
+C) @BeforeSuite
+D) @BeforeMethod
+10. What does 'thread-count=3' mean in testng.xml?
+A) Maximum 3 test classes
+B) 3 tests run simultaneously
+C) 3 retries per test
+D) 3 browser instances total
+
+===== PAGE 11 =====
+Test 2: Extent Reports & Listeners (Easy)
+1. ITestListener interface method called when test FAILS:
+A) onTestStart()
+B) onTestComplete()
+C) onTestFailure()
+D) onTestError()
+2. To attach a screenshot to Extent Report on failure, we use:
+A) extent.addScreenshot()
+B) MediaEntityBuilder.createScreenCaptureFromPath()
+C) test.attach(screenshot)
+D) reporter.addImage()
+3. Why do we use ThreadLocal instead of a regular ExtentTest?
+A) ThreadLocal is faster
+B) Each parallel thread writes to its own test node
+C) ExtentTest requires ThreadLocal
+D) To prevent duplicate tests
+4. Which method creates a new test node in Extent Report?
+A) extent.startTest()
+B) extent.createTest()
+C) extent.addTest()
+D) extent.newTest()
+5. Status.PASS, Status.FAIL, Status.SKIP are from which library?
+A) TestNG
+B) Selenium
+C) ExtentReports
+D) Log4j
+6. ExtentSparkReporter generates which type of file?
+A) XML
+B) JSON
+C) HTML
+D) CSV
+7. Where is TestListener registered in our framework?
+A) BaseTest class
+B) pom.xml
+C) testng.xml listeners section
+D) config.properties
+8. Screenshot absolute path uses which Java method?
+A) new File('.').getPath()
+B) System.getProperty('user.dir')
+C) System.getenv('HOME')
+D) Paths.get('.')
+9. What happens if extent.flush() is NOT called?
+A) Tests fail
+B) Report HTML file remains empty
+C) Exception is thrown
+
+===== PAGE 12 =====
+D) Report opens automatically
+10. Theme.DARK in ExtentSparkReporter sets:
+A) Dark browser mode
+B) Dark HTML report theme
+C) Night mode for IDE
+D) Dark console output
+
+===== PAGE 13 =====
+Test 3: CI/CD & Data-Driven (Medium)
+1. In GitHub Actions, mvn clean test command:
+(A) Only compiles, (B) Only tests, (C) Compiles + deletes target + runs tests, (D) Deploys application
+A) Only compiles code
+B) Only runs tests
+C) Deletes target, compiles, runs all tests
+D) Deploys to production
+2. Why does our BaseTest check System.getenv('CI')?
+boolean headless = ... || Boolean.parseBoolean(System.getenv('CI'));
+A) To check if browser is installed
+B) To auto-enable headless on GitHub Actions without changing config
+C) To detect operating system
+D) To enable parallel execution
+3. Apache POI XSSFWorkbook reads which file format?
+A) .xls (Excel 97-2003)
+B) .csv (Comma Separated)
+C) .xlsx (Excel 2007+)
+D) .ods (OpenDocument)
+4. @DataProvider(name='loginData') is linked to @Test by:
+A) Same class name
+B) @Test(dataProvider='loginData') annotation
+C) Same method name
+D) testng.xml configuration
+5. In our Excel, Execute='No' causes the test to:
+if ('Yes'.equalsIgnoreCase(row.get('Execute'))) { filteredData.add(...); }
+A) Fail the test
+B) Skip with @Skip annotation
+C) Not be added to DataProvider — never runs
+D) Run but with empty data
+6. What is rerunFailingTestsCount=1 in Maven Surefire plugin?
+A) Runs all tests twice
+B) Automatically retries failed tests once before marking as failure
+C) Limits max 1 failure
+D) Runs only 1 test at a time
+7. In parallel execution, 'user_' + System.currentTimeMillis() ensures:
+A) Same username every run
+B) Unique username per test run — prevents DB conflicts between threads
+C) Username contains timestamp
+D) Faster username generation
+8. GitHub Actions workflow triggers on:
+on:
+push:
+branches: [ main ]
+A) Manual trigger only
+B) Every push to main branch automatically
+C) Only pull requests
+D) Scheduled daily runs
+
+===== PAGE 14 =====
+9. The .gitignore file should include test-output/ because:
+A) It contains sensitive data
+B) It's too large
+C) It's generated every run — causes noisy commits
+D) GitHub doesn't support it
+10. Our ExcelReader.getCellValue() handles NUMERIC cells by:
+if (numValue == Math.floor(numValue)) return String.valueOf((long)numValue);
+A) Returns decimal format (123.0)
+B) Returns whole number (123) for integers, decimal for others
+C) Returns empty string
+D) Throws exception
+
+===== PAGE 15 =====
+Test 4: Framework Integration (Medium)
+1. If @BeforeSuite fails (DB init fails), what happens to all tests?
+A) Tests run with corrupted DB
+B) All tests are skipped
+C) Only first test skips
+D) Tests run normally
+2. We use try-catch in initializeDatabase() instead of Assert because:
+A) Assert doesn't work in @BeforeSuite
+B) DB init failure is non-critical — tests can still run even if init fails partially
+C) try-catch is faster
+D) @BeforeSuite doesn't support Assert
+3. In parallel execution with 3 threads, how many WebDriver instances exist simultaneously?
+A) 1 (shared)
+B) 2
+C) 3 (one per thread)
+D) As many as tests
+4. CONFIG_USERNAME in Excel means:
+if (username.equals('CONFIG_USERNAME')) {
+username = ConfigReader.get('test.username');
+}
+A) Username must be configured manually
+B) Read actual username from config.properties
+C) Skip the test case
+D) Generate random username
+5. Why does our framework use @Listeners(TestListener.class) on BaseTest instead of only testng.xml?
+A) testng.xml listeners don't work
+B) Ensures listener works when running individual test classes, not just full suite
+C) @Listeners is more efficient
+D) Required by TestNG 7+
+6. Screenshot path uses absolute path (System.getProperty('user.dir')) because:
+A) Relative paths are slower
+B) Extent Report HTML finds screenshots regardless of where the report is opened
+C) CI/CD requires absolute paths
+D) Java only supports absolute paths
+7. A banking test registers 'acc_1775452408399'. The timestamp ensures:
+A) Test runs faster
+B) Unique username — no conflicts with other parallel threads or previous runs
+C) Username is memorable
+D) Database accepts the format
+8. When ExtentManager.getInstance() is first called during test execution,
+what triggers the report file creation?
+A) extent.flush()
+B) createInstance() which creates ExtentSparkReporter with file path
+C) onStart() in TestListener
+D) First test pass
+9. In our E2E tests, we use pause(3) instead of explicit waits because:
+
+===== PAGE 16 =====
+A) Explicit waits don't work in E2E
+B) E2E flows involve page redirects and DB operations needing predictable delays
+C) pause() is more accurate
+D) Thread.sleep() is more reliable
+10. The ConfigReader static block runs:
+static { properties.load(file); }
+A) Before every test
+B) Once when ConfigReader class is first loaded by JVM
+C) On every get() call
+D) When config.properties changes
+
+===== PAGE 17 =====
+Test 5: Banking Framework Scenarios (Hard)
+1. On CI, all 52 tests show 'Chrome instance exited' for Run 1 of each test class.
+All subsequent runs PASS. What is the issue and fix?
+A) Wrong Chrome version — update pom.xml
+B) Chrome crashes on first startup on Linux. Fix: add --disable-gpu, --remote-debugging-port=0 flags
+C) Parallel execution conflict — reduce thread-count
+D) Missing headless flag — add --headless=new
+2. getTotalBalance() times out with:
+TimeoutException: waiting for By.cssSelector: #accountTable tbody tr:last-child td:nth-child(2) b
+After many test runs with config user. What happened?
+A) ParaBank changed the locator
+B) Config user has too many accounts - table structure changed, b tag absent for last row
+C) Network timeout
+D) Explicit wait timeout too low
+3. E2E Test fails: 'Registration result: Signing up is easy!' instead of 'Welcome user123'
+All 4 E2E tests fail because Log Out/Accounts Overview links are missing.
+Root cause?
+A) Wrong registration form locators
+B) ParaBank DB overloaded — registration silently fails, user not created, not logged in
+C) Network connectivity issue
+D) Config user credentials wrong
+4. testInvalidLogin PASSES locally but FAILS on CI:
+Expected: 'The username and password could not be verified.'
+Got: 'An internal error has occurred'
+Why?
+A) Locator for error message is wrong
+B) CI runs after many prior registrations — ParaBank DB corrupted, shows internal error
+C) Chrome version difference
+D) Timeout too low on CI
+5. You have parallel thread-count=3 and config user logs in on all 3 threads simultaneously.
+Thread 1 pays a bill, Thread 2 checks balance. Thread 2 sees wrong balance.
+What is the design flaw and fix?
+A) Increase wait time
+B) Shared config user — parallel threads interfere with same account data. Fix: each thread registers unique
+user
+C) Reduce thread count to 1
+D) Use database lock
+6. ExtentReport.html exists but shows no test results (0 tests).
+Screenshots folder has files. What is wrong?
+A) Wrong report path
+B) extent.flush() not called — in-memory data never written to disk
+C) TestListener not registered
+D) Wrong Status values used
+7. Your E2E test registers a fresh user but finds 'Accounts Overview' link not clickable.
+Fallback logs in with config user but STILL fails.
+What is the actual root cause?
+A) Wrong locator for Accounts Overview link
+B) ParaBank showing internal error page after login — neither new user nor config user can reach accounts
+page
+
+===== PAGE 18 =====
+C) Parallel execution conflict
+D) Wrong base URL in config
+8. CI pipeline takes 13 minutes. You need it under 5 minutes. What changes achieve this?
+A) Remove all assertions to speed up tests
+B) Increase thread-count to 10, remove pause() calls, replace with explicit waits, skip E2E suite in PR builds
+C) Run only 10 tests instead of 52
+D) Use faster test data
+9. Your TestListener fails with NullPointerException at extentTest.get().log(Status.PASS, msg)
+for one specific test. What is the likely cause?
+A) Status.PASS is null
+B) onTestStart() was not called for that test — extentTest.get() returns null
+C) TestListener registered twice
+D) ExtentReports version conflict
+10. Config user 'user_1774670744212' worked for 50 runs then started failing.
+All E2E tests that use this user now get 'An internal error has occurred'.
+Best long-term fix?
+A) Change config user to a new one
+B) Add @BeforeSuite to re-initialize DB + re-register config user fresh each suite run
+C) Remove E2E tests
+D) Increase timeout to 30 seconds
+
+===== PAGE 19 =====
+ANSWER KEY
+Test 1:
+Q1: B Q2: B Q3: C Q4: C Q5: C Q6: D Q7: B Q8: B Q9: C Q10: B
+Test 2:
+Q1: C Q2: B Q3: B Q4: B Q5: C Q6: C Q7: C Q8: B Q9: B Q10: B
+Test 3:
+Q1: C Q2: B Q3: C Q4: B Q5: C Q6: B Q7: B Q8: B Q9: C Q10: B
+Test 4:
+Q1: B Q2: B Q3: C Q4: B Q5: B Q6: B Q7: B Q8: B Q9: B Q10: B
+Test 5:
+Q1: B Q2: B Q3: B Q4: B Q5: B Q6: B Q7: B Q8: B Q9: B Q10: B

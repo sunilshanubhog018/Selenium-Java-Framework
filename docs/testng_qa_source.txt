@@ -1,0 +1,546 @@
+
+===== PAGE 1 =====
+TestNG Interview Questions | SDET 4+ Years
+TestNG Interview Questions & Answers
+For SDET / Automation Engineer – 4+ Years Experience
+Banking & Financial Domain Focus
+Easy (15) | Medium (15) | Difficult / Real-World (10)
+SECTION A – Easy (Fundamentals)
+These are basic concept questions. You MUST answer these confidently and instantly.
+Q1. What is TestNG and why do we use it over JUnit?
+TestNG (Test Next Generation) is a Java testing framework inspired by JUnit but with advanced 
+features. We prefer TestNG because it supports annotations like @BeforeSuite/@AfterSuite, test 
+grouping, parallel execution, data-driven testing with @DataProvider, test dependencies, and built-in 
+HTML reporting. JUnit lacks many of these features natively.
+Q2. What are the different TestNG annotations? List them in execution order.
+The execution order is:
+@BeforeSuite → @BeforeTest → @BeforeClass → @BeforeMethod
+    → @Test →
+@AfterMethod → @AfterClass → @AfterTest → @AfterSuite
+Suite-level runs once for the entire suite. Test-level runs once per <test> tag in testng.xml. Class-level 
+runs once per class. Method-level runs before/after EACH @Test method.
+Interview Tip: Draw this on a whiteboard if asked. Interviewers love visual explanations of the annotation 
+lifecycle.
+Q3. What is the difference between @BeforeMethod and @BeforeClass?
+@BeforeClass: Runs ONCE before the first test method in the class. Used for one-time setup like 
+launching a browser or establishing a DB connection.
+@BeforeMethod: Runs BEFORE EACH @Test method. Used for repetitive setup like navigating to a 
+URL or resetting state between tests.
+Q4. What is the default priority of a @Test method?
+The default priority is 0. Methods with lower priority values execute first. If two methods have the 
+same priority, TestNG executes them in alphabetical order of method names.
+Q5. How do you skip a test in TestNG?
+There are two ways:
+1. Using enabled attribute: @Test(enabled = false) — the test won't run at all.
+2. Using SkipException: Throw new SkipException("reason") inside the test method for conditional 
+skipping at runtime.
+Page 1
+===== PAGE 2 =====
+TestNG Interview Questions | SDET 4+ Years
+Q6. What is the difference between Hard Assert and Soft Assert?
+Hard Assert (Assert): Execution STOPS immediately at the first failure. Remaining lines in the test 
+method never execute. Best for critical checkpoints like login verification.
+Soft Assert (SoftAssert): Execution CONTINUES even after failures. All failures are collected and 
+reported together when soft.assertAll() is called. Best for validating multiple fields on a single page.
+Interview Tip: Always mention that forgetting soft.assertAll() silently ignores failures — this shows you've 
+actually used it.
+Q7. What is dependsOnMethods in TestNG?
+dependsOnMethods creates a dependency between test methods. If the parent test fails, the 
+dependent test is automatically SKIPPED (not failed). Example: if loginTest fails, checkBalanceTest 
+with dependsOnMethods="loginTest" will be skipped because testing balance without login makes no 
+sense.
+Q8. What is testng.xml and why is it used?
+testng.xml is a configuration file that controls test execution. It defines which test classes/methods to 
+run, execution order, parallel settings, groups to include/exclude, parameters, and listeners. It gives 
+you centralized control over the entire test suite without modifying Java code.
+Q9. How do you run tests in parallel using TestNG?
+In testng.xml, set the parallel attribute on the <suite> tag:
+<suite name="Suite" parallel="methods" thread-count="3">
+<!-- parallel can be: methods, tests, classes, instances -->
+"methods" runs test methods in parallel, "classes" runs entire classes in parallel, and "tests" runs 
+<test> blocks in parallel.
+Q10. What is @DataProvider in TestNG?
+@DataProvider is used for data-driven testing. It supplies multiple sets of data to a single @Test 
+method. The test runs once for each data set. The provider method returns Object[][] where each row 
+is one test iteration.
+@DataProvider(name = "loginData")
+public Object[][] getData() {
+    return new Object[][] {
+        {"user1", "pass1"},
+        {"user2", "pass2"}
+    };
+}
+ 
+@Test(dataProvider = "loginData")
+public void loginTest(String user, String pass) { }
+Page 2
+===== PAGE 3 =====
+TestNG Interview Questions | SDET 4+ Years
+Q11. What are groups in TestNG?
+Groups allow you to categorize tests (e.g., "smoke", "regression", "sanity") and selectively run them. 
+You tag methods with @Test(groups={"smoke"}) and configure which groups to run in testng.xml 
+using <include> and <exclude> tags.
+Q12. What is the difference between @BeforeTest and @BeforeSuite?
+@BeforeSuite: Runs ONCE before the entire suite (all <test> tags). Used for global setup like DB 
+connection.
+@BeforeTest: Runs once before each <test> tag in testng.xml. If you have 3 <test> tags, it runs 3 
+times. Used for environment-specific setup.
+Q13. How do you set test execution order in TestNG?
+Three ways: (1) priority attribute — @Test(priority=1) runs before @Test(priority=2). (2) 
+dependsOnMethods — creates explicit dependency chain. (3) In testng.xml using preserve-
+order="true" with specific method listing.
+Q14. What reports does TestNG generate by default?
+TestNG generates two reports in the test-output folder: (1) index.html — a detailed HTML report with 
+pass/fail/skip status for each test. (2) emailable-report.html — a single-page summary report you can 
+email to stakeholders. Both show test names, execution time, and failure details.
+Q15. What is timeOut in @Test?
+timeOut sets the maximum time (in milliseconds) a test can take. If it exceeds this time, the test is 
+automatically marked as FAILED. Example: @Test(timeOut = 5000) fails if the test takes more than 5 
+seconds. Useful for catching performance regressions or infinite loops.
+Page 3
+===== PAGE 4 =====
+TestNG Interview Questions | SDET 4+ Years
+SECTION B – Medium (Implementation)
+These require deeper understanding and hands-on experience. Expect follow-up questions.
+Q16. How do you implement Retry Logic for failed tests in TestNG?
+Implement the IRetryAnalyzer interface and override the retry() method. Then attach it to tests using 
+@Test(retryAnalyzer = RetryAnalyzer.class) or globally via a listener.
+public class RetryAnalyzer implements IRetryAnalyzer {
+    private int count = 0;
+    private static final int MAX_RETRY = 2;
+ 
+    @Override
+    public boolean retry(ITestResult result) {
+        if (count < MAX_RETRY) {
+            count++;
+            return true;  // retry
+        }
+        return false;     // stop retrying
+    }
+}
+Interview Tip: Mention that retry is useful for flaky tests due to network issues in banking applications, but 
+overusing it hides real bugs.
+Q17. What are TestNG Listeners? Name the commonly used ones.
+Listeners are interfaces that let you hook into TestNG's execution lifecycle to add custom behavior. 
+Common listeners:
+• ITestListener — onTestStart, onTestSuccess, onTestFailure (screenshots on failure)
+• ISuiteListener — onStart, onFinish (suite-level setup/teardown)
+• IReporter — generateReport (custom report generation like Extent Reports)
+• IRetryAnalyzer — retry logic for failed tests
+• IAnnotationTransformer — modify annotations at runtime
+Register them in testng.xml with <listeners><listener class-name="..."/></listeners> or using 
+@Listeners annotation.
+Q18. How do you pass parameters to tests from testng.xml?
+Two approaches:
+1. @Parameters: Define in testng.xml and inject into methods:
+<!-- testng.xml -->
+<parameter name="browser" value="chrome"/>
+ 
+// Java
+@Parameters({"browser"})
+Page 4
+===== PAGE 5 =====
+TestNG Interview Questions | SDET 4+ Years
+@BeforeMethod
+public void setup(String browser) {
+    // browser = "chrome"
+}
+2. @DataProvider: For multiple data sets (more flexible, data from Excel/DB).
+Use @Parameters for environment config (browser, URL). Use @DataProvider for test data 
+(usernames, amounts).
+Q19. How do you run specific groups from testng.xml?
+<test name="Smoke Tests">
+    <groups>
+        <run>
+            <include name="smoke"/>
+            <exclude name="broken"/>
+        </run>
+    </groups>
+    <classes>
+        <class name="testng_basics.LoginTest"/>
+        <class name="testng_basics.TransferTest"/>
+    </classes>
+</test>
+Only methods tagged @Test(groups={"smoke"}) will run. Methods tagged with "broken" are excluded 
+even if they're also in "smoke".
+Q20. What is the difference between dependsOnMethods and dependsOnGroups?
+dependsOnMethods: Hard dependency on specific method names. Tightly coupled — if you rename 
+the method, dependency breaks.
+dependsOnGroups: Dependency on a group of tests. Loosely coupled — if ALL tests in that group 
+pass, the dependent test runs. Better for large frameworks.
+// Method dependency (tight coupling)
+@Test(dependsOnMethods = "loginTest")
+ 
+// Group dependency (loose coupling)
+@Test(dependsOnGroups = "login-group")
+Q21. How do you take a screenshot on test failure in TestNG?
+Implement ITestListener and override onTestFailure():
+public class ScreenshotListener implements ITestListener {
+    @Override
+    public void onTestFailure(ITestResult result) {
+Page 5
+===== PAGE 6 =====
+TestNG Interview Questions | SDET 4+ Years
+        WebDriver driver = ((BaseTest) result.getInstance())
+                            .getDriver();
+        TakesScreenshot ts = (TakesScreenshot) driver;
+        File src = ts.getScreenshotAs(OutputType.FILE);
+        File dest = new File("screenshots/" 
+                   + result.getName() + ".png");
+        FileUtils.copyFile(src, dest);
+    }
+}
+Interview Tip: In banking projects, mention that you also capture the transaction ID and timestamp in 
+screenshot names for audit trail purposes.
+Q22. How do you read test data from Excel using @DataProvider?
+@DataProvider(name = "excelData")
+public Object[][] readExcel() throws Exception {
+    FileInputStream fis = new FileInputStream("testdata.xlsx");
+    XSSFWorkbook wb = new XSSFWorkbook(fis);
+    XSSFSheet sheet = wb.getSheet("LoginData");
+    int rows = sheet.getPhysicalNumberOfRows();
+    int cols = sheet.getRow(0).getPhysicalNumberOfCells();
+    Object[][] data = new Object[rows - 1][cols];
+    for (int i = 1; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            data[i-1][j] = sheet.getRow(i).getCell(j)
+                           .getStringCellValue();
+        }
+    }
+    wb.close();
+    return data;
+}
+Q23. How do you configure TestNG with Maven Surefire Plugin?
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-surefire-plugin</artifactId>
+    <version>3.2.5</version>
+    <configuration>
+        <suiteXmlFiles>
+            <suiteXmlFile>testng.xml</suiteXmlFile>
+        </suiteXmlFiles>
+    </configuration>
+</plugin>
+This allows running tests via 'mvn test' command, which is essential for CI/CD integration with 
+Jenkins. Without this configuration, Maven won't pick up your testng.xml.
+Page 6
+===== PAGE 7 =====
+TestNG Interview Questions | SDET 4+ Years
+Q24. What is IAnnotationTransformer and when do you use it?
+IAnnotationTransformer lets you modify TestNG annotations at RUNTIME, without changing source 
+code. Common uses:
+• Applying RetryAnalyzer globally to all tests instead of adding it to each @Test
+• Dynamically enabling/disabling tests based on environment
+• Changing priority or dataProvider at runtime
+public class AnnotationTransformer 
+       implements IAnnotationTransformer {
+    @Override
+    public void transform(ITestAnnotation annotation,
+            Class testClass, Constructor ctor, Method m) {
+        annotation.setRetryAnalyzer(RetryAnalyzer.class);
+    }
+}
+Q25. How do you handle multiple browser testing with TestNG?
+Use @Parameters with testng.xml to define parallel browser tests:
+<suite parallel="tests" thread-count="3">
+  <test name="Chrome">
+    <parameter name="browser" value="chrome"/>
+    <classes><class name="tests.LoginTest"/></classes>
+  </test>
+  <test name="Firefox">
+    <parameter name="browser" value="firefox"/>
+    <classes><class name="tests.LoginTest"/></classes>
+  </test>
+</suite>
+In @BeforeMethod, read the parameter and initialize the corresponding WebDriver. Use 
+ThreadLocal<WebDriver> for thread safety in parallel execution.
+Q26. What is the difference between @Factory and @DataProvider?
+@DataProvider: Runs the SAME test method multiple times with different data. Single instance of 
+test class.
+@Factory: Creates MULTIPLE INSTANCES of the entire test class. Each instance can have different 
+constructor parameters. All @Test methods run for each instance.
+@Factory
+public Object[] createInstances() {
+    return new Object[] {
+        new LoginTest("chrome"),
+        new LoginTest("firefox")
+    };
+Page 7
+===== PAGE 8 =====
+TestNG Interview Questions | SDET 4+ Years
+}
+Use @DataProvider when you need different data for one test. Use @Factory when you need 
+different configurations for the entire class.
+Q27. How do you implement custom reporting with TestNG?
+Implement IReporter interface or use Extent Reports (most common in industry):
+• Add ExtentReports + ExtentSparkReporter dependencies
+• Create a TestNG listener that initializes ExtentReports in onStart()
+• Log pass/fail/skip with screenshots in onTestSuccess/onTestFailure/onTestSkipped
+• Flush the report in onFinish()
+In banking projects, reports typically include transaction IDs, environment details, and execution 
+timestamps for compliance audits.
+Q28. What is invocationCount and threadPoolSize in @Test?
+invocationCount makes a test run N times. threadPoolSize runs those invocations in parallel threads. 
+Together they're used for basic load/stress testing.
+@Test(invocationCount = 10, threadPoolSize = 3)
+public void fundTransferTest() {
+    // Runs 10 times using 3 threads
+    // Useful for concurrency testing in banking
+}
+Interview Tip: Mention that for real performance testing you'd use JMeter or Gatling, but invocationCount is 
+useful for quick concurrency checks during functional testing.
+Q29. How do you handle test data setup and cleanup in TestNG?
+Use the annotation lifecycle strategically:
+• @BeforeSuite — Create test database/schema, load reference data
+• @BeforeClass — Insert test accounts, beneficiaries
+• @BeforeMethod — Reset account balances to known state
+• @AfterMethod — Rollback transactions, clear session
+• @AfterClass — Delete test accounts
+• @AfterSuite — Drop test schema
+In banking, test data isolation is critical — each test should leave the system in a clean state to avoid 
+cascading failures.
+Q30. What happens if @BeforeClass fails?
+If @BeforeClass fails, ALL @Test methods in that class are SKIPPED (not failed). The @AfterClass 
+still runs for cleanup. This is important because if browser launch fails in @BeforeClass, there's no 
+point running any tests. The @BeforeMethod methods are also skipped.
+Page 8
+===== PAGE 9 =====
+TestNG Interview Questions | SDET 4+ Years
+SECTION C – Difficult / Real-World Scenarios
+These are scenario-based questions that test real project experience. Expected at 18-22L range 
+interviews.
+Q31. How would you design a TestNG framework for a banking application with 500+ test 
+cases?
+I would structure it with these layers:
+1. Project Structure: Page Object Model (POM) with Base classes
+• src/main/java — Page objects, utilities, config readers
+• src/test/java — Test classes organized by module (login, accounts, transfers, loans)
+• src/test/resources — testng.xml suites, test data files
+2. TestNG Configuration: Multiple testng.xml files:
+• smoke-suite.xml — 30-50 critical tests, runs on every build
+• regression-suite.xml — all 500+ tests, runs nightly
+• module-wise XMLs — for targeted testing during sprints
+3. Data Management: Excel/DB-driven @DataProvider with environment-specific data
+4. Reporting: Extent Reports with screenshots on failure, transaction IDs logged
+5. CI/CD: Jenkins pipeline triggering mvn test with Surefire plugin, reports published as artifacts
+Interview Tip: Draw this architecture on a whiteboard. Mention thread safety with ThreadLocal<WebDriver> 
+for parallel execution. Bring up how banking requires audit trails in test reports.
+Q32. You have 500 regression tests taking 8 hours. How do you reduce execution time 
+using TestNG?
+1. Parallel Execution: Run tests in parallel using parallel="methods" or parallel="classes" with 
+optimal thread-count (typically 3-5 based on machine specs).
+2. Group Prioritization: Tag critical tests as "smoke" and run them first. Non-critical "regression" 
+tests can run in a separate pipeline.
+3. Dependency Optimization: Use dependsOnGroups to skip entire dependent modules when 
+prerequisite modules fail, avoiding wasted execution time.
+4. Smart Retry: Limit retries to 1-2 attempts only for known flaky scenarios (network timeouts in 
+banking APIs).
+5. Data-Driven Optimization: Reduce redundant data combinations. Instead of testing 50 account 
+types, identify equivalence classes and test 10.
+Typical result: 8 hours → 2-3 hours with parallel execution + smart grouping.
+Q33. A test passes locally but fails in Jenkins CI/CD. How do you debug this using 
+TestNG?
+Systematic debugging approach:
+Page 9
+===== PAGE 10 =====
+TestNG Interview Questions | SDET 4+ Years
+1. Check TestNG Reports: Compare local vs Jenkins test-output/index.html for exact error 
+messages.
+2. Screenshots: ITestListener should capture screenshots on failure. Check if the page loaded 
+correctly in CI.
+3. Environment Differences: Verify browser version, screen resolution (headless mode), and base 
+URL parameters in testng.xml.
+4. Timing Issues: Add explicit waits. CI machines are often slower. Check if timeOut values are 
+sufficient.
+5. Thread Safety: If running parallel in CI, check for shared state issues. Verify 
+ThreadLocal<WebDriver> usage.
+6. Test Data: CI might use a different database. Check if @DataProvider data is environment-aware.
+Q34. How do you handle flaky tests in a banking automation framework?
+Flaky tests are dangerous in banking because they can hide real defects in critical flows like fund 
+transfers:
+Step 1 - Identify: Use ITestListener to log flaky tests (tests that fail once then pass on retry). Track 
+flaky rate per test.
+Step 2 - Quarantine: Move consistently flaky tests to a "quarantine" group. Don't include them in CI 
+pipeline but run them separately.
+Step 3 - Root Cause: Common causes in banking apps are — page load delays (add explicit waits), 
+session timeouts (reset sessions in @BeforeMethod), stale data (use fresh test data per run).
+Step 4 - Fix & Restore: Fix the root cause, verify stability over 10+ runs, then move back to 
+regression group.
+Step 5 - Metrics: Maintain a flaky test dashboard. If flaky rate exceeds 5%, it's a framework health 
+issue.
+Q35. How do you implement cross-browser testing with TestNG for a net banking 
+application?
+// BaseTest.java
+public class BaseTest {
+    protected static ThreadLocal<WebDriver> driver 
+                    = new ThreadLocal<>();
+ 
+    @Parameters({"browser"})
+    @BeforeMethod
+    public void setup(String browser) {
+        switch (browser.toLowerCase()) {
+            case "chrome":
+                driver.set(new ChromeDriver());
+                break;
+            case "firefox":
+                driver.set(new FirefoxDriver());
+Page 10
+===== PAGE 11 =====
+TestNG Interview Questions | SDET 4+ Years
+                break;
+            case "edge":
+                driver.set(new EdgeDriver());
+                break;
+        }
+    }
+ 
+    public WebDriver getDriver() {
+        return driver.get();
+    }
+ 
+    @AfterMethod
+    public void teardown() {
+        driver.get().quit();
+        driver.remove(); // Prevent memory leaks
+    }
+}
+ThreadLocal is CRITICAL for parallel execution — without it, threads share the same WebDriver 
+instance causing random failures. driver.remove() in @AfterMethod prevents memory leaks.
+Interview Tip: Always mention ThreadLocal in cross-browser/parallel testing answers. It's a strong 
+differentiator at senior levels.
+Q36. How do you integrate TestNG with Extent Reports and attach screenshots to failed 
+tests?
+public class ExtentReportListener implements ITestListener {
+    static ExtentReports extent;
+    static ThreadLocal<ExtentTest> test = new ThreadLocal<>();
+ 
+    @Override
+    public void onStart(ITestContext context) {
+        extent = new ExtentReports();
+        extent.attachReporter(
+            new ExtentSparkReporter("report.html"));
+    }
+ 
+    @Override
+    public void onTestStart(ITestResult result) {
+        test.set(extent.createTest(result.getMethod()
+                 .getMethodName()));
+    }
+ 
+    @Override
+    public void onTestFailure(ITestResult result) {
+        String screenshot = captureScreenshot(result);
+        test.get().fail(result.getThrowable());
+        test.get().addScreenCaptureFromPath(screenshot);
+    }
+ 
+Page 11
+===== PAGE 12 =====
+TestNG Interview Questions | SDET 4+ Years
+    @Override
+    public void onFinish(ITestContext context) {
+        extent.flush();
+    }
+}
+Q37. How do you handle database verification in TestNG tests for banking transactions?
+After a fund transfer UI test, we verify the transaction was correctly recorded in the database:
+@Test(dependsOnMethods = "executeFundTransfer")
+public void verifyTransactionInDB() {
+    SoftAssert soft = new SoftAssert();
+  
+    // Query DB for the transaction
+    String query = "SELECT * FROM transactions "
+        + "WHERE ref_no = '" + txnRefNo + "'";
+    ResultSet rs = DBUtil.executeQuery(query);
+  
+    soft.assertEquals(rs.getString("status"),"SUCCESS");
+    soft.assertEquals(rs.getDouble("amount"), 5000.00);
+    soft.assertEquals(rs.getString("debit_acc"),
+                      senderAccount);
+    soft.assertEquals(rs.getString("credit_acc"),
+                      receiverAccount);
+    soft.assertAll();
+}
+Key points: Use Soft Assert for DB verification (check all fields, not just the first). Use 
+dependsOnMethods so DB check only runs if the transfer succeeded. Clean up test transactions in 
+@AfterClass.
+Q38. A @DataProvider test with 100 rows fails at row 45. How do you debug and re-run 
+only failed iterations?
+Debug: TestNG reports show the exact data set that failed (parameters are logged). Check test-
+output/index.html for the failed iteration's input data.
+Re-run failed: TestNG auto-generates testng-failed.xml in test-output/ folder. Run this file to re-
+execute only failed tests. For @DataProvider, it re-runs only the failed data rows.
+Prevent in future: Add logging in the test method that prints the current data row. Use try-catch with 
+soft assert to continue through all rows and report all failures at once.
+// Re-run only failed tests
+// Right-click test-output/testng-failed.xml → Run as TestNG
+// OR in Maven:
+mvn test -DsuiteXmlFile=test-output/testng-failed.xml
+Page 12
+===== PAGE 13 =====
+TestNG Interview Questions | SDET 4+ Years
+Q39. How do you manage test execution across multiple environments (Dev, QA, Staging, 
+Prod) using TestNG?
+Environment management strategy:
+1. Config Files: Create env-specific property files (dev.properties, qa.properties, staging.properties) 
+with URLs, credentials, DB connections.
+2. TestNG Parameter: Pass environment as parameter from testng.xml or Maven:
+<!-- testng.xml -->
+<parameter name="env" value="qa"/>
+ 
+// OR via Maven
+mvn test -Denv=staging
+ 
+// In @BeforeSuite, load the right config
+@Parameters({"env"})
+@BeforeSuite
+public void loadConfig(String env) {
+    Properties props = new Properties();
+    props.load(new FileInputStream(env + ".properties"));
+    ConfigManager.init(props);
+}
+3. Jenkins Integration: Jenkins job parameterized with environment dropdown. Passes -
+Denv=<selected> to Maven.
+Q40. How do you ensure thread safety when running parallel tests with shared resources 
+like DB connections?
+This is critical in banking test automation where tests interact with shared databases:
+• ThreadLocal<WebDriver> for browser instances — each thread gets its own driver
+• ThreadLocal<Connection> for DB connections — each thread gets its own connection
+• Unique test data per thread — generate unique account numbers/transaction IDs using 
+Thread.currentThread().getId()
+• Avoid shared mutable state — no static variables for test data
+• Use synchronized blocks ONLY when absolutely necessary (e.g., writing to shared report)
+// Thread-safe WebDriver
+private static ThreadLocal<WebDriver> driver 
+    = new ThreadLocal<>();
+ 
+// Thread-safe unique test data
+String uniqueAcc = "TEST_" + Thread.currentThread().getId()
+                    + "_" + System.currentTimeMillis();
+Interview Tip: Thread safety questions are a MUST at 18L+ SDET interviews. Practice explaining 
+ThreadLocal with a whiteboard diagram showing how 3 threads each maintain their own WebDriver instance.
+Page 13
+===== PAGE 14 =====
+TestNG Interview Questions | SDET 4+ Years
+Page 14
+===== PAGE 15 =====
+TestNG Interview Questions | SDET 4+ Years
+Quick Revision – One-Liners
+# Question Key Answer
+1 TestNG over JUnit? Groups, parallel, DataProvider, dependencies, XML 
+config
+2 Annotation order? Suite > Test > Class > Method > @Test > reverse
+3 @BeforeMethod vs @BeforeClass? Per-test vs once-per-class
+4 Default priority? 0 (alphabetical if same)
+5 Skip a test? enabled=false OR throw SkipException
+6 Hard vs Soft Assert? Stops vs continues; soft needs assertAll()
+7 dependsOnMethods? Skips (not fails) if dependency fails
+8 testng.xml purpose? Central control: groups, parallel, params, order
+9 Parallel modes? methods, tests, classes, instances
+10 @DataProvider? Returns Object[][], test runs per row
+11 Retry mechanism? IRetryAnalyzer interface
+12 Screenshot on failure? ITestListener.onTestFailure()
+13 @Factory vs @DataProvider? Multiple class instances vs multiple data sets
+14 Thread safety? ThreadLocal<WebDriver> + unique test data
+15 testng-failed.xml? Auto-generated; re-runs only failed tests
+Page 15

@@ -1,0 +1,274 @@
+
+===== PAGE 1 =====
+Interview Q&A; + Practice Tests
+ Dropdowns · Checkboxes · Radio Buttons · Custom Dropdowns
+ Week 2 — Day 2 | SDET Prep
+
+===== PAGE 2 =====
+Interview Questions & Answers
+Q1. What is the Select class in Selenium and when do you use it?
+The Select class is a Selenium utility specifically designed to interact with HTML <select> dropdown
+elements. It provides methods like selectByVisibleText(), selectByValue(), and selectByIndex() to
+choose options. It should ONLY be used when the dropdown tag is <select>. Using it on custom
+dropdowns (div/ul/li) will throw UnexpectedTagNameException.
+Q2. What are the three ways to select an option in a native dropdown?
+1. selectByVisibleText("India") — selects by the text visible to the user.
+2. selectByValue("in") — selects by the value attribute of the option tag.
+3. selectByIndex(0) — selects by 0-based position in the list.
+Q3. How do you handle a multi-select dropdown?
+First check isMultiple() to confirm the dropdown supports multi-selection. Then call selectByValue() or
+selectByVisibleText() multiple times — each call adds to the selection. Use deselectByValue(),
+deselectByIndex(), or deselectAll() to remove selections. Standard single-select dropdowns ignore
+multiple selects.
+Q4. Why should you check isSelected() before clicking a checkbox?
+Checkboxes are toggle elements — clicking toggles their state regardless of what it currently is. If you
+call click() on an already-checked checkbox, you will uncheck it, causing your test to behave incorrectly.
+Always guard: if (!checkbox.isSelected()) { checkbox.click(); } to ensure deterministic behaviour.
+Q5. What is the difference between isSelected(), isEnabled(), and isDisplayed()?
+isSelected(): Is the checkbox/radio ticked? Returns true/false.
+isEnabled(): Is the element interactable? A disabled input returns false.
+isDisplayed(): Is the element visible on the page? Hidden elements return false.
+These are three independent states — an element can be displayed and enabled but still not selected.
+Q6. How do radio buttons differ from checkboxes in Selenium handling?
+Radio buttons allow only one selection per group (same name attribute). Selecting a new radio
+automatically deselects the previous one — you never need to manually deselect. Checkboxes are
+independent and support multiple selections. Both use isSelected() and click() but the behavioural
+difference is critical for writing correct tests.
+Q7. How do you select a specific radio button from a group using Selenium?
+Use driver.findElements(By.name("groupName")) to get all radios in the group. Loop through the list,
+check getAttribute("value") or getText() to find the target, call click() on it, and immediately break out of
+the loop to avoid unnecessary iterations.
+Q8. What happens if you use the Select class on a Bootstrap dropdown?
+Selenium will throw UnexpectedTagNameException because the Select class internally validates that
+the WebElement's tag name is 'select'. Bootstrap dropdowns use div/button/ul/li tags. The fix is to use
+the 2-step approach: click the toggle button to open, then click the desired option using XPath or CSS.
+
+===== PAGE 3 =====
+Q9. How do you handle a dropdown that opens on hover, not on click?
+Use the Actions class: create an Actions object, call moveToElement(dropdownButton) and .perform()
+to trigger the hover. Once the menu is visible, use a normal click() or findElement() to select the desired
+option. This simulates real mouse hover behaviour.
+Q10. How do you handle custom dropdown options that load with a delay?
+After clicking the dropdown toggle, use WebDriverWait with
+ExpectedConditions.elementToBeClickable() targeting the option. This ensures the test waits until the
+option is visible and clickable before interacting. Never use Thread.sleep() as it is a fixed wait and
+slows down the test suite unnecessarily.
+Q11. How would you get the currently selected value from a dropdown?
+For native dropdowns: use select.getFirstSelectedOption().getText() which returns the visible text of the
+currently selected option. For custom dropdowns: read the dropdown button's text using
+dropdownBtn.getText() — it usually updates to reflect the selected value.
+Q12. How do you verify all options available in a dropdown?
+Use select.getOptions() which returns a List<WebElement> of all option elements. Loop through and
+call getText() or getAttribute("value") on each. This is useful for verifying that the correct number of
+options exist and that expected options are present in the dropdown.
+Q13. Can you deselect a radio button in Selenium?
+No. Radio buttons cannot be deselected by clicking them again — the click is ignored if the radio is
+already selected. The only way to 'deselect' a radio is by selecting another radio in the same group. If
+deselection is required, check if it is truly a radio button or a custom toggle element.
+Q14. What is the difference between By.name() and By.id() for radio buttons?
+By.id() returns a single unique element. For radio buttons, each option has a unique id but they share
+the same name attribute as a group. By.name() with findElements() returns all radios in the group as a
+List, making it easier to iterate and select the desired option dynamically.
+Q15. How do you identify whether a dropdown is native or custom before writing code?
+Open DevTools in the browser (F12), inspect the dropdown element. If the tag is <select> with <option>
+children — use the Select class. If you see <div>, <button>, <ul>, <li> — it is a custom dropdown and
+requires the 2-step click approach. This analysis should always be done before writing automation
+code.
+
+===== PAGE 4 =====
+5 Practice Tests
+All tests use DemoQA (https://demoqa.com) as the practice site — no local server setup required. Each
+test is self-contained with setup and teardown.
+Test 1: Native Dropdown — Select All Three Methods
+Objective: Verify all three selection methods work on a native <select> dropdown.
+import org.openqa.selenium.*;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.Select;
+import org.testng.Assert;
+import org.testng.annotations.*;
+public class Test1_NativeDropdown {
+WebDriver driver;
+@BeforeMethod
+public void setup() {
+driver = new ChromeDriver();
+driver.manage().window().maximize();
+driver.get("https://demoqa.com/select-menu");
+}
+@Test
+public void testSelectByVisibleText() {
+WebElement el = driver.findElement(By.id("oldSelectMenu"));
+Select select = new Select(el);
+// Select by visible text
+select.selectByVisibleText("Yellow");
+Assert.assertEquals(select.getFirstSelectedOption().getText(), "Yellow");
+// Select by value
+select.selectByValue("3");
+Assert.assertEquals(select.getFirstSelectedOption().getText(), "Green");
+// Select by index
+select.selectByIndex(1);
+Assert.assertEquals(select.getFirstSelectedOption().getText(), "Blue");
+}
+@AfterMethod
+public void teardown() { driver.quit(); }
+}
+Test 2: Multi-Select Dropdown — Select and Deselect
+Objective: Select multiple options and verify deselect works correctly.
+
+===== PAGE 5 =====
+public class Test2_MultiSelect {
+WebDriver driver;
+@BeforeMethod
+public void setup() {
+driver = new ChromeDriver();
+driver.manage().window().maximize();
+driver.get("https://demoqa.com/select-menu");
+}
+@Test
+public void testMultiSelect() {
+WebElement el = driver.findElement(By.id("cars"));
+Select ms = new Select(el);
+Assert.assertTrue(ms.isMultiple(), "Should support multi-select");
+ms.selectByValue("volvo");
+ms.selectByValue("saab");
+ms.selectByValue("audi");
+Assert.assertEquals(ms.getAllSelectedOptions().size(), 3);
+ms.deselectByValue("saab");
+Assert.assertEquals(ms.getAllSelectedOptions().size(), 2);
+ms.deselectAll();
+Assert.assertEquals(ms.getAllSelectedOptions().size(), 0);
+}
+@AfterMethod
+public void teardown() { driver.quit(); }
+}
+Test 3: Checkboxes — Check, Verify, Uncheck
+Objective: Safely check and uncheck checkboxes using isSelected() guard.
+public class Test3_Checkboxes {
+WebDriver driver;
+@BeforeMethod
+public void setup() {
+driver = new ChromeDriver();
+driver.manage().window().maximize();
+driver.get("https://demoqa.com/checkbox");
+}
+@Test
+public void testCheckboxOperations() {
+WebElement homeCheckbox = driver.findElement(
+By.xpath("//label[@for='tree-node-home']/span[@class='rct-checkbox']"));
+
+===== PAGE 6 =====
+// Check it
+homeCheckbox.click();
+// Verify checked state via result text
+WebElement result = driver.findElement(By.id("result"));
+Assert.assertTrue(result.isDisplayed(), "Result should show after check");
+Assert.assertTrue(result.getText().contains("home"),
+"Result should mention home");
+}
+@Test
+public void testIsSelectedStateGuard() {
+// Safer approach using isSelected check
+List<WebElement> checkboxes = driver.findElements(
+By.cssSelector("input[type='checkbox']"));
+for (WebElement cb : checkboxes) {
+if (!cb.isSelected()) {
+cb.click();
+Assert.assertTrue(cb.isSelected(), "Should now be checked");
+}
+}
+}
+@AfterMethod
+public void teardown() { driver.quit(); }
+}
+Test 4: Radio Buttons — Select and Verify Group Behaviour
+Objective: Select a radio button, verify only one is selected in the group.
+public class Test4_RadioButtons {
+WebDriver driver;
+@BeforeMethod
+public void setup() {
+driver = new ChromeDriver();
+driver.manage().window().maximize();
+driver.get("https://demoqa.com/radio-button");
+}
+@Test
+public void testRadioSelection() {
+// Select 'Yes' radio
+WebElement yesRadio = driver.findElement(By.xpath(
+"//label[@for='yesRadio']"));
+yesRadio.click();
+// Verify 'Yes' is selected
+
+===== PAGE 7 =====
+WebElement yesInput = driver.findElement(By.id("yesRadio"));
+Assert.assertTrue(yesInput.isSelected(), "Yes should be selected");
+// Select 'Impressive' radio
+WebElement impressiveRadio = driver.findElement(By.xpath(
+"//label[@for='impressiveRadio']"));
+impressiveRadio.click();
+// Verify Yes is now deselected (only one can be active)
+Assert.assertFalse(yesInput.isSelected(), "Yes should now be deselected");
+WebElement impInput = driver.findElement(By.id("impressiveRadio"));
+Assert.assertTrue(impInput.isSelected(), "Impressive should be selected");
+// Verify result text
+String resultText = driver.findElement(By.cssSelector(".mt-3")).getText();
+Assert.assertTrue(resultText.contains("Impressive"));
+}
+@AfterMethod
+public void teardown() { driver.quit(); }
+}
+Test 5: Custom Dropdown — 2-Step Click with Explicit Wait
+Objective: Handle a React/Bootstrap-style custom dropdown using 2-step approach and wait.
+import org.openqa.selenium.support.ui.*;
+import java.time.Duration;
+public class Test5_CustomDropdown {
+WebDriver driver;
+WebDriverWait wait;
+@BeforeMethod
+public void setup() {
+driver = new ChromeDriver();
+driver.manage().window().maximize();
+wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+driver.get("https://demoqa.com/select-menu");
+}
+@Test
+public void testCustomDropdown() {
+// Step 1: Open the React Select dropdown
+WebElement dropdown = wait.until(ExpectedConditions.elementToBeClickable(
+By.id("withOptGroup")));
+dropdown.click();
+// Step 2: Wait for options to appear and select
+WebElement option = wait.until(ExpectedConditions.elementToBeClickable(
+
+===== PAGE 8 =====
+By.xpath("//*[contains(@class,'option') and text()='Group 1, option 2']")));
+option.click();
+// Verify selected value is displayed
+WebElement selectedValue = driver.findElement(
+By.xpath("//*[@id='withOptGroup']//*[contains(@class,'single-value')]"));
+Assert.assertEquals(selectedValue.getText(), "Group 1, option 2",
+"Dropdown should show selected value");
+}
+@Test
+public void testCustomDropdownDynamicSelection() {
+// Open dropdown
+driver.findElement(By.id("selectOne")).click();
+// Get all options dynamically
+List<WebElement> options =
+wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(
+By.xpath("//*[contains(@class,'MenuList')]//*[contains(@class,'option')]")));
+String targetTitle = "Dr.";
+for (WebElement opt : options) {
+if (opt.getText().equals(targetTitle)) {
+opt.click();
+break;
+}
+}
+// Verify
+String selected = driver.findElement(
+By.xpath("//*[@id='selectOne']//*[contains(@class,'single-value')]"))
+.getText();
+Assert.assertEquals(selected, targetTitle);
+}
+@AfterMethod
+public void teardown() { driver.quit(); }
+}
+ End of Interview Q&A; + Practice Tests — Week 2 Day 2 | SDET Study Plan

@@ -36,25 +36,7 @@ public class EndToEndTest extends BaseTest {
     }
 
     private void login() {
-        RuntimeException last = null;
-        for (int attempt = 1; attempt <= 3; attempt++) {
-            try {
-                getDriver().get(ConfigReader.get("base.url"));
-                LoginPage loginPage = new LoginPage(getDriver());
-                loginPage.login(sharedUsername, PASSWORD);
-                loginPage.waitForUrl("overview");
-                return;
-            } catch (RuntimeException e) {
-                last = e;
-                System.out.println("  ⚠ Login attempt " + attempt + " failed, retrying...");
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException ie) {
-                    Thread.currentThread().interrupt();
-                }
-            }
-        }
-        throw new RuntimeException("Login failed after 3 attempts", last);
+        utils.WaitHelper.loginWithRetry(getDriver(), sharedUsername, PASSWORD);
     }
 
     @Test(priority = 1, groups = {"e2e"}, description = "E2E: New customer onboarding flow")

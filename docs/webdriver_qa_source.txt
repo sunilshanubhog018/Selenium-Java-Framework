@@ -1,0 +1,204 @@
+
+===== PAGE 1 =====
+Selenium WebDriver
+ Top Interview Questions — Java | SDET Prep
+Total Questions: 30
+Topics: Commands, Waits, Locators, Windows
+Format: Q&A with Code
+SECTION 1: WebDriver Basics
+Q1. What is Selenium WebDriver?
+[Easy]
+Answer: Selenium WebDriver is a browser automation framework that allows you to write code to
+control browsers. It communicates directly with the browser using browser-specific drivers
+(ChromeDriver, GeckoDriver) without needing a server.
+Q2. What is the difference between driver.get() and driver.navigate().to()?
+[Easy]
+Answer: Both open a URL, but driver.navigate() maintains browser history allowing back/forward
+navigation. driver.get() waits for page to fully load; navigate().to() is part of the Navigation interface.
+driver.get("https://example.com"); // direct load
+driver.navigate().to("https://example.com"); // via navigation API
+Q3. How do you get the current page title and URL?
+[Easy]
+Answer: Use driver.getTitle() to get page title as a String, and driver.getCurrentUrl() to get the current
+URL.
+String title = driver.getTitle(); String url = driver.getCurrentUrl();
+Q4. What does driver.close() vs driver.quit() do?
+[Easy]
+Answer: driver.close() closes only the current active browser window/tab. driver.quit() closes ALL
+windows and fully terminates the WebDriver session. Always call quit() in @AfterClass/@AfterTest to
+prevent memory leaks.
+Q5. How do you refresh a web page in Selenium?
+[Easy]
+Answer: Three ways: navigate().refresh(), sendKeys(Keys.F5) on body, or
+driver.get(driver.getCurrentUrl()).
+driver.navigate().refresh(); // recommended driver.navigate().back();
+driver.navigate().forward();
+SECTION 2: Finding Elements
+Q6. What are the 8 locator strategies in Selenium?
+[Easy]
+Answer: By.id(), By.name(), By.className(), By.tagName(), By.linkText(), By.partialLinkText(),
+By.cssSelector(), By.xpath(). Priority order: id > name > cssSelector > xpath.
+Q7. What is the difference between findElement() and findElements()?
+[Medium]
+
+===== PAGE 2 =====
+Answer: findElement() returns a single WebElement — throws NoSuchElementException if not found.
+findElements() returns List — returns empty list (not exception) if nothing found. Use
+findElements().size() > 0 to check element existence.
+List els = driver.findElements(By.className("item")); if (!els.isEmpty()) {
+els.get(0).click(); }
+Q8. When would you use cssSelector over xpath?
+[Medium]
+Answer: CSS selectors are faster, simpler, and more readable for most scenarios. Use xpath when:
+traversing up to parent, locating by text content, or complex axis traversal (following-sibling, ancestor).
+CSS cannot traverse up the DOM — xpath can.
+driver.findElement(By.cssSelector("input#email.form-control"));
+driver.findElement(By.xpath("//label[text()='Email']/following-sibling::input"));
+Q9. How do you write a dynamic xpath for changing attributes?
+[Hard]
+Answer: Use contains(), starts-with(), or normalize-space() functions to handle dynamic ids.
+// Dynamic id like "btn_1234" By.xpath("//button[contains(@id,'btn_')]")
+By.xpath("//button[starts-with(@id,'btn')]")
+Q10. What is a relative locator (Selenium 4)?
+[Hard]
+Answer: Selenium 4 introduced RelativeLocator to find elements relative to another element: above(),
+below(), toLeftOf(), toRightOf(), near().
+WebElement lbl = driver.findElement(By.id("usernameLabel")); WebElement input =
+driver.findElement(RelativeLocator.with(By.tagName("input")).below(lbl));
+SECTION 3: Waits
+Q11. What are the three types of waits in Selenium?
+[Easy]
+Answer: 1) Thread.sleep() — hard pause, bad practice. 2) Implicit Wait — global timeout for finding
+elements, set once. 3) Explicit Wait (WebDriverWait) — waits for specific condition on specific element,
+preferred.
+Q12. What is implicit wait and its drawback?
+[Medium]
+Answer: Implicit wait tells WebDriver to poll the DOM for up to N seconds when finding elements.
+Drawback: it applies globally to ALL findElement calls, can slow down tests when checking absence of
+elements, and mixing with explicit waits causes unpredictable behavior.
+driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+Q13. Write explicit wait for element to be clickable.
+[Medium]
+Answer: WebDriverWait + ExpectedConditions is the recommended approach for synchronization in
+modern Selenium.
+WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15)); WebElement
+btn = wait.until( ExpectedConditions.elementToBeClickable(By.id("submitBtn")) );
+btn.click();
+Q14. What is FluentWait and how is it different from WebDriverWait?
+
+===== PAGE 3 =====
+[Hard]
+Answer: FluentWait lets you configure polling interval and exceptions to ignore. WebDriverWait
+extends FluentWait with 500ms default polling. Use FluentWait when you need custom polling
+frequency or to ignore specific exceptions.
+Wait wait = new FluentWait<>(driver) .withTimeout(Duration.ofSeconds(20))
+.pollingEvery(Duration.ofSeconds(2)) .ignoring(NoSuchElementException.class);
+WebElement el = wait.until(d -> d.findElement(By.id("result")));
+Q15. What happens if you mix implicit and explicit waits?
+[Hard]
+Answer: It causes unpredictable wait times. If implicit=10s and explicit=5s, Selenium may actually wait
+up to 15s because they compound. Best practice: use ONLY explicit waits — set implicitlyWait to 0 if
+using WebDriverWait.
+SECTION 4: Element Interactions
+Q16. How do you handle dropdowns in Selenium?
+[Easy]
+Answer: Use the Select class for HTML elements. Three ways to select: selectByVisibleText(),
+selectByValue(), selectByIndex().
+Select dropdown = new Select(driver.findElement(By.id("country")));
+dropdown.selectByVisibleText("India"); dropdown.selectByValue("IN");
+dropdown.selectByIndex(2);
+Q17. How do you handle checkboxes and radio buttons?
+[Easy]
+Answer: Use click() to select. Use isSelected() to verify current state before clicking to avoid toggling.
+WebElement chk = driver.findElement(By.id("terms")); if (!chk.isSelected()) {
+chk.click(); } Assert.assertTrue(chk.isSelected());
+Q18. How do you handle file upload in Selenium?
+[Medium]
+Answer: Use sendKeys() on the file input element with the absolute file path. No need for AutoIT or
+Robot class.
+WebElement upload = driver.findElement(By.id("fileInput"));
+upload.sendKeys("/home/nice/documents/testfile.pdf");
+Q19. How do you perform mouse hover using Actions class?
+[Medium]
+Answer: Actions class provides moveToElement() for hover. Must call build().perform() to execute the
+action chain.
+Actions actions = new Actions(driver); WebElement menu =
+driver.findElement(By.id("navMenu")); actions.moveToElement(menu).build().perform();
+// sub-menu items now visible
+Q20. How do you handle JavaScript alerts/popups?
+[Medium]
+Answer: Use driver.switchTo().alert() to handle browser alerts. accept() clicks OK, dismiss() clicks
+Cancel, getText() reads message.
+Alert alert = driver.switchTo().alert(); String msg = alert.getText();
+alert.accept(); // OK // alert.dismiss(); // Cancel
+
+===== PAGE 4 =====
+SECTION 5: Windows, Frames & Advanced
+Q21. How do you switch between multiple browser windows/tabs?
+[Medium]
+Answer: Get all window handles, iterate to find the new window, switch using switchTo().window().
+Always store mainHandle to switch back.
+String main = driver.getWindowHandle(); for (String handle :
+driver.getWindowHandles()) { if (!handle.equals(main))
+driver.switchTo().window(handle); } // work in new tab driver.close();
+driver.switchTo().window(main);
+Q22. How do you handle iframes in Selenium?
+[Medium]
+Answer: Switch into frame using switchTo().frame() with index, name/id, or WebElement. Always
+switch back to default with switchTo().defaultContent().
+driver.switchTo().frame("frameName"); // by name/id driver.switchTo().frame(0); //
+by index driver.switchTo().frame(frameElement); // by element
+driver.switchTo().defaultContent(); // exit frame
+Q23. How do you execute JavaScript using Selenium?
+[Hard]
+Answer: Use JavascriptExecutor to run JS. Useful for scrolling, clicking hidden elements, setting
+values, and getting page data.
+JavascriptExecutor js = (JavascriptExecutor) driver;
+js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
+js.executeScript("arguments[0].click();", element);
+js.executeScript("arguments[0].value='test';", inputEl);
+Q24. How do you take a screenshot in Selenium?
+[Easy]
+Answer: Use TakesScreenshot interface. Call getScreenshotAs(OutputType.FILE) then copy to desired
+location.
+File src = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+FileUtils.copyFile(src, new File("screenshots/test.png"));
+Q25. What is StaleElementReferenceException and how to fix it?
+[Hard]
+Answer: Thrown when an element was found but the DOM changed (page refresh, AJAX update)
+making the reference stale. Fix: re-find the element inside a try-catch retry loop, or use explicit wait.
+for (int i = 0; i < 3; i++) { try { driver.findElement(By.id("btn")).click(); break;
+} catch (StaleElementReferenceException e) { // retry } }
+SECTION 6: TestNG + Framework Questions
+Q26. How do you run tests in parallel in TestNG?
+[Hard]
+Answer: Configure parallel execution in testng.xml with parallel attribute set to 'methods', 'classes', or
+'tests'. Use ThreadLocal to ensure each thread has its own driver instance.
+Q27. What is Page Object Model (POM)?
+
+===== PAGE 5 =====
+[Medium]
+Answer: POM is a design pattern where each web page has a corresponding Java class. Page class
+contains locators and methods. Tests only call page methods — locators are not in test code. Reduces
+duplication and improves maintainability.
+public class LoginPage { @FindBy(id="username") WebElement userField; public void
+login(String u, String p) { userField.sendKeys(u); } }
+Q28. What is @DataProvider in TestNG? How do you use it?
+[Medium]
+Answer: DataProvider enables data-driven testing by supplying multiple data sets to a single test
+method. Returns Object[][] where each inner array is one test run.
+@DataProvider(name="credentials") public Object[][] getData() { return new
+Object[][] {{ "user1","pass1" }, { "user2","pass2" }}; }
+@Test(dataProvider="credentials") public void testLogin(String u, String p) { ... }
+Q29. What is the difference between @BeforeMethod and @BeforeClass?
+[Easy]
+Answer: @BeforeClass runs once before all tests in the class (good for driver init in non-parallel).
+@BeforeMethod runs before EACH test method (good for navigation reset, fresh state per test).
+Q30. How do you handle dynamic web tables in Selenium?
+[Hard]
+Answer: Find all rows with findElements(), iterate with a loop, extract cell text using td tags. Use XPath
+axes like following-sibling to navigate table structure.
+List rows = driver.findElements(By.xpath("//table[@id='data']//tr")); for
+(WebElement row : rows) { List cells = row.findElements(By.tagName("td"));
+System.out.println(cells.get(0).getText()); }
+ SDET Study Plan · Week 2 · Selenium WebDriver Interview Prep · 30 Questions

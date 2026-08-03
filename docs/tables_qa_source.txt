@@ -1,0 +1,433 @@
+
+===== PAGE 1 =====
+Selenium Java — Week 2
+ Tables & Dynamic Elements
+ Interview Q&A + 5 Practice Tests
+ Selenium 4.27.0 | Java 21 | TestNG 7.9.0
+ Blue
+Fundamentals (Q1-Q15)
+Concept clarity — asked at all levels
+ Red
+Senior / Framework (Q16-Q35)
+4+ years, 18-22 LPA, framework design &
+debugging
+PART 1: Fundamentals (Asked at All Levels)
+These questions test your core understanding. Even at 4+ years, interviewers may start here to establish a
+baseline before going deeper.
+HTML Tables — Fundamentals
+Q1: What are the key HTML tags that make up a table? Explain each.
+An HTML table uses 6 primary tags: <table> — the entire table container. <thead> — groups header row(s).
+<tbody> — groups data rows. <tr> (Table Row) — a single row. <th> (Table Header) — a header cell, bold
+and centered by default. <td> (Table Data) — a regular data cell. In Selenium, we navigate this hierarchy
+using XPath like //table[@id='t1']//tbody/tr/td to reach specific cells.
+Q2: How do you read a specific cell value from a table?
+Use XPath with row and column indexes: By.xpath("//table[@id='table1']//tbody/tr[2]/td[3]") reads row 2,
+column 3. Call getText() on the returned WebElement. Important: XPath indexing is 1-based (td[1] = first
+column), while Java List indexing is 0-based (cells.get(0) = first column). This mismatch is the most common
+table automation bug.
+Q3: How do you iterate through all rows and columns of a table?
+Step 1: Get all rows — driver.findElements(By.xpath("//table//tbody/tr")). Step 2: Loop each row. Step 3:
+Get cells within that row — row.findElements(By.tagName("td")). The critical point is calling findElements
+on the row element (not driver) to scope the search to that row's children only. This prevents cross-row cell
+matches.
+Q4: What is the difference between calling findElements on driver vs on a parent element?
+driver.findElements() searches the entire DOM from root. parentElement.findElements() searches only
+within that element's subtree. For tables, row.findElements(By.tagName("td")) returns only that row's cells.
+If you used driver.findElements(By.tagName("td")), you'd get every cell from every row in every table on
+the page — completely wrong.
+Q5: How do you find a specific row by cell value and act on it?
+
+===== PAGE 2 =====
+Two approaches: Approach 1 (Java loop): Iterate rows, check the target column using cells.get(0).getText(),
+and when matched, act using row.findElement(By.xpath(".//a[contains(text(),'edit')]")). The dot in .//a
+makes the XPath relative to the current row. Approach 2 (Pure XPath): Use a conditional expression:
+//tbody/tr[td[1][text()='Bach']]//a[contains(text(),'edit')] — directly locates the link without any Java loop.
+Q6: What is the dot (.) in .//a XPath and why is it critical for table operations?
+.//a (with dot) searches within the current context node only — if called on a row element, it only searches
+within that row. //a (without dot) searches the entire document from root regardless of context. When working
+inside a table row loop, always use the dot prefix. Without it, you might click an element from a completely
+different row — a very common bug.
+Q7: How do you count rows and columns in a table?
+For rows: driver.findElements(By.xpath("//table//tbody/tr")).size(). For columns: get cells from any row:
+rows.get(0).findElements(By.tagName("td")).size(), or count header cells:
+driver.findElements(By.xpath("//table//thead/tr/th")).size(). Use rows from tbody only — don't include
+thead rows in your count.
+Dynamic Elements — Fundamentals
+Q8: What are dynamic elements in web applications?
+Dynamic elements are web elements whose properties change at runtime. This includes: elements that
+appear/disappear based on user actions (AJAX loading), elements with auto-generated IDs that change
+every page load (e.g., id='btn_x7k9m2'), elements that change state (disabled to enabled), and elements
+rendered by JavaScript after the initial page load. Banking apps are heavily dynamic — account balances
+refresh via AJAX, transaction tables load lazily, and modals appear for confirmations.
+Q9: What ExpectedConditions do you use for dynamic elements? Explain the key ones.
+visibilityOfElementLocated(By) — waits until element is in DOM AND visible on page.
+presenceOfElementLocated(By) — waits until element appears in DOM regardless of visibility.
+invisibilityOfElementLocated(By) — waits for element to disappear or become hidden.
+elementToBeClickable(By) — waits until element is visible AND enabled. stalenessOf(element) — waits
+until an element is no longer attached to DOM. textToBePresentInElement(elem, text) — waits for specific
+text content to appear in an element.
+Q10: What is the difference between visibilityOfElementLocated and
+presenceOfElementLocated?
+presenceOfElementLocated only checks if the element exists in the DOM tree — it could have display:none,
+visibility:hidden, or zero dimensions and still pass. visibilityOfElementLocated checks that the element is in
+DOM AND is visible (displayed, has height/width > 0). Use presence when the element is being added to
+DOM via AJAX. Use visibility when you need to interact with or read text from the element, since getText()
+returns empty string for invisible elements.
+Q11: What is StaleElementReferenceException? When does it occur?
+This exception occurs when you try to interact with a WebElement whose DOM node has been destroyed or
+detached. Common causes: page refresh after findElement(), AJAX reload redrawing a section, SPA
+re-rendering a component, or JavaScript DOM manipulation. The stored WebElement reference points to a
+node that no longer exists in the current DOM. The fix is to re-find the element after any action that modifies
+
+===== PAGE 3 =====
+the DOM, or use wait.until(ExpectedConditions.stalenessOf(oldElement)) then re-find.
+Q12: How do you handle elements with dynamically generated IDs?
+Use partial attribute matching: contains(): //input[contains(@id,'username')] when ID has a stable substring.
+starts-with(): //div[starts-with(@class,'account_')] when prefix is stable. Stable parent + child:
+//div[@class='login-form']//input when parent has stable locator. Text-based: //button[text()='Submit']. CSS
+partial: input[id*='username']. Never use the full dynamic ID as a locator since it changes every session.
+Q13: How do you wait for a loading spinner to disappear before proceeding?
+Use a two-step pattern: Step 1 — Wait for spinner to go:
+wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className("spinner"))). Step 2 — Wait
+for content to appear: wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("results"))). This
+"wait for loader to go + wait for content to appear" pattern is standard in banking apps where every action
+shows a processing indicator.
+Q14: What is the difference between implicit wait and explicit wait for dynamic elements?
+Implicit wait is a global timeout applied to all findElement calls — it only waits for element presence in DOM.
+It cannot wait for visibility, clickability, or disappearance. Explicit wait (WebDriverWait) is targeted to a
+specific condition — visibility, clickability, text presence, staleness, etc. For dynamic elements, explicit wait is
+almost always correct because you need to wait for specific states. Mixing both can cause unpredictable
+timeout stacking, so prefer explicit waits exclusively.
+Q15: What is the common pattern to handle AJAX-loaded content in Selenium?
+The pattern: (1) Perform the action that triggers the AJAX call (click a button, submit a form). (2) Wait for the
+response using an explicit wait with the appropriate ExpectedCondition — visibilityOfElementLocated if
+waiting for new content, invisibilityOfElementLocated if waiting for a loader to disappear. (3) Only then interact
+with the loaded content. Never use Thread.sleep() for AJAX — response times vary between environments.
+WebDriverWait polls every 500ms and returns as soon as the condition is met, making tests both reliable and
+fast.
+
+===== PAGE 4 =====
+PART 2: Senior & Framework Level (4+ Years, 18-22 LPA)
+These questions test how you designed it, how you debugged it, and how it works in your real framework.
+Interviewers at this level expect framework patterns, utility classes, parallel execution awareness, and real
+project stories.
+Framework Design & Utility Patterns
+Q16: How did you handle table operations in your framework? Did you write a utility class?
+Yes. I created a TableHelper utility with reusable methods: getCellValue(driver, tableLocator, row, col),
+getRowCount(driver, tableLocator), getColumnValues(driver, tableLocator, colIndex),
+findRowByCellValue(driver, tableLocator, colIndex, value), and clickActionInRow(driver, tableLocator,
+searchCol, searchValue, actionText). Each method handles XPath construction internally. Tests call:
+TableHelper.getCellValue(driver, "table1", 2, 3) — no XPath in test classes. If table structure changes, I
+update one utility method instead of 50 tests.
+Q17: How did you handle dynamic elements in your Page Object Model?
+Two strategies: Strategy 1 — Encapsulated waits in POM methods: Each POM method that interacts with
+a dynamic element internally creates a WebDriverWait and uses the appropriate ExpectedCondition. The test
+never writes wait logic. Strategy 2 — WaitHelper utility: A centralized helper with methods like
+waitForVisible(driver, locator), waitForClickable(driver, locator), waitForInvisible(driver, locator). POM
+methods call the helper. The key principle: the test should read like business logic, not Selenium API calls.
+Q18: Show me how a TableHelper utility findRowByCellValue method would look.
+The method finds a row by matching a specific column value and returns the row WebElement or null. It takes
+driver, table locator, column index (0-based Java), and search value as parameters. Internally it uses
+driver.findElements to get all rows, loops through them, calls row.findElements(By.tagName("td")) to get cells,
+compares cells.get(colIndex).getText() with the search value, and returns the matching row. This
+encapsulates the entire search-and-match pattern that would otherwise be repeated in every test.
+Q19: How do you handle paginated tables in your framework?
+I create a PaginatedTableHelper that wraps table operations with pagination logic. The method
+searchAcrossPages() does: (1) Search current page rows for the target value. (2) If not found, check if 'Next'
+button is enabled. (3) Click Next, wait for table reload using stalenessOf() on a reference row to detect DOM
+refresh, then re-find all rows and search again. (4) Continue until found or all pages exhausted. A max-page
+limit prevents infinite loops. This is critical in banking where transaction tables can have hundreds of pages.
+Edge Cases & StaleElement Handling
+Q20: A test is flaky — passes locally, fails in CI with StaleElementReferenceException. How do
+you debug?
+Step 1: Check if CI runs headless — rendering differences can cause timing issues. Step 2: Add screenshot
+capture in @AfterMethod to see browser state on failure. Step 3: Identify which element goes stale — add
+logging before each interaction. Step 4: Check if an AJAX call or auto-refresh is modifying the DOM between
+findElement and the interaction. Step 5: Fix by re-finding the element immediately before use, or use
+FluentWait with ignoring(StaleElementReferenceException.class). Step 6: If the table auto-refreshes, avoid
+
+===== PAGE 5 =====
+storing row/cell references across multiple actions.
+Q21: How do you make StaleElementReferenceException handling robust in a framework?
+Three-layer defense: Layer 1 — Prevention: Never store element references across actions that could
+modify the DOM. Re-find immediately before interaction. Layer 2 — FluentWait: Use FluentWait configured
+with .ignoring(StaleElementReferenceException.class).pollingEvery(Duration.ofMillis(500)) for
+elements on dynamic pages. Layer 3 — Retry wrapper: A utility method retryOnStale(Supplier<T> action, int
+maxRetries) that catches StaleElementReferenceException and retries up to N times. In my banking
+framework, Layer 1 solved 90% of cases; Layer 2 handled the remaining auto-refresh scenarios.
+Q22: How do you handle a table that auto-refreshes every 30 seconds with live data?
+Key principle: minimize the gap between findElement and interaction. (1) Don't store row references —
+find and act in the same statement chain where possible. (2) Use FluentWait ignoring
+StaleElementReferenceException. (3) If you need to read multiple cells from the same row, read them all in
+one tight loop iteration before the next refresh. (4) For critical assertions, take a snapshot of the data (read all
+values into Java variables/List) before asserting — assertions on stored Strings can't go stale. (5) In extreme
+cases, pause auto-refresh via JavaScript before the test section.
+Q23: How do you verify a sortable table column is actually sorted after clicking the header?
+After clicking the column header: (1) Wait for table re-render — use stalenessOf() on a row reference, then
+wait for new rows. (2) Collect all values from that column into a Java List<String> using a loop. (3) Create a
+copy and sort it: Collections.sort(copy). (4) Assert original equals sorted: Assert.assertEquals(actual,
+sorted). For descending, use Collections.reverse() after sorting. For numeric columns like amounts, parse
+to Double before comparing. For date columns, parse to LocalDate using DateTimeFormatter.
+Parallel Execution & Thread Safety
+Q24: How do you make table and dynamic element operations thread-safe in parallel execution?
+The key: each thread must have its own WebDriver via ThreadLocal<WebDriver>. Table operations are
+driver-specific, so they're naturally isolated per thread. The risk comes from utility classes — ensure
+TableHelper and WaitHelper accept WebDriver as a parameter and never store state in static fields. Each
+test's findElements returns elements specific to that test's browser instance. Never share WebElement
+references across threads — WebElement objects are tied to a specific driver session.
+Q25: Your parallel tests interfere with each other on a shared test environment with common test
+data. How do you handle it?
+This is a test data problem, not a Selenium problem. Solutions: (1) Unique test data per thread: Each test
+creates its own transaction/account using setup APIs, so table searches find unique rows. (2) Data-driven
+with partitioning: Assign different data sets to different threads. (3) Test isolation: Each test cleans up its
+own data in @AfterMethod. (4) If searching a shared table, use highly specific search criteria (unique
+reference number, not common names). Banking frameworks often use API calls to create test data before UI
+tests touch it.
+Real Banking Project Scenarios
+Q26: In your banking project, where did you encounter tables that needed automation?
+
+===== PAGE 6 =====
+Five main areas: (1) Transaction history — search by transaction ID across paginated tables, verify
+debit/credit amounts. (2) Account statement — iterate rows to sum amounts, verify opening/closing balance.
+(3) Beneficiary management — find beneficiary by name, click edit/delete in that row. (4) Loan EMI
+schedule — verify EMI amounts, interest, principal split per row. (5) Fund transfer confirmation — read
+reference number and status from the confirmation table. For all five, I used the TableHelper utility — same
+pattern: locate table, find row, extract or act.
+Q27: Tell me about a real debugging scenario involving dynamic elements in your project.
+We had a flaky test in the fund transfer flow. After clicking 'Transfer', a success table appeared via AJAX. The
+test immediately tried to read the reference number but got empty text or NoSuchElementException. Root
+cause: the table was present in DOM (display:none) and became visible after AJAX. We used
+presenceOfElementLocated which returned immediately (element was already in DOM), but it was still
+invisible. Fix: changed to visibilityOfElementLocated which waits until the table is actually displayed.
+Lesson: presence != visibility. Always use the condition that matches your actual need.
+Q28: How do you automate an AJAX search dropdown where options load after typing 3
+characters?
+Steps: (1) sendKeys("SBI") to the input field. (2) Wait for dropdown container:
+wait.until(visibilityOfElementLocated(By.className("dropdown-options"))). (3) Wait for specific option:
+wait.until(visibilityOfElementLocated(By.xpath("//li[text()='SBI Bank']"))); (4) Click the option. If AJAX
+response time varies, use FluentWait with polling. If the dropdown loads as a dynamic table inside a
+container, use the same table row search pattern — find the matching row and click it. Common trap:
+sendKeys fires too fast — use a small explicit wait after typing before the dropdown check.
+Q29: How do you handle a scenario where a confirmation table appears in a modal dialog after a
+transaction?
+Combined dynamic element + table pattern: (1) After clicking Submit, wait for modal:
+wait.until(visibilityOfElementLocated(By.className("modal-content"))). (2) Inside the modal, locate the
+table and read confirmation details using scoped findElement on the modal element. (3) Verify reference
+number, amount, status. (4) Click the Close/OK button on the modal. (5) Wait for modal to disappear:
+invisibilityOfElementLocated. In POM, the page class method submitTransfer() handles all of this internally
+and returns a TransactionResult object with the extracted data.
+Q30: How do you verify that a bank statement table's total matches the sum of individual row
+amounts?
+I iterate all rows, parse the amount column to BigDecimal (not double — banking needs precision), and sum
+them. Then I read the displayed total from the footer row and compare. Code pattern: loop rows, get
+cells.get(amountCol).getText(), remove currency symbols and commas, parse to BigDecimal, add to running
+total. Assert: assertEquals(calculatedSum, displayedTotal). For paginated tables, I accumulate the sum
+across all pages using the pagination helper. This is a very common banking test scenario — auditors
+specifically check that totals are mathematically correct.
+Behavioral & "Tell Me About a Time..." Questions
+Q31: Tell me about a time your tests were flaky due to dynamic elements. What did you do?
+Situation: Our account statement test was flaky — passing 80% locally, 50% in CI. The test loaded the
+statement table and immediately iterated rows. Root cause: The table was loaded via AJAX but the
+
+===== PAGE 7 =====
+findElements call ran before all rows were rendered. It sometimes caught 5 rows, sometimes 20. Fix: Added a
+two-part wait — (1) wait for the table container to be visible, (2) wait until the row count stabilizes by checking
+in a loop that row count at time T equals row count at T+500ms. Flakiness dropped to 0%. Lesson:
+visibilityOfElementLocated on the table container doesn't guarantee all rows are loaded — you need a
+smarter wait for dynamic row loading.
+Q32: You're reviewing a junior's PR and see they're using Thread.sleep(2000) before reading a
+table. What feedback?
+I'd explain: Thread.sleep() is a hard wait — it always waits 2 seconds even if the table loads in 200ms,
+wasting time. If the table takes 3 seconds in CI, the test fails. Replace with: WebDriverWait +
+visibilityOfElementLocated for the table or the first row — this polls every 500ms and returns as soon as
+content appears. I'd point them to our WaitHelper utility. Finally, I'd set up a code review checklist item: no
+Thread.sleep() in production test code — use explicit waits. I'd explain the 'why' rather than just the 'what'
+so they internalize the principle.
+Q33: How do you mentor junior team members on table handling and dynamic element waits?
+I emphasize two mental models: For tables — think of it as a nested loop: outer loop = rows, inner = cells.
+Always scope findElements to the parent. For dynamic elements — think of WebDriverWait as "keep
+checking until...". I created a debugging checklist: (1) Is the element in the right table? Print table id. (2) Is
+your XPath index off by one? Print cell text. (3) Is the element loaded yet? Add a wait. (4) Did the DOM
+refresh? Re-find the element. I pair-program the first table test with them, then have them write the next
+independently.
+Rapid Fire — Quick Conceptual Questions
+Q34: Can you use findElement(By.tagName("td")) directly on driver to read a specific table cell?
+Technically yes, but it returns the first td in the entire page — not what you want. Always scope to a specific
+table and row first. Use: table.findElement(By.xpath(".//tbody/tr[1]/td[3]")) or navigate through row
+elements.
+Q35: What happens if you use visibilityOfElementLocated on an element that never appears?
+TimeoutException is thrown after the WebDriverWait timeout expires. The exception message includes the
+ExpectedCondition that failed and the last exception encountered. Always handle this with an appropriate
+timeout and a meaningful assertion message.
+
+===== PAGE 8 =====
+PART 3: Five Practice Tests (Updated & Verified)
+NOTE: All tests use WebDriverWait + ExpectedConditions — no Thread.sleep(). Extend BaseTest.java.
+Class Header & Imports
+package week2.seleniumcore;
+import base.BaseTest;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
+import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
+import java.time.Duration;
+import java.util.List;
+public class TablesAndDynamicElementsTest extends BaseTest {
+Test 1: Read Specific Cell — Access by Row/Column Index
+Concepts: XPath row/col index (1-based), getText(), Assert.assertTrue
+@Test(description = "Read email cell from table row 1, column 3")
+public void test01_ReadSpecificCell() {
+  driver.get("https://the-internet.herokuapp.com/tables");
+  // XPath 1-based: td[1]=LastName, td[2]=FirstName, td[3]=Email
+  WebElement cell = driver.findElement(
+      By.xpath("//table[@id='table1']//tbody/tr[1]/td[3]"));
+  String email = cell.getText();
+  System.out.println("Row 1 Email: " + email);
+  Assert.assertTrue(email.contains("@"),
+      "Cell should contain an email address");
+}
+Test 2: Iterate All Rows — Scoped findElements on Row
+Concepts: row.findElements() scoping, List iteration, row count assertion
+@Test(description = "Iterate all rows, print data, verify row count")
+public void test02_IterateTableRows() {
+  driver.get("https://the-internet.herokuapp.com/tables");
+  List<WebElement> headers = driver.findElements(
+      By.xpath("//table[@id='table1']//thead/tr/th"));
+  StringBuilder headerRow = new StringBuilder("Headers: ");
+  for (WebElement h : headers) {
+    headerRow.append(h.getText()).append(" | ");
+  }
+  System.out.println(headerRow);
+  List<WebElement> rows = driver.findElements(
+      By.xpath("//table[@id='table1']//tbody/tr"));
+  Assert.assertTrue(rows.size() > 0, "Table should have rows");
+  for (int i = 0; i < rows.size(); i++) {
+    // Scoped to ROW — not driver
+    List<WebElement> cells = rows.get(i).findElements(
+        By.tagName("td"));
+
+===== PAGE 9 =====
+    StringBuilder rd = new StringBuilder("Row " + (i+1) + ": ");
+    for (WebElement c : cells) {
+      rd.append(c.getText()).append(" | ");
+    }
+    System.out.println(rd);
+  }
+  Assert.assertEquals(rows.size(), 4,
+      "Table1 should have 4 data rows");
+}
+
+===== PAGE 10 =====
+Test 3: Search Row by Value — Relative XPath with Dot
+Concepts: Loop to match cell value, .//a relative XPath, break on match
+@Test(description = "Find row by Last Name, click edit link")
+public void test03_SearchAndActOnRow() {
+  driver.get("https://the-internet.herokuapp.com/tables");
+  String target = "Bach";
+  List<WebElement> rows = driver.findElements(
+      By.xpath("//table[@id='table1']//tbody/tr"));
+  boolean found = false;
+  for (WebElement row : rows) {
+    List<WebElement> cells = row.findElements(
+        By.tagName("td"));
+    String lastName = cells.get(0).getText(); // 0-based
+    if (lastName.equals(target)) {
+      found = true;
+      System.out.println("Found: " + cells.get(1).getText()
+          + " " + lastName);
+      // DOT = relative to THIS row only
+      WebElement editLink = row.findElement(
+          By.xpath(".//a[contains(text(),'edit')]"));
+      editLink.click();
+      System.out.println("Clicked edit for " + target);
+      break;
+    }
+  }
+  Assert.assertTrue(found,
+      "Should find row with last name: " + target);
+}
+Test 4: Dynamic Loading — AJAX Content Appears After Click
+Concepts: visibilityOfElementLocated, hidden vs DOM-added elements, SoftAssert
+@Test(description = "Wait for AJAX content on dynamic_loading/1 and /2")
+public void test04_DynamicLoading() {
+  WebDriverWait wait = new WebDriverWait(driver,
+      Duration.ofSeconds(10));
+  SoftAssert sa = new SoftAssert();
+  // Scenario A: Element hidden, then revealed
+  driver.get("https://the-internet.herokuapp.com"
+      + "/dynamic_loading/1");
+  driver.findElement(
+      By.xpath("//button[text()='Start']")).click();
+  WebElement finish1 = wait.until(
+      ExpectedConditions.visibilityOfElementLocated(
+          By.id("finish")));
+  sa.assertEquals(finish1.getText(), "Hello World!",
+      "Example 1 text mismatch");
+  // Scenario B: Element NOT in DOM, then added
+  driver.get("https://the-internet.herokuapp.com"
+      + "/dynamic_loading/2");
+  driver.findElement(
+      By.xpath("//button[text()='Start']")).click();
+  WebElement finish2 = wait.until(
+      ExpectedConditions.visibilityOfElementLocated(
+          By.id("finish")));
+  sa.assertEquals(finish2.getText(), "Hello World!",
+      "Example 2 text mismatch");
+  sa.assertAll();
+
+===== PAGE 11 =====
+}
+
+===== PAGE 12 =====
+Test 5: Dynamic Controls — Remove, Add, Enable, Type
+Concepts: invisibilityOfElementLocated, elementToBeClickable, re-find after DOM change, isEnabled()
+@Test(description = "Test checkbox remove/add and input enable")
+public void test05_DynamicControls() {
+  driver.get("https://the-internet.herokuapp.com"
+      + "/dynamic_controls");
+  WebDriverWait wait = new WebDriverWait(driver,
+      Duration.ofSeconds(10));
+  // Part A: Remove checkbox
+  WebElement cb = driver.findElement(
+      By.xpath("//input[@type='checkbox']"));
+  Assert.assertTrue(cb.isDisplayed(),
+      "Checkbox should be visible");
+  driver.findElement(
+      By.xpath("//button[text()='Remove']")).click();
+  wait.until(ExpectedConditions
+      .invisibilityOfElementLocated(
+          By.xpath("//input[@type='checkbox']")));
+  WebElement msg = wait.until(
+      ExpectedConditions.visibilityOfElementLocated(
+          By.id("message")));
+  Assert.assertEquals(msg.getText(), "It's gone!");
+  // Add checkbox back
+  driver.findElement(
+      By.xpath("//button[text()='Add']")).click();
+  WebElement cbBack = wait.until(
+      ExpectedConditions.visibilityOfElementLocated(
+          By.xpath("//input[@type='checkbox']")));
+  Assert.assertTrue(cbBack.isDisplayed());
+  // Part B: Enable input
+  WebElement input = driver.findElement(
+      By.xpath("//input[@type='text']"));
+  Assert.assertFalse(input.isEnabled(),
+      "Input should be disabled");
+  driver.findElement(
+      By.xpath("//button[text()='Enable']")).click();
+  wait.until(ExpectedConditions.elementToBeClickable(
+      By.xpath("//input[@type='text']")));
+  // Re-find to avoid StaleElementReferenceException
+  input = driver.findElement(
+      By.xpath("//input[@type='text']"));
+  Assert.assertTrue(input.isEnabled());
+  input.sendKeys("Banking Test Data");
+  Assert.assertEquals(
+      input.getAttribute("value"),
+      "Banking Test Data");
+}
+NOTE: All tests use WebDriverWait + ExpectedConditions for synchronization. No Thread.sleep() — these are
+CI/CD ready.

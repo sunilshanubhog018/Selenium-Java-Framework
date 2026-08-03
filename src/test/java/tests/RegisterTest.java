@@ -67,9 +67,6 @@ public class RegisterTest extends BaseTest {
                 username, password
         );
 
-        // Pause to see the result on UI
-        //try { Thread.sleep(5000); } catch (InterruptedException e) {}
-        
         // After successful registration, h1 shows "Welcome <username>"
         String title = registerPage.getSuccessTitle();
         Assert.assertTrue(title.contains("elcome"),

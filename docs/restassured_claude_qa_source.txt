@@ -1,0 +1,1329 @@
+
+===== PAGE 1 =====
+REST Assured API Automation - SDET Interview Q&A
+Page 1
+ REST Assured
+ API Automation
+ SDET Interview Question Bank
+PART 1
+Fundamentals
+28 questions
+PART 2
+Senior / Framework Level
+29 questions + rapid fire
+PART 3
+Practice Tests
+5 tests x 10 MCQs = 50
+ Banking / fintech domain focus  ParaBank examples throughout
+
+===== PAGE 2 =====
+REST Assured API Automation - SDET Interview Q&A
+Page 2
+PART 1 — Fundamentals
+Core concepts every API tester must know cold
+These are the questions that open almost every API automation interview. Answer them crisply and you set the
+tone for the rest of the conversation.
+Q1. What is an API, and how is API testing different from UI testing?
+An API (Application Programming Interface) is the contract that lets two software systems talk to each
+other. In a banking app, the UI is the web page a customer sees; the API is the service layer underneath
+that actually moves money, fetches balances, and creates accounts.
+API testing hits that service layer directly over HTTP, without a browser. It is faster (no page loads, no
+rendering), more stable (no locators to break when the UI changes), and can test logic the UI never
+exposes. UI testing validates what the user sees and does; API testing validates the business logic and
+data contracts underneath.
+Q2. What is REST, and how does it differ from SOAP?
+REST (Representational State Transfer) is an architectural style for web services. It is resource-based,
+uses standard HTTP methods, is stateless, and typically exchanges JSON.
+SOAP is a stricter protocol: XML-only, uses a WSDL contract, has built-in standards for security and
+transactions, and is heavier. Banks still run SOAP for legacy core systems; newer services are almost
+always REST.
+Key differences: REST is lightweight and flexible; SOAP is rigid but has formal contracts and built-in error
+handling via SOAP faults.
+Q3. Explain the main HTTP methods and when each is used.
+GET — retrieve data; must not change server state (safe and idempotent). E.g. fetch account balance.
+POST — create a new resource, or trigger an action. Not idempotent — calling it twice creates two things.
+E.g. transfer funds, open an account.
+PUT — replace a resource entirely. Idempotent — same call twice gives the same end state. E.g. update
+full customer profile.
+PATCH — partially update a resource. E.g. change only the phone number.
+DELETE — remove a resource. Idempotent.
+The idempotency distinction matters enormously in banking: a retried POST /transfer could move money
+twice, which is why real payment APIs use idempotency keys.
+Q4. What are the important HTTP status codes an API tester must know?
+2xx Success: 200 OK (request succeeded), 201 Created (new resource made), 204 No Content
+(success, empty body).
+3xx Redirection: 301 Moved Permanently, 304 Not Modified.
+4xx Client errors: 400 Bad Request (malformed input), 401 Unauthorized (not authenticated), 403
+Forbidden (authenticated but not permitted), 404 Not Found, 409 Conflict, 422 Unprocessable Entity, 429
+Too Many Requests.
+5xx Server errors: 500 Internal Server Error, 502 Bad Gateway, 503 Service Unavailable, 504 Gateway
+Timeout.
+
+===== PAGE 3 =====
+REST Assured API Automation - SDET Interview Q&A
+Page 3
+Interview trap: 401 vs 403. 401 means 'I do not know who you are'; 403 means 'I know who you are, and
+you are not allowed'.
+Q5. Explain the given / when / then syntax in REST Assured.
+REST Assured uses a BDD-style fluent chain:
+given() — the setup. Headers, query params, path params, request body, authentication. Everything you
+are sending.
+when() — the action. The HTTP method and endpoint, e.g. .post("/transfer").
+then() — the validation. Status code, response body assertions, response time, extraction.
+RestAssured.baseURI = "https://parabank.parasoft.com";
+given()
+    .queryParam("accountId", 13344)
+    .header("Content-Type", "application/json")
+.when()
+    .get("/parabank/services/bank/accounts/13344")
+.then()
+    .statusCode(200)
+    .body("type", equalTo("SAVINGS"));
+Q6. Where exactly is the HTTP method specified in a REST Assured chain?
+In the method call right after .when(). The method name IS the HTTP verb — .get(), .post(), .put(),
+.delete(). The string passed inside is only the endpoint path, never the verb.
+A very common beginner mistake is writing .get("GET /accounts/123") — this puts the literal word GET
+into the URL and produces a broken request. Correct form is .get("/accounts/123").
+Q7. What is JsonPath and why can you not just use String methods to read a response?
+A response arrives as plain text. To Java it is just a String — it has no idea that place_id is a field. Parsing
+converts that flat text into a navigable structure you can query by key.
+String searching fails because spacing varies, the same key may appear nested elsewhere, and values
+contain commas, quotes and braces that confuse naive matching. Nested objects and arrays are nearly
+impossible to reach by hand.
+JsonPath parses the response and lets you address values by path — hence the name.
+JsonPath js = response.jsonPath();
+String type      = js.getString("type");        // simple field
+float  balance   = js.getFloat("balance");      // typed read
+int    firstId   = js.getInt("[0].id");         // array index
+List<Integer> ids = js.getList("id");           // same field from every array element
+int    count     = js.getList("$").size();      // array size
+Q8. How do you extract a value from a response and use it in the next request?
+
+===== PAGE 4 =====
+REST Assured API Automation - SDET Interview Q&A
+Page 4
+Use .extract() to bridge from validation to usage. Critically, the extracted value must be assigned to a
+variable — calling .extract().response().asString() without assigning silently discards the result.
+This chaining is the backbone of API test flows: create a resource, capture its generated ID, then use that
+ID for GET / PUT / DELETE.
+Response response =
+    given().spec(requestSpec())
+    .when().get("/customers/12212/accounts")
+    .then().statusCode(200)
+    .extract().response();
+int accountId = response.jsonPath().getInt("[0].id");
+// accountId now feeds the next request - never hardcoded
+Q9. What is the difference between a path parameter and a query parameter?
+A path parameter is part of the URL structure and identifies a specific resource: /accounts/13344 — here
+13344 is a path param.
+A query parameter comes after ? and filters or supplies extra data:
+/transfer?fromAccountId=13344&toAccountId=54321&amount=100
+Rule of thumb: path params identify which resource; query params modify how you want it or supply action
+inputs.
+given()
+    .pathParam("accountId", 13344)
+    .queryParam("amount", 100)
+.when()
+    .get("/accounts/{accountId}")
+Q10. How do you validate a JSON response body in REST Assured?
+Use .body() with Hamcrest matchers. You can assert on simple fields, nested fields with dot notation, and
+array elements by index or with collection matchers.
+Always read the actual response before writing assertions — assuming field names is the single most
+common cause of failing API tests.
+.then()
+    .statusCode(200)
+    .body("firstName", equalTo("John"))
+    .body("address.city", equalTo("Beverly Hills"))   // nested
+    .body("id", notNullValue())
+    .body("accounts.size()", greaterThan(0))          // array size
+    .body("type", hasItems("CHECKING", "SAVINGS"));   // collection
+Q11. What is serialization and deserialization in API testing?
+Serialization — converting a Java object into JSON to send as a request body. You build a POJO, and
+Jackson turns it into JSON automatically.
+Deserialization — converting a JSON response back into a Java object so you can call getters instead of
+
+===== PAGE 5 =====
+REST Assured API Automation - SDET Interview Q&A
+Page 5
+parsing strings.
+Together they let you stop hand-writing escaped JSON strings and stop scraping responses with
+JsonPath.
+// Serialization - POJO becomes the request body
+Payee payee = new Payee("Electric Co", address, "555-1234", "98765");
+given().body(payee).when().post("/billpay");
+// Deserialization - response becomes a typed object
+Account account = response.as(Account.class);
+System.out.println(account.getBalance());
+Q12. What is a POJO and why use it instead of JsonPath?
+A POJO (Plain Old Java Object) is a simple class whose fields mirror the JSON structure, with getters and
+setters.
+Advantages over raw JsonPath:
+ Compile-time safety — a typo in getBalance() fails to compile; a typo in js.getFloat("balnce") fails only at
+runtime.
+ Refactorable — rename a field once, the IDE updates every usage.
+ Readable — account.getBalance() reads better than js.getFloat("[0].balance").
+ Reusable — the same POJO serves both request and response.
+public class Account {
+    private int id;
+    private int customerId;
+    private String type;
+    private double balance;
+    // getters and setters
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
+    public double getBalance() { return balance; }
+    public void setBalance(double balance) { this.balance = balance; }
+}
+Q13. How do you handle authentication in REST Assured?
+REST Assured supports several schemes:
+Basic Auth: .auth().basic("user", "pass")
+Preemptive Basic: .auth().preemptive().basic("user", "pass") — sends credentials without waiting for a
+401 challenge.
+Bearer token: .header("Authorization", "Bearer " + token)
+OAuth 2.0: .auth().oauth2(accessToken)
+API Key: usually a header or query param.
+In practice you fetch the token once in a @BeforeSuite, store it, and inject it into the request spec for all
+tests.
+Q14. What is a RequestSpecification and why use spec builders?
+
+===== PAGE 6 =====
+REST Assured API Automation - SDET Interview Q&A
+Page 6
+A RequestSpecification bundles common request setup — base URI, base path, headers, content type,
+logging — into one reusable object. A ResponseSpecification does the same for common expectations.
+This is the API equivalent of a BasePage in the Page Object Model: define it once, reuse everywhere, and
+when the base URI changes you edit one line instead of fifty tests.
+public static RequestSpecification requestSpec() {
+    return new RequestSpecBuilder()
+        .setBaseUri(ConfigReader.get("api.base.uri"))
+        .setBasePath(ConfigReader.get("api.base.path"))
+        .setContentType(ContentType.JSON)
+        .log(LogDetail.ALL)
+        .build();
+}
+// In the test:
+given().spec(ApiSpecs.requestSpec()).when().get("/accounts/13344");
+Q15. How do you log requests and responses in REST Assured?
+Logging is essential for debugging — when a call returns 400, you need to see exactly what was sent.
+ .log().all() after given() logs the full request
+ .log().all() after then() logs the full response
+ .log().ifValidationFails() logs only on failure — best for CI, keeps logs clean
+ RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter()) applies logging globally
+given().log().all()
+.when().get("/accounts/13344")
+.then().log().ifValidationFails()
+       .statusCode(200);
+Q16. What is JSON Schema validation and why does it matter?
+Schema validation checks the structure of a response — field names, data types, required fields, nesting
+— rather than specific values.
+This catches contract breaks that value assertions miss. If a developer changes balance from a number to
+a string, or drops a field entirely, schema validation fails immediately even though the endpoint still returns
+200.
+.then()
+  .assertThat()
+  .body(matchesJsonSchemaInClasspath("account-schema.json"));
+Q17. How do you assert on response time?
+REST Assured can validate performance as part of a functional test — useful as a lightweight guard
+against regressions.
+
+===== PAGE 7 =====
+REST Assured API Automation - SDET Interview Q&A
+Page 7
+.then()
+    .time(lessThan(2000L));                      // under 2 seconds
+// or extract it
+long ms = response.getTime();
+long sec = response.getTimeIn(TimeUnit.SECONDS);
+Q18. What is the difference between @BeforeClass, @BeforeMethod and @BeforeSuite in
+an API test framework?
+@BeforeSuite — runs once for the entire suite. Ideal for fetching an auth token or initialising a test
+database.
+@BeforeClass — runs once per test class. Good for RestAssured configuration shared by that class.
+@BeforeMethod — runs before every test method. Use for per-test data setup where isolation matters.
+In API frameworks you generally want less per-method setup than in UI frameworks, because there is no
+browser to reset — which is exactly why API suites run so much faster.
+Q19. What is a request payload, and which HTTP methods carry one?
+The payload (or body) is the data sent with a request — usually JSON in modern REST APIs.
+POST, PUT and PATCH carry payloads. GET and DELETE normally do not — a GET body is technically
+allowed by the spec but widely ignored by servers and proxies, so data for a GET goes in query or path
+parameters instead.
+Interview trap: if asked to write a GET with a body, point out that the identifying data belongs in the URL.
+Q20. What is the difference between Content-Type and Accept headers?
+Content-Type describes the format of the data you are sending. Accept tells the server the format you
+want back.
+They are independent — you can send XML and request JSON in reply. This negotiation is why the same
+endpoint can serve multiple client types. ParaBank, for instance, will return either XML or JSON depending
+on the Accept header.
+given()
+    .contentType(ContentType.JSON)   // I am sending JSON
+    .accept(ContentType.JSON)        // send me JSON back
+    .body(transferRequest)
+.when()
+    .post("/transfer");
+Q21. What are the different parameter types in REST Assured?
+queryParam — appended after ? in the URL; filters or supplies action inputs
+pathParam — substituted into the URL template; identifies a resource
+formParam — sent as form-encoded body data (application/x-www-form-urlencoded), typical of login
+forms
+headerParam / header — request headers such as Authorization
+multiPart — file uploads (multipart/form-data)
+Using the wrong type is a common cause of a puzzling 400 — for example sending form params to an
+
+===== PAGE 8 =====
+REST Assured API Automation - SDET Interview Q&A
+Page 8
+endpoint expecting JSON.
+given()
+    .pathParam("accountId", 13344)
+    .queryParam("startDate", "2026-01-01")
+    .header("Authorization", "Bearer " + token)
+.when()
+    .get("/accounts/{accountId}/transactions");
+Q22. What is GPath and how does it differ from JsonPath syntax you may know from other
+tools?
+REST Assured uses Groovy GPath for its body() assertions and JsonPath extraction — not the JsonPath
+syntax used by Postman or Jayway (which starts with $. and uses bracket filters).
+GPath uses plain dot notation and Groovy collection methods. This matters because copying a Postman
+JsonPath expression straight into REST Assured frequently fails.
+GPath is far more powerful than simple field access — it supports filtering, aggregation and projection,
+which is covered in the senior section.
+// GPath (REST Assured)
+js.getString("address.city");
+js.getInt("[0].id");
+// NOT Jayway JsonPath syntax:
+// $.address.city   $[0].id
+Q23. How do you extract headers, cookies and the status line from a response?
+Beyond the body, the response carries metadata that is often worth asserting — particularly security
+headers and session cookies in banking applications.
+Response r = given().when().get("/accounts/13344");
+String contentType = r.getHeader("Content-Type");
+String sessionId   = r.getCookie("JSESSIONID");
+int    status      = r.getStatusCode();
+String statusLine  = r.getStatusLine();
+long   timeTaken   = r.getTime();
+// Assert a security header is present
+r.then().header("X-Content-Type-Options", equalTo("nosniff"));
+Q24. How do you handle XML responses in REST Assured?
+Use XmlPath instead of JsonPath. Many banking core systems still expose SOAP or XML REST services,
+so this comes up more often than people expect.
+The navigation is similar in spirit, but paths follow the XML element hierarchy and you can use XPath-style
+expressions.
+
+===== PAGE 9 =====
+REST Assured API Automation - SDET Interview Q&A
+Page 9
+XmlPath xml = new XmlPath(response.asString());
+String accountType = xml.getString("account.type");
+// or assert directly
+.then()
+  .body("account.balance", equalTo("1231.10"));
+Q25. What is Hamcrest and why does REST Assured use it?
+Hamcrest is a matcher library that makes assertions read like English and produce clear failure messages.
+REST Assured's body() method takes Hamcrest matchers.
+Common matchers: equalTo, not, notNullValue, nullValue, hasItem, hasItems, hasSize, greaterThan,
+lessThan, containsString, startsWith, everyItem.
+Practical note: TestNG bundles its own Hamcrest version, which can clash with the one REST Assured
+pulls in, producing a NoSuchMethodError at runtime. The fix is to pin a single explicit Hamcrest
+dependency.
+.body("balance", greaterThan(0f))
+.body("type", not(equalTo("CLOSED")))
+.body("accounts", hasSize(11))
+.body("transactions.amount", everyItem(greaterThan(0f)))
+Q26. What are the main types of API testing?
+ Functional — does the endpoint do what the specification says
+ Contract / schema — is the structure, field names and data types as agreed
+ Integration — do chained services work together end to end
+ Security — authentication, authorisation, injection, data exposure
+ Performance / load — response time and behaviour under concurrency (JMeter, Gatling)
+ Negative / error handling — invalid input, boundary values, failure modes
+In an automation framework you primarily build functional, contract and negative coverage; load testing
+usually sits in a separate tool.
+Q27. Why is relaxed HTTPS validation sometimes needed, and what is the risk?
+Test environments frequently use self-signed or expired certificates, which causes REST Assured to throw
+an SSL handshake exception. RestAssured.useRelaxedHTTPSValidation() bypasses certificate
+verification.
+The risk is that it disables a genuine security check. It is acceptable in a controlled test environment, but it
+should never be applied to production-facing tests, and ideally it is config-driven rather than hardcoded so
+it can be switched off per environment.
+// Environment-driven rather than unconditional
+if (Boolean.parseBoolean(ConfigReader.get("api.relaxed.ssl"))) {
+    RestAssured.useRelaxedHTTPSValidation();
+}
+Q28. What is the difference between asserting inside then() and using TestNG Assert?
+
+===== PAGE 10 =====
+REST Assured API Automation - SDET Interview Q&A
+Page 10
+then() assertions are fluent, fail fast, and produce REST Assured's detailed diff output showing expected
+vs actual for the whole body. Best for validating the response itself.
+TestNG Assert is used after extraction, when you need to compare against values computed in the test —
+for example asserting a balance delta, or comparing an API result against a database value.
+A mature test typically uses both: then() for response contract, TestNG Assert for business logic
+verification.
+Use SoftAssert when you want to collect several failures in one run rather than stopping at the first.
+
+===== PAGE 11 =====
+REST Assured API Automation - SDET Interview Q&A
+Page 11
+PART 2 — Senior / Framework Level
+Architecture, banking scenarios, edge cases and behavioural questions
+This is where senior interviews are won or lost. The interviewer is probing whether you have actually designed a
+framework and reasoned about trade-offs, or only written tests inside one somebody else built.
+Q1. Walk me through the architecture of the API automation framework you built.
+A layered structure inside a single Maven project, sharing infrastructure with the UI framework:
+ config — config.properties plus a ConfigReader; base URIs and credentials are never hardcoded
+ specs — RequestSpecification / ResponseSpecification builders; common setup defined once
+ base — BaseApiTest holding global RestAssured configuration and filters
+ payloads — request and response POJOs for serialization and deserialization
+ endpoints (service layer) — AccountService, TransactionService, BillPayService; every endpoint URL
+lives here
+ tests — split into smoke and regression; contain only orchestration and assertions
+ utils — data providers, schema validators
+The governing rule: no test class contains a raw endpoint URL, exactly as no UI test contains a locator.
+When an endpoint changes, one service method changes — not fifty tests.
+Q2. Why keep the API layer in the same project as the UI framework instead of a separate
+repo?
+Three reasons, and the third is the important one.
+1. Shared infrastructure — one ConfigReader, one config.properties, one reporting setup, one CI
+pipeline. A separate repo duplicates all of it, so an environment URL change means editing two repos.
+2. Consistent conventions — one build, one dependency set, one place for reviewers to look.
+3. The API layer can serve the UI layer. UI tests are slow and brittle, especially in setup. Instead of
+registering a user through six UI screens, the test calls the API to create the account in one request, then
+drives only the behaviour under test through the browser. That is only possible if both layers live together
+— and it typically cuts UI suite runtime dramatically while removing a whole class of flakiness.
+Q3. BANKING SCENARIO: How would you test a fund transfer API properly?
+
+===== PAGE 12 =====
+REST Assured API Automation - SDET Interview Q&A
+Page 12
+A 200 response proves nothing about whether money moved. The correct pattern is read, act, re-read,
+assert deltas:
+1. GET the source account balance before
+2. GET the destination account balance before
+3. POST the transfer
+4. GET both balances again
+5. Assert source decreased by exactly the amount, destination increased by exactly the amount
+Then extend to the ledger: assert a debit entry appears on the source and a credit entry on the destination
+with matching amounts and timestamps.
+Additional cases a bank would demand: insufficient funds, transfer to a closed or frozen account, negative
+and zero amounts, amount with more than two decimal places, cross-currency, transfer to the same
+account, boundary at the daily limit, and duplicate-submission handling (idempotency).
+double fromBefore = accountService.getAccount(fromId).getBalance();
+double toBefore   = accountService.getAccount(toId).getBalance();
+transactionService.transfer(fromId, toId, 100.00)
+    .then().statusCode(200);
+double fromAfter = accountService.getAccount(fromId).getBalance();
+double toAfter   = accountService.getAccount(toId).getBalance();
+Assert.assertEquals(fromAfter, fromBefore - 100.00, 0.001);
+Assert.assertEquals(toAfter,   toBefore   + 100.00, 0.001);
+Q4. BANKING SCENARIO: An API returns 200 OK but the body says status FAILED. How do
+you handle this?
+This is a critical real-world distinction. HTTP status describes the transport; the response body
+describes the business outcome. A payment gateway can accept your request successfully (200) while
+the payment itself was declined.
+A test that only asserts the status code would pass on a failed transaction — a false negative that could let
+a real defect reach production.
+The fix is to assert both layers: transport-level status AND business-level status, plus the actual state
+change.
+.then()
+    .statusCode(200)                          // transport succeeded
+    .body("status", equalTo("SUCCESS"))       // business succeeded
+    .body("transactionId", notNullValue());   // and produced a record
+// then re-read the balance to confirm the state actually changed
+Q5. How do you handle test data in an API framework, and why does it matter more in
+banking?
+Strategies, roughly in order of maturity:
+ Hardcoded — fastest to write, breaks on every environment refresh. Avoid.
+
+===== PAGE 13 =====
+REST Assured API Automation - SDET Interview Q&A
+Page 13
+ Externalised — Excel, JSON or CSV via a DataProvider. Good for parameterised cases.
+ Dynamically created — the test creates its own account via API in setup, uses it, then cleans up. Most
+robust.
+ Database seeded — reset to a known state before the suite.
+Banking makes this acute because balances are mutable and shared. If a test asserts a balance of 1000
+but another test transferred funds out of that account, you get an intermittent failure that has nothing to do
+with a real defect. The rule is: a test should create and own the data it asserts on, and never depend
+on data another test can mutate.
+Q6. How would you design tests to run in parallel safely?
+The main risks are shared state and thread safety.
+ Independent data per thread — each test creates its own account rather than sharing a fixture account.
+This is the single biggest factor.
+ No shared mutable statics — if you must share (e.g. an auth token), make it ThreadLocal or set it once
+in @BeforeSuite and treat it as read-only.
+ RestAssured static config — RestAssured.baseURI is global mutable state. Prefer per-request
+RequestSpecification objects rather than mutating statics, which is another argument for spec builders.
+ Configure in testng.xml — parallel="methods" or "classes" with a sensible thread-count.
+ Watch the server — API tests are fast, so 20 threads can rate-limit or overwhelm a test environment.
+Tune thread-count against what the environment tolerates.
+<suite name="API Regression" parallel="methods" thread-count="5">
+    <test name="Banking API Tests">
+        <classes>
+            <class name="com.parabank.api.tests.TransferApiTest"/>
+        </classes>
+    </test>
+</suite>
+Q7. How do you handle authentication tokens that expire mid-suite?
+Naive approach: fetch a token in @BeforeSuite. This breaks on long regression runs when the token
+expires halfway through.
+Better: a TokenManager that caches the token along with its expiry, and refreshes on demand. Every
+request asks the manager for a token; the manager returns the cached one if still valid, or transparently
+fetches a new one.
+For thread safety under parallel execution, guard the refresh with synchronisation so twenty threads do not
+all trigger a refresh simultaneously.
+Belt and braces: a filter that retries once on a 401 after forcing a refresh, which handles server-side
+revocation.
+Q8. What is your strategy for negative testing an API?
+Systematic rather than ad hoc. For every endpoint I work through categories:
+ Missing required fields — expect 400 with a message naming the field
+
+===== PAGE 14 =====
+REST Assured API Automation - SDET Interview Q&A
+Page 14
+ Invalid data types — string where a number is expected
+ Boundary values — zero, negative, maximum, maximum plus one, excessive decimal places
+ Authorisation — no token, expired token, valid token for a different customer's account (the classic
+IDOR vulnerability, and a serious finding in banking)
+ Non-existent resources — expect 404, not 500
+ Business rule violations — insufficient funds, frozen account, exceeding daily limits
+Crucially I assert on the error contract, not just a non-200. A vague 500 where a 400 with a clear
+message belongs is itself a defect worth raising.
+Q9. How do you integrate API tests into a CI/CD pipeline?
+A tiered strategy so feedback speed matches risk:
+ On every commit — the smoke suite: a handful of critical-path tests finishing in under two minutes. Fails
+the build immediately.
+ On merge to main / nightly — the full regression suite in parallel.
+ Reporting — publish Allure results as a build artifact so failures are diagnosable without rerunning.
+Practical concerns: environment URLs and credentials come from CI secrets, never from a committed
+properties file; the pipeline must fail loudly rather than silently skipping; and flaky tests must be fixed or
+quarantined, because a suite that fails randomly trains the team to ignore failures, which defeats the
+purpose entirely.
+Q10. How do you decide what to test at the API layer versus the UI layer?
+I think in terms of the test pyramid. The API layer is fast and stable, so it should carry the bulk of functional
+coverage:
+ API layer — business logic, validation rules, error handling, data contracts, boundary conditions,
+authorisation, all the permutations. If a behaviour is observable through the API, test it there.
+ UI layer — that the interface correctly invokes those services and renders the result: critical user
+journeys, form validation display, navigation. A small number of high-value end-to-end paths.
+The anti-pattern is testing thirty validation permutations through the browser. Each takes twenty seconds
+and breaks whenever a class name changes; the same coverage at the API layer runs in seconds and is
+far more stable. One UI test proves the wiring works; the API tests prove the logic works.
+Q11. BEHAVIOURAL: Describe a time when your automated tests missed a bug in
+production.
+Structure the answer with STAR — Situation, Task, Action, Result — and be honest. Interviewers are
+testing whether you learn from failure, not whether you are infallible.
+A strong pattern to draw on: tests asserted the HTTP status code but not the business outcome or the
+resulting state — so a transaction that returned 200 while silently failing went undetected until users
+reported it.
+The valuable part of the answer is what changed afterwards: added state-verification assertions (re-read
+the balance), introduced schema validation to catch contract drift, and — most importantly — added a
+regression test reproducing the exact defect so it can never recur silently. Finish by naming the general
+
+===== PAGE 15 =====
+REST Assured API Automation - SDET Interview Q&A
+Page 15
+lesson: assert on the state change, not merely on the response.
+Q12. BEHAVIOURAL: Tell me about a time you disagreed with a developer about whether
+something was a defect.
+What is being assessed is your evidence-gathering and communication, not whether you won.
+A good answer establishes: you brought data rather than opinion (the request, the response, the
+specification clause), you sought to understand the developer's reasoning rather than escalating
+immediately, and you framed it around user or business impact rather than personal correctness.
+Strong closes include: the specification itself turned out to be ambiguous, so the real outcome was
+clarifying the contract for both sides — or you were wrong, you said so, and you adjusted the test.
+Showing you can concede gracefully reads as senior, not weak.
+Q13. BEHAVIOURAL: How do you handle a flaky test suite that the team has stopped
+trusting?
+This tests engineering judgement and influence.
+First measure — instrument reruns to quantify which tests fail intermittently and how often. Opinions about
+flakiness are usually wrong; data is not.
+Then triage by root cause rather than blanket-adding retries. Typical causes: shared mutable test data,
+timing and race conditions, environment instability, and genuine intermittent product defects — the last
+being the dangerous category that retries would hide.
+Then quarantine — move flaky tests out of the blocking pipeline so the main suite is trustworthy again,
+with a time-boxed commitment to fix rather than leaving them parked forever.
+The framing that lands: a suite nobody trusts provides negative value, because it consumes time while
+giving false confidence.
+Q14. How do you validate an API contract has not broken between releases?
+Value assertions alone are insufficient — they check data, not structure. Layered approach:
+ JSON schema validation on every critical response, checking field presence, types and nesting.
+Catches a field being removed, renamed, or changing type.
+ Contract tests against the published specification (OpenAPI/Swagger), ideally generated from it.
+ Consumer-driven contracts (e.g. Pact) in a microservices estate, where a provider change can break
+consumers that the provider team is unaware of.
+In banking this is especially important because the API is consumed by mobile apps, partner integrations
+and internal services simultaneously. A field silently changing from number to string can break a
+downstream consumer in ways no functional test on the provider side would reveal.
+Q15. What are the most common mistakes you see in API automation frameworks?
+ Asserting only status codes — the single most common gap; the test passes while the business
+operation failed
+ Hardcoded IDs and data — breaks on every environment refresh; capture IDs dynamically instead
+ Endpoint URLs scattered through test classes — no service layer, so one endpoint change touches
+dozens of files
+
+===== PAGE 16 =====
+REST Assured API Automation - SDET Interview Q&A
+Page 16
+ Hand-escaped JSON strings in test code — unreadable and error-prone; use POJOs
+ Order-dependent tests — test B only passes if test A ran first, which destroys parallel execution
+ No negative coverage — only happy paths automated
+ Credentials committed to the repository instead of injected from CI secrets
+ Blanket retries masking genuine intermittent defects
+Q16. Show how you would use GPath to filter and aggregate data in a response.
+This is a favourite senior question because it separates people who only do simple field assertions from
+those who genuinely know REST Assured. GPath supports Groovy collection operations directly inside the
+path expression.
+In banking this is genuinely useful: total the debits in a statement, find the highest transaction, or confirm
+every transaction on an account belongs to the correct customer.
+// Sum every transaction amount
+float total = js.getFloat("sum{ it.amount }");
+// All accounts with a negative balance
+List<Integer> overdrawn =
+    js.getList("findAll { it.balance < 0 }.id");
+// Highest transaction amount
+float max = js.getFloat("max{ it.amount }.amount");
+// Count of savings accounts
+int savings = js.getList("findAll { it.type == 'SAVINGS' }").size();
+// Assert inline without extraction
+.then().body("findAll { it.balance < 0 }.size()", equalTo(2));
+Q17. BANKING: Why should monetary values never be handled as double, and how does
+that affect your assertions?
+Floating-point types cannot represent most decimal fractions exactly. 0.1 + 0.2 does not equal 0.3 in binary
+floating point. For money this produces rounding errors that accumulate — unacceptable in a financial
+system.
+Production banking code uses BigDecimal with an explicit scale and rounding mode. Your tests should
+mirror that.
+Practical impact on assertions: comparing doubles with == is unreliable, so either use BigDecimal with
+compareTo, or assert with an explicit delta tolerance. A test that uses exact double equality on a balance
+will fail intermittently for reasons that look like a product defect but are not.
+
+===== PAGE 17 =====
+REST Assured API Automation - SDET Interview Q&A
+Page 17
+// Fragile - can fail on representable-precision differences
+Assert.assertTrue(after == before - 100.00);
+// Acceptable - explicit tolerance
+Assert.assertEquals(after, before - 100.00, 0.001);
+// Best - exact decimal arithmetic
+BigDecimal expected = before.subtract(new BigDecimal("100.00"));
+Assert.assertEquals(0, after.compareTo(expected));
+// note: compareTo, not equals - equals also compares scale,
+// so 100.0 and 100.00 are "not equal" but do compareTo as 0
+Q18. BANKING: How do you test an asynchronous API, such as a payment that completes
+via callback?
+Many banking operations are asynchronous: you submit a payment, receive 202 Accepted with a
+reference, and the actual settlement happens later, notified by webhook or discoverable by polling.
+Testing approach:
+ Assert the acknowledgement — 202 plus a tracking reference
+ Poll with a timeout — repeatedly query the status endpoint until terminal state or timeout. Never a fixed
+Thread.sleep, which is either flaky or wasteful
+ For webhooks — stand up a lightweight listener endpoint the system under test can call, and assert on
+the callback payload
+ Assert the terminal state, not just that processing started
+The common mistake is asserting 202 and stopping — that only proves the request was queued, not that
+the payment settled.
+// Poll until terminal state with a bounded wait
+Awaitility.await()
+    .atMost(30, TimeUnit.SECONDS)
+    .pollInterval(2, TimeUnit.SECONDS)
+    .until(() -> paymentService.getStatus(txnRef)
+                    .equals("SETTLED"));
+// then verify the resulting state change
+Assert.assertEquals(0, accountService.getBalance(id)
+        .compareTo(expectedAfterSettlement));
+Q19. How do you validate the database alongside the API, and when is it worth doing?
+API responses tell you what the service says happened. Database validation confirms what was actually
+persisted — the two can diverge when there is a caching layer, an incomplete transaction, or an
+asynchronous write.
+Worth doing for: financial transactions, audit trail entries, and anywhere the API response does not expose
+all the persisted fields.
+Caveats worth raising in interview, because they show maturity: it couples your tests to the schema, so a
+refactor breaks tests that were not testing the schema; use read-only credentials; and do not use it as a
+substitute for the API assertion — it supplements it.
+
+===== PAGE 18 =====
+REST Assured API Automation - SDET Interview Q&A
+Page 18
+// After a transfer, verify the ledger row was actually written
+String sql =
+  "SELECT amount, type FROM transaction " +
+  "WHERE account_id = ? ORDER BY date DESC LIMIT 1";
+try (PreparedStatement ps = conn.prepareStatement(sql)) {
+    ps.setInt(1, fromAccountId);
+    ResultSet rs = ps.executeQuery();
+    Assert.assertTrue(rs.next(), "No ledger entry written");
+    Assert.assertEquals(rs.getBigDecimal("amount")
+            .compareTo(new BigDecimal("100.00")), 0);
+    Assert.assertEquals(rs.getString("type"), "Debit");
+}
+Q20. BANKING: Your framework logs full request and response bodies. Why is that a
+compliance problem, and how do you fix it?
+Banking API payloads contain personally identifiable and sensitive data — account numbers, SSN, card
+numbers, customer addresses, authentication tokens. Logging them in full writes that data into CI logs,
+build artifacts and report files, which are typically far less protected than the application itself. That is a
+genuine data-protection breach, not merely untidy.
+Notice the ParaBank customer response includes an SSN field — a real framework must not log that
+verbatim.
+The fix is a masking layer: a custom REST Assured filter that intercepts request and response bodies and
+redacts sensitive fields before anything is written to logs or reports. Also switch from log().all() to
+log().ifValidationFails() so full bodies only appear on failure, and never log Authorization headers.
+public class MaskingFilter implements Filter {
+    private static final List<String> SENSITIVE =
+        List.of("ssn", "password", "cardNumber", "cvv", "token");
+    @Override
+    public Response filter(FilterableRequestSpecification req,
+                           FilterableResponseSpecification res,
+                           FilterContext ctx) {
+        Response response = ctx.next(req, res);
+        log.info(mask(response.asString()));   // redact before logging
+        return response;
+    }
+}
+Q21. What are REST Assured filters and what would you use them for?
+A filter intercepts every request and response, letting you apply cross-cutting behaviour without touching
+individual tests. It is the API equivalent of a TestNG listener.
+Real uses:
+ Authentication — inject a fresh token into every request
+ Logging — structured logging, or the PII masking described above
+ Reporting — attach request and response to the Allure report automatically
+ Correlation IDs — add a trace header so a failing test can be matched to server-side logs, which is
+enormously useful when debugging an intermittent failure in a shared environment
+
+===== PAGE 19 =====
+REST Assured API Automation - SDET Interview Q&A
+Page 19
+ Retry on 401 — refresh the token and retry once
+RestAssured.filters(
+    new AllureRestAssured(),        // auto-attach to report
+    new MaskingFilter(),            // redact PII
+    new CorrelationIdFilter()       // trace header per request
+);
+Q22. How do you handle third-party dependencies your API calls but you cannot control?
+A payment gateway, credit bureau or SMS provider cannot be hit freely in testing — it may cost money,
+rate-limit, or simply be unavailable. It also cannot be made to produce failure scenarios on demand.
+Service virtualisation / mocking (WireMock is the common choice) stands up a stub that returns
+controlled responses. This is the only practical way to test failure paths: gateway timeout, declined
+transaction, malformed response, 503.
+The trade-off to acknowledge: mocks can drift from reality. Mitigate by keeping a small suite of contract
+tests that run against the real sandbox periodically, so you learn when the stub no longer matches the
+provider.
+stubFor(post(urlEqualTo("/gateway/charge"))
+    .willReturn(aResponse()
+        .withStatus(503)
+        .withFixedDelay(5000)));   // simulate timeout + outage
+// now assert your service degrades gracefully
+// rather than corrupting the account state
+Q23. How do you test pagination, and what defects does it commonly hide?
+Transaction history endpoints are almost always paginated. Test cases:
+ First page, middle page, last page
+ Page size boundaries — 0, 1, maximum, maximum plus one
+ Page beyond the end — expect an empty list, not a 500
+ Total count consistency — sum of all pages equals the reported total
+ No duplicates or gaps across page boundaries — the classic defect, caused by unstable sort order
+when records share a sort key
+ Concurrent modification — a record inserted while paginating can push an item onto a page you
+already read, so it is silently missed
+That last case is exactly the kind of scenario that impresses in interview, because it shows you think about
+data moving underneath a multi-request operation.
+Q24. How would you organise a suite of several hundred API tests?
+Structure by domain, then by risk tier:
+ Packages by business area — accounts, transfers, billpay, loans, customer. Mirrors how the product is
+owned and makes failures easy to route
+ TestNG groups — smoke, regression, negative, contract. Groups cut across packages so you can run
+
+===== PAGE 20 =====
+REST Assured API Automation - SDET Interview Q&A
+Page 20
+'all smoke' or 'all negative' independently
+ Suite files — smoke.xml for the commit pipeline, regression.xml nightly
+ Naming convention — methodUnderTest_condition_expectedResult, so a failure name is
+self-describing in a report without opening the code
+ Independence — every test creates the data it needs, so any subset can run in any order in parallel
+The governing principle: someone should be able to find the right test from a failure message alone, and
+run any meaningful subset without running everything.
+Q25. How do you manage configuration and secrets across multiple environments?
+ Environment-specific properties — config-dev, config-qa, config-staging, selected by a Maven profile
+or a system property such as -Denv=qa
+ Never commit credentials — this is the one that gets people into real trouble. Secrets come from CI
+secret stores or environment variables and are injected at runtime
+ Fail loudly on a missing key — your ConfigReader should throw a clear error naming the missing key
+rather than returning null and failing mysteriously three layers deeper
+ No production writes — if any suite touches production it must be strictly read-only, and this should be
+enforced structurally, not by convention
+Worth stating explicitly in interview: a repository with a committed password is a security incident, and
+reviewers look for whether you understand that.
+mvn test -Denv=qa -Dsuite=smoke
+// ConfigReader picks config-qa.properties,
+// but credentials come from environment variables:
+String pwd = System.getenv("API_TEST_PASSWORD");
+Q26. How do you integrate API tests with Allure reporting?
+Add the allure-rest-assured filter and every request and response is attached to the report automatically —
+which means a failure can be diagnosed from the report without rerunning anything.
+Beyond the basics, annotations add real value: @Epic and @Feature group tests by business area,
+@Severity marks criticality so triage can start with blockers, @Story links to requirements, and @Step
+breaks a long chained flow into readable stages.
+Pair it with the masking filter above so attached payloads are redacted.
+@Epic("Banking Core")
+@Feature("Fund Transfer")
+@Severity(SeverityLevel.BLOCKER)
+@Story("Customer transfers between own accounts")
+public class TransferApiTest extends BaseApiTest {
+    @Test(description = "Balances update correctly after transfer")
+    public void transfer_validAmount_updatesBothBalances() { ... }
+}
+Q27. BEHAVIOURAL: Describe a time you had to deliver testing under an unrealistic
+deadline.
+
+===== PAGE 21 =====
+REST Assured API Automation - SDET Interview Q&A
+Page 21
+This assesses prioritisation and whether you communicate risk rather than silently absorbing it.
+A strong answer shows you did not simply work longer hours or quietly cut corners. Instead: you assessed
+what carried the most risk, automated the highest-value paths first, were explicit about what would not be
+covered, and put that in writing so the decision to ship was an informed business decision rather than an
+accident.
+Good closing detail: what you did afterwards to repay the gap — backfilling coverage in the following sprint
+rather than leaving the debt permanent.
+What to avoid: presenting yourself as the hero who tested everything anyway. Senior interviewers are
+listening for risk communication, not heroics.
+Q28. BEHAVIOURAL: Tell me about a production incident where testing was questioned.
+This is really about blameless analysis and systemic thinking.
+Structure: what happened and the user impact, how it was contained, then the genuinely interesting part
+— why the existing tests did not catch it. Common honest answers: the scenario was outside the tested
+data set, an integration point was mocked and reality differed, or the defect was environmental rather than
+functional.
+Then describe the systemic fix, not just the one test: a regression test reproducing the exact defect, plus
+whatever class of gap it revealed (contract validation, a missing negative case, environment parity).
+The tone that reads as senior is a lack of defensiveness — treating it as a system failure to learn from
+rather than apportioning blame, including toward yourself.
+Q29. What would you improve about your current framework if you had more time?
+An extremely common closing question. Answering 'nothing' reads as either inexperienced or incurious.
+Credible answers, each showing awareness of a real limitation:
+ Contract testing against the OpenAPI specification, so provider drift is caught automatically rather than
+by a failing functional test
+ Better test data management — an on-demand data factory rather than partly-shared fixtures
+ Reduced reliance on a shared environment, using containerised dependencies for isolation
+ Performance assertions baselined over time rather than fixed thresholds
+ Mutation testing to check the assertions themselves are meaningful
+Pick one you genuinely understand and can discuss in depth. A shallow buzzword answer here is worse
+than a simple honest one.
+RAPID FIRE — one-liners
+1. Which is faster and why — API or UI
+automation?
+API, by roughly an order of magnitude. No browser
+launch, no page rendering, no waiting for elements.
+2. Is PUT idempotent? Is POST?
+PUT yes, POST no. Repeating a POST /transfer could
+move money twice.
+
+===== PAGE 22 =====
+REST Assured API Automation - SDET Interview Q&A
+Page 22
+3. What is the difference between 401 and
+403?
+401 — not authenticated (who are you?). 403 —
+authenticated but not permitted.
+4. What does .extract() do in REST
+Assured?
+Bridges validation to usage — pulls the response out so
+values can feed subsequent requests. Must be assigned
+to a variable.
+5. What does @DataProvider give you?
+TestNG data-driven testing — one test method executed
+with multiple data sets.
+6. Serialization vs deserialization in one
+line each?
+Serialization: Java object to JSON for the request.
+Deserialization: JSON response to Java object.
+7. Why use spec builders?
+Common request/response setup defined once and
+reused — the API equivalent of a BasePage.
+8. What does JSON schema validation
+catch that value assertions miss?
+Structural contract breaks — a field removed, renamed, or
+changing data type, even when the endpoint still returns
+200.
+9. Why should money never be a double?
+Floating point cannot represent decimal fractions exactly;
+use BigDecimal with compareTo.
+10. What does GPath findAll do?
+Filters a collection inside the response, e.g. findAll {
+it.balance < 0 } returns overdrawn accounts.
+11. What does 202 Accepted mean, and
+why is it a testing trap?
+The request was queued, not completed. Asserting 202
+alone does not prove the operation succeeded.
+12. What is a REST Assured filter?
+An interceptor applied to every request and response -
+used for auth, logging, PII masking and reporting.
+13. Why is logging full response bodies
+risky in banking?
+Payloads contain PII such as SSN and card data, which
+then leak into CI logs and report artifacts.
+14. BigDecimal equals vs compareTo?
+equals also compares scale, so 100.0 and 100.00 are
+unequal; compareTo returns 0 as expected.
+15. What is WireMock used for?
+Stubbing third-party services so failure paths - timeouts,
+declines, outages - can be tested on demand.
+16. What is the classic pagination defect?
+Duplicates or gaps across page boundaries caused by an
+unstable sort order.
+
+===== PAGE 23 =====
+REST Assured API Automation - SDET Interview Q&A
+Page 23
+PART 3 — Practice Tests
+5 tests  10 questions each  increasing difficulty
+Answer without looking anything up, then check against the key at the end. Tests 1–2 are easy, 3–4 medium, and
+Test 5 covers hard real-world scenarios.
+Practice Test 1 - Fundamentals (Easy)
+Q1. Which HTTP method is used to retrieve data without changing server state?
+A) POST
+B) GET
+C) PUT
+D) DELETE
+Q2. What does status code 201 indicate?
+A) Request succeeded
+B) Resource created successfully
+C) Bad request
+D) Unauthorized
+Q3. In the REST Assured chain below, where is the HTTP method specified?
+given()
+    .queryParam("key", "abc123")
+.when()
+    .get("/accounts/13344")
+.then()
+    .statusCode(200);
+A) In given()
+B) In the .body() call
+C) In .when().get(...)
+D) In .then()
+Q4. Which block of the given/when/then syntax contains request headers and body?
+A) given()
+B) when()
+C) then()
+D) extract()
+Q5. BANKING: An API call to fetch a customer's account balance should use which method?
+A) POST
+B) GET
+C) PUT
+D) PATCH
+Q6. What will the following code print if the response array has 11 elements?
+JsonPath js = response.jsonPath();
+System.out.println(js.getList("$").size());
+A) 11
+
+===== PAGE 24 =====
+REST Assured API Automation - SDET Interview Q&A
+Page 24
+B) 10
+C) 0
+D) Compilation error
+Q7. Which status code means the client is not authenticated?
+A) 400
+B) 401
+C) 403
+D) 404
+Q8. What is the default data format REST Assured expects when ContentType.JSON is set?
+A) XML
+B) JSON
+C) HTML
+D) Plain text
+Q9. BANKING: A fund transfer request that creates a new transaction record should use:
+A) GET
+B) POST
+C) HEAD
+D) OPTIONS
+Q10. What does this line extract?
+int value = response.jsonPath().getInt("[0].id");
+A) The whole response
+B) The first account's id
+C) All account ids
+D) The array size
+Practice Test 2 - Core Concepts (Easy)
+Q1. Which annotation runs once before all tests in the entire suite?
+A) @BeforeMethod
+B) @BeforeClass
+C) @BeforeSuite
+D) @BeforeTest
+Q2. What is the purpose of .log().all() placed after then()?
+A) Logs the request
+B) Logs the response
+C) Logs both
+D) Disables logging
+Q3. Which Hamcrest matcher asserts a field is not null?
+A) isNotNull()
+B) notNullValue()
+C) hasValue()
+D) exists()
+
+===== PAGE 25 =====
+REST Assured API Automation - SDET Interview Q&A
+Page 25
+Q4. What is wrong with the code below?
+given()
+    .spec(requestSpec())
+.when()
+    .get("GET /customers/12212/accounts")
+.then()
+    .statusCode(200);
+A) Missing then() block
+B) The HTTP verb is inside the URL string
+C) queryParam is misspelled
+D) Nothing is wrong
+Q5. A path parameter is used to:
+A) Filter results
+B) Identify a specific resource in the URL
+C) Set the content type
+D) Authenticate the request
+Q6. BANKING: Which is the correct assertion to verify a savings account type?
+A) assertEquals(type)
+B) .body("type", equalTo("SAVINGS"))
+C) .body("SAVINGS")
+D) .type("SAVINGS")
+Q7. What does this code do?
+List<Integer> ids = response.jsonPath().getList("id");
+A) Prints all account types
+B) Puts every element's id into a List
+C) Returns the array size
+D) Throws an exception
+Q8. Which status code family indicates a server-side error?
+A) 2xx
+B) 3xx
+C) 4xx
+D) 5xx
+Q9. BANKING: A transfer API returns 200 OK but the body contains status FAILED. The test
+asserts only the status code. What happens?
+A) The test fails correctly
+B) The test passes incorrectly
+C) The test errors out
+D) REST Assured auto-detects the failure
+Q10. What must you do with the result of .extract().response().asString()?
+A) Nothing, it prints automatically
+B) Assign it to a variable to use it
+C) Pass it to then()
+D) Call .log() on it
+
+===== PAGE 26 =====
+REST Assured API Automation - SDET Interview Q&A
+Page 26
+Practice Test 3 - Framework Level (Medium)
+Q1. Which REST Assured feature bundles base URI, headers and content type for reuse
+across tests?
+A) ResponseSpecification
+B) RequestSpecBuilder
+C) JsonPath
+D) Filter
+Q2. What does the code below achieve?
+.then()
+  .assertThat()
+  .body(matchesJsonSchemaInClasspath("account-schema.json"));
+A) Validates response values
+B) Validates the response structure and data types
+C) Logs the schema
+D) Serializes the response
+Q3. BANKING: To properly verify a fund transfer moved money, you must:
+A) Assert status code 200 only
+B) Assert the response body says SUCCESS
+C) Read balances before and after and assert the exact deltas
+D) Check the transfer endpoint returns quickly
+Q4. Which is the correct way to send a POJO as a JSON request body?
+A) .body(pojo.toString())
+B) .body(pojo)
+C) .jsonBody(pojo)
+D) .serialize(pojo)
+Q5. In parallel execution, why is RestAssured.baseURI risky?
+A) It is slower
+B) It is global mutable state shared across threads
+C) It does not support HTTPS
+D) It cannot be read from config
+Q6. What does this deserialization produce?
+Account account = response.as(Account.class);
+System.out.println(account.getBalance());
+A) A JSON string
+B) A typed Account object with getters
+C) A JsonPath object
+D) A Map
+Q7. BANKING: What does the GPath expression below return?
+List<Integer> result =
+    js.getList("findAll { it.balance < 0 }.id");
+
+===== PAGE 27 =====
+REST Assured API Automation - SDET Interview Q&A
+Page 27
+A) The total balance
+B) The ids of all overdrawn accounts
+C) The number of accounts
+D) The first account id
+Q8. BANKING: A test asserts a balance of 1000 but fails intermittently. The most likely root
+cause is:
+A) Network latency
+B) Another test mutating the same shared account
+C) Wrong status code
+D) Missing content-type header
+Q9. What is the primary advantage of a service/endpoint layer in an API framework?
+A) Faster execution
+B) Endpoint URLs live in one place instead of scattered across tests
+C) Automatic retries
+D) Built-in reporting
+Q10. Which assertion validates response time?
+A) .responseTime(2000)
+B) .time(lessThan(2000L))
+C) .duration(2000)
+D) .timeout(2000)
+Practice Test 4 - Design & Strategy (Medium)
+Q1. What does .log().ifValidationFails() provide over .log().all()?
+A) More detail
+B) Logs only when an assertion fails, keeping CI logs clean
+C) Faster execution
+D) Logs to a file
+Q2. BANKING: Testing that customer A cannot access customer B's account via the API tests
+for:
+A) Performance
+B) Insecure Direct Object Reference (authorisation flaw)
+C) Schema compliance
+D) Idempotency
+Q3. What problem does the code below have in a long-running regression suite?
+@BeforeSuite
+public void setup() {
+    token = fetchAuthToken();
+}
+A) Syntax error
+B) The token may expire mid-suite
+C) It is too slow
+D) It cannot be reused
+
+===== PAGE 28 =====
+REST Assured API Automation - SDET Interview Q&A
+Page 28
+Q4. Which TestNG configuration runs test methods in parallel across 5 threads?
+A) parallel="tests" thread-count="5"
+B) parallel="methods" thread-count="5"
+C) parallel="true" threads="5"
+D) concurrent="5"
+Q5. A response changes a field from a number to a string, but still returns 200. What catches
+this?
+A) Status code assertion
+B) Response time assertion
+C) JSON schema validation
+D) Logging
+Q6. BANKING: Which negative test is MOST important for a transfer API?
+A) Transferring a valid amount
+B) Transferring with insufficient funds
+C) Fetching the balance
+D) Logging in successfully
+Q7. BANKING: Your framework logs full response bodies containing SSN and card numbers.
+This is primarily:
+A) A performance problem
+B) A data-protection/compliance breach
+C) A formatting issue
+D) Acceptable in test environments
+Q8. You must test how your service behaves when a third-party payment gateway times out.
+The best approach is:
+A) Wait for a real outage
+B) Stub the gateway with WireMock returning a delayed 503
+C) Skip the scenario
+D) Increase your own timeout
+Q9. What does this code demonstrate?
+int accountId = response.jsonPath().getInt("[0].id");
+given().spec(requestSpec())
+.when().get("/accounts/" + accountId + "/transactions")
+.then().statusCode(200);
+A) Serialization
+B) Chaining - capturing a value to feed the next request
+C) Schema validation
+D) Parallel execution
+Q10. Which is the strongest test data strategy for a shared banking test environment?
+A) Hardcoded account IDs
+B) A fixed seed account shared by all tests
+C) Each test creates and owns the data it asserts on
+D) Reading IDs from a text file
+
+===== PAGE 29 =====
+REST Assured API Automation - SDET Interview Q&A
+Page 29
+Practice Test 5 - Real-World Scenarios (Hard)
+Q1. Under parallel execution, twenty threads simultaneously detect an expired token and all
+trigger a refresh. The best fix is:
+A) Increase token lifetime
+B) Synchronise the refresh so only one thread fetches while others wait
+C) Disable parallel execution
+D) Retry each request three times
+Q2. BANKING: A payment API is called twice due to a network retry, moving money twice.
+Which mechanism prevents this?
+A) Rate limiting
+B) Idempotency keys on the request
+C) Schema validation
+D) Response time assertions
+Q3. What is the subtle defect in this verification approach?
+double after = accountService.getAccount(id).getBalance();
+Assert.assertTrue(after == before - 100.00);
+A) Syntax error
+B) Floating-point comparison without a delta tolerance
+C) Wrong HTTP method
+D) Missing status assertion
+Q4. In a microservices estate, a provider changes a response field and breaks three unaware
+consumers. Which practice would have caught this?
+A) Higher UI coverage
+B) Consumer-driven contract testing (e.g. Pact)
+C) Longer timeouts
+D) More parallel threads
+Q5. BANKING: A transfer test passes in isolation but fails when the suite runs in parallel. The
+MOST likely cause is:
+A) Insufficient thread count
+B) Tests sharing the same account and mutating its balance
+C) Slow network
+D) Incorrect base URI
+Q6. What does this test fail to verify, despite appearing thorough?
+transactionService.transfer(fromId, toId, 100.00)
+    .then()
+    .statusCode(200)
+    .body("status", equalTo("SUCCESS"))
+    .time(lessThan(2000L));
+A) The status code
+B) That the money actually moved - no state re-read
+C) The content type
+D) The response time
+
+===== PAGE 30 =====
+REST Assured API Automation - SDET Interview Q&A
+Page 30
+Q7. BANKING: Why does the assertion below fail even when the balances are logically equal?
+BigDecimal actual   = new BigDecimal("100.00");
+BigDecimal expected = new BigDecimal("100.0");
+Assert.assertTrue(actual.equals(expected));
+A) Wrong method name
+B) BigDecimal equals also compares scale, so 100.0 != 100.00
+C) BigDecimal cannot be compared
+D) The delta is missing
+Q8. BANKING: Which combination gives the strongest guarantee that a bill payment
+succeeded?
+A) 200 status only
+B) 200 status plus response body status field
+C) 200, body status, source balance decrease, and a matching ledger entry
+D) Response time under 2 seconds
+Q9. BANKING: A payment API returns 202 Accepted with a reference. The test asserts 202 and
+passes. What is missing?
+A) Response time assertion
+B) Confirmation that the payment reached a terminal settled state
+C) The content-type header
+D) A schema check
+Q10. A suite fails randomly roughly 15% of the time. The team has begun ignoring failures.
+The FIRST action should be:
+A) Add retries to all tests
+B) Delete the flaky tests
+C) Measure and quantify which tests fail intermittently and why
+D) Increase all wait times
+
+===== PAGE 31 =====
+REST Assured API Automation - SDET Interview Q&A
+Page 31
+Answer Key
+All five practice tests
+Practice Test 1 - Fundamentals (Easy)
+Q1
+Q2
+Q3
+Q4
+Q5
+Q6
+Q7
+Q8
+Q9
+Q10
+ B
+ B
+ C
+ A
+ B
+ A
+ B
+ B
+ B
+ B
+Practice Test 2 - Core Concepts (Easy)
+Q1
+Q2
+Q3
+Q4
+Q5
+Q6
+Q7
+Q8
+Q9
+Q10
+ C
+ B
+ B
+ B
+ B
+ B
+ B
+ D
+ B
+ B
+Practice Test 3 - Framework Level (Medium)
+Q1
+Q2
+Q3
+Q4
+Q5
+Q6
+Q7
+Q8
+Q9
+Q10
+ B
+ B
+ C
+ B
+ B
+ B
+ B
+ B
+ B
+ B
+Practice Test 4 - Design & Strategy (Medium)
+Q1
+Q2
+Q3
+Q4
+Q5
+Q6
+Q7
+Q8
+Q9
+Q10
+ B
+ B
+ B
+ B
+ C
+ B
+ B
+ B
+ B
+ C
+Practice Test 5 - Real-World Scenarios (Hard)
+Q1
+Q2
+Q3
+Q4
+Q5
+Q6
+Q7
+Q8
+Q9
+Q10
+ B
+ B
+ B
+ B
+ B
+ B
+ B
+ C
+ B
+ C

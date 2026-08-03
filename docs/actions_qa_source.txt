@@ -1,0 +1,460 @@
+
+===== PAGE 1 =====
+Actions Class (Hover, Drag-Drop)
+ Interview Questions & Answers
+ Week 2 | Selenium Java Automation | SDET Study Plan
+DOCUMENT STRUCTURE
+PART 1 — Fundamentals (Blue Level) | All experience levels
+PART 2 — Senior / Framework Level (Red Level) | 4+ yrs, ■18-22 LPA targeting
+    Framework design, edge cases, parallel execution, banking scenarios, behavioral, rapid fire
+PART 3 — Practice Tests (Green Level) | 5 tests with full code
+
+===== PAGE 2 =====
+PART 1 — FUNDAMENTALS
+ Blue Level | All Experience Levels
+Basics & Core Concepts
+Q1. What is the Actions class in Selenium? When would you use it instead of WebElement
+methods?
+A: The Actions class (org.openqa.selenium.interactions.Actions) provides an API for complex
+user interactions that go beyond simple click() and sendKeys(). You use it for hover effects, double-click,
+right-click, drag-and-drop, keyboard shortcuts, and scroll operations. Regular WebElement methods can
+only do basic click and type — anything involving mouse movement, modifier keys, or composite gestures
+requires Actions.
+Q2. How do you create an Actions object?
+A: You instantiate it by passing the WebDriver instance: Actions actions = new
+Actions(driver); — the driver reference is mandatory because Actions internally uses the driver to
+send commands to the browser.
+Q3. Explain the Builder Pattern in Actions class. What is method chaining?
+A: Actions uses the Builder Pattern — each method (moveToElement, click, sendKeys, etc.) returns the
+same Actions object, allowing you to chain multiple actions in a single fluent statement. The chain is
+queued internally and only executed when you call .perform(). Example:
+actions.moveToElement(el).click().sendKeys("text").perform();
+Q4. What is the difference between build() and perform()?
+A: perform() builds and executes the action sequence immediately — this is what you use 99% of the
+time. build() returns an Action (singular) object without executing, letting you store it and call
+action.perform() later. Note: Actions (plural) is the builder class; Action (singular) is the interface
+returned by build().
+Q5. What happens if you forget to call .perform() at the end of an action chain?
+A: Nothing happens — no error is thrown, no exception is raised, but the actions are never executed. The
+chain is silently queued and discarded. This is the #1 most common Actions class mistake.
+Mouse Actions
+Q6. How do you perform a hover (mouseover) action in Selenium?
+A: Use actions.moveToElement(element).perform(); — this moves the mouse cursor to the
+center of the element, triggering CSS :hover effects and JavaScript mouseover event listeners. It's
+essential for testing dropdown menus that appear on hover.
+Q7. How do you handle multi-level nested hover menus (e.g., Accounts → Savings →
+Statement)?
+A: You hover on each level sequentially, adding an explicit wait between each hover for the sub-menu to
+become visible: hover on parent → wait for child to be visible → hover on child → wait for grandchild →
+click. Without waits between hovers, you'll get NoSuchElementException because the sub-menu hasn't
+rendered yet.
+Q8. What is moveToElement(element, xOffset, yOffset)? When would you use it?
+
+===== PAGE 3 =====
+A: It moves the mouse to an element offset from its center by the given x and y pixels. Use it for sliders
+(move to specific position), canvas elements (click precise coordinates), or custom UI controls where the
+clickable area isn't the element center.
+Q9. How do you perform a double-click in Selenium?
+A: actions.doubleClick(element).perform(); — commonly used when a UI requires
+double-click to enter edit mode, like double-clicking a table cell to edit transaction remarks in a banking
+app.
+Q10. How do you perform a right-click (context click)?
+A: actions.contextClick(element).perform(); — this triggers the browser's context menu or a
+custom right-click menu. After the context click, use regular findElement/click to select an option from the
+context menu.
+Q11. Explain clickAndHold() and release() methods.
+A: clickAndHold(element) presses the mouse button down on an element without releasing it.
+release() releases the held mouse button. Together they form the building blocks of manual
+drag-and-drop: clickAndHold(source) → moveToElement(target) → release().
+Drag and Drop
+Q12. What are the three approaches for drag-and-drop in Selenium?
+A: (1) actions.dragAndDrop(source, target).perform() — simplest, both are WebElements.
+(2) actions.dragAndDropBy(source, xOffset, yOffset).perform() — drag by pixel offset, for
+sliders. (3) Manual:
+actions.clickAndHold(source).moveToElement(target).release().perform() — most
+reliable, works even when approach 1 fails.
+Q13. Why does dragAndDrop() sometimes fail on modern web applications?
+A: Many modern apps use the HTML5 Drag-and-Drop API which fires specific events (dragstart, dragover,
+dragenter, drop, dragend). Selenium's built-in dragAndDrop() doesn't always trigger these HTML5 events
+correctly. The manual clickAndHold → moveToElement → release sequence or a JavaScript workaround is
+needed.
+Q14. When would you use dragAndDropBy() instead of dragAndDrop()?
+A: When there's no target WebElement — like dragging a slider handle by 100 pixels to the right, or moving
+an element on a canvas to a specific position. You specify pixel offsets:
+actions.dragAndDropBy(slider, 100, 0).perform();
+Keyboard Actions
+Q15. How do you simulate Ctrl+A (Select All) using Actions class?
+A: actions.keyDown(Keys.CONTROL).sendKeys("a").keyUp(Keys.CONTROL).perform(); —
+keyDown presses the Ctrl key, sendKeys presses 'a' while Ctrl is held, keyUp releases Ctrl. Always pair
+keyDown with keyUp.
+Q16. What happens if you forget to call keyUp() after keyDown()?
+A: The modifier key (Ctrl/Shift/Alt) remains pressed for all subsequent actions in the session. This causes
+bizarre failures — every subsequent click becomes Ctrl+Click, every sendKeys becomes Shift+sendKeys,
+etc. It's a very hard-to-debug issue.
+Q17. How is Actions.sendKeys() different from WebElement.sendKeys()?
+
+===== PAGE 4 =====
+A: WebElement.sendKeys() types into a specific element. Actions.sendKeys() sends keys to whichever
+element currently has focus (or to the active element). Actions.sendKeys(element, keys) first focuses the
+element, then types — similar to WebElement.sendKeys() but allows chaining with other actions.
+Q18. How do you simulate Tab key navigation through form fields?
+A: actions.sendKeys(Keys.TAB).sendKeys("value1").sendKeys(Keys.TAB).sendKeys("v
+alue2").perform(); — each TAB moves focus to the next field, and sendKeys types into the newly
+focused field. Useful for testing form tab order.
+
+===== PAGE 5 =====
+PART 2 — SENIOR / FRAMEWORK LEVEL
+ Red Level | 4+ Years Experience | ■18-22 LPA Targeting
+Framework Design & Architecture
+Q19. How would you design a reusable Actions utility class in your test framework?
+A: Create an ActionUtils class that encapsulates common patterns: hoverAndClick(parent,
+childLocator) with built-in waits, safeDragAndDrop(src, tgt) using manual sequence,
+doubleClickAndType(el, text), keyboardShortcut(modifier, key). Initialize it with
+WebDriver in constructor. This avoids raw Actions chains scattered across test classes, improves
+readability, and centralizes wait strategies.
+Q20. How do you handle flaky hover tests in CI/CD (headless Chrome)?
+A: Headless browsers have known issues with hover events. Strategies: (1) Add explicit waits after hover
+for element visibility. (2) Use pause(Duration) in the chain for CSS transition timing. (3) As a fallback,
+use JavaScriptExecutor to dispatch mouseover events directly:
+js.executeScript("arguments[0].dispatchEvent(new MouseEvent('mouseover',
+{bubbles: true}));", element). (4) Set window size explicitly in headless mode — some hover
+menus break at small viewport sizes.
+Q21. How do you handle Actions class in parallel test execution?
+A: The Actions object is tied to a specific WebDriver instance, so it's inherently thread-safe IF each thread
+has its own driver. In frameworks using ThreadLocal<WebDriver>, create a new Actions instance per test
+method or per page object — never share an Actions object across threads. If using a utility class, pass the
+driver from ThreadLocal in the constructor.
+Q22. When all three drag-and-drop approaches fail, what's your escalation strategy?
+A: Escalation ladder: (1) Try manual clickAndHold→moveToElement→release. (2) Add intermediate
+moveToElement steps with pause. (3) Use JavaScript to simulate HTML5 DnD events (DataTransfer object
++ dispatchEvent for dragstart/dragover/drop). (4) If it's an Angular/React app with custom DnD, inspect the
+framework's event handlers and trigger them directly via JS. (5) As absolute last resort, use Robot class for
+OS-level mouse control — but this doesn't work in headless mode.
+Edge Cases & Tricky Scenarios
+Q23. How do you handle tooltip verification using Actions class?
+A: Hover on the element: actions.moveToElement(infoIcon).perform(), then wait for tooltip to
+become visible, then verify its text. Key considerations: (1) Tooltip may be a title attribute (use getAttribute),
+a separate div (use findElement after hover), or a custom component (may need to wait for animation). (2)
+In banking apps, tooltips often show sensitive info like masked account numbers — verify masking rules
+too.
+Q24. What is MoveTargetOutOfBoundsException? How do you fix it?
+A: Thrown when moveToElement targets an element outside the browser viewport. Fix: scroll to the
+element first using actions.scrollToElement(el).perform() (Selenium 4+) or
+JavaScriptExecutor's scrollIntoView. In responsive banking apps, elements may shift positions at different
+viewport sizes — always scroll before hover in framework utility methods.
+Q25. How do you test a slider component (e.g., loan EMI calculator) accurately?
+
+===== PAGE 6 =====
+A: Calculate the pixel offset: get slider track width, determine the percentage you want (e.g., 60%),
+compute xOffset = trackWidth * 0.6. Use dragAndDropBy(sliderHandle, xOffset, 0). For
+validation: after dragging, read the displayed value and assert. Edge cases: test min boundary (0%), max
+boundary (100%), and snap-to-step behavior if the slider has discrete steps.
+Q26. How do you verify that a context menu option is disabled (grayed out)?
+A: After contextClick, locate the menu option element. Check: (1) element.isEnabled() returns false,
+(2) element has a 'disabled' class or aria-disabled='true' attribute, (3) element's CSS opacity or color
+indicates disabled state. In banking: some context menu options like 'Delete Transaction' should be
+disabled for completed/settled transactions.
+Banking Domain Scenarios
+Q27. Describe how you'd automate a fund transfer workflow that involves hover menus, form tab
+navigation, and OTP entry.
+A: Step-by-step: (1) Hover on 'Payments' menu → wait → click 'Fund Transfer'. (2) Tab through form:
+sendKeys(TAB) for Account Number → IFSC → Amount → Remarks. (3) Click 'Proceed' → handle
+confirmation dialog. (4) For OTP: switch to OTP input, type OTP, submit. Framework approach: wrap
+hover-navigation in a NavigationHelper, form filling in a FormFiller utility, OTP in an OTPHandler — all
+using Actions internally. Add retries for hover flakiness.
+Q28. How would you test drag-and-drop reordering of dashboard widgets in a banking app?
+A: Test approach: (1) Capture initial widget order via list of element texts. (2) Drag widget A to widget B's
+position using manual clickAndHold→moveToElement→release. (3) Verify new order by re-reading widget
+texts. (4) Verify persistence — refresh page, confirm order is saved. (5) Edge cases: drag to same position
+(no change), drag first to last, drag to invalid drop zone (verify rejection). (6) In CI: add pause between
+clickAndHold and moveToElement for rendering.
+Behavioral & Scenario Questions
+Q29. Tell me about a time you dealt with a flaky test caused by Actions class.
+A: Structure: STAR format. Example: 'In our banking app, a hover-based account navigation test was
+failing intermittently in CI but passing locally. Root cause: headless Chrome wasn't triggering mouseover
+events consistently. Fix: I added explicit waits after each moveToElement, implemented a retry mechanism
+in our ActionUtils.hoverAndClick(), and as a fallback added JavaScript dispatchEvent for mouseover.
+Result: test reliability went from 70% to 99.5% in CI pipeline.'
+Q30. How do you decide whether to use Actions class or JavaScriptExecutor for a given
+interaction?
+A: Actions class simulates real user behavior — mouse movements, keyboard presses, event sequences
+— and should be the default choice because it tests the actual user experience. JavaScriptExecutor
+bypasses the browser's event system and directly manipulates the DOM. Use JS only when Actions fails
+(HTML5 DnD, headless hover issues) or for interactions Selenium doesn't support (scroll within a specific
+container, trigger custom framework events). Document every JS workaround as tech debt.
+Rapid Fire
+Q31. What package is Actions in?
+A: org.openqa.selenium.interactions.Actions
+
+===== PAGE 7 =====
+Q32. Actions vs Action?
+A: Actions (plural) = builder class. Action (singular) = interface from build()
+Q33. Default target of moveToElement?
+A: Center of the element
+Q34. Does perform() reset the action chain?
+A: Yes — after perform(), the internal queue is cleared
+Q35. Can you chain multiple perform() calls?
+A: No — each chain needs its own perform(). Start a new chain after perform()
+Q36. Selenium 4 scroll method?
+A: actions.scrollToElement(element).perform()
+Q37. How to add a pause in action chain?
+A: actions.pause(Duration.ofMillis(500)) — Selenium 4+
+Q38. What's the fallback for hover in headless?
+A: JavaScriptExecutor: dispatchEvent(new MouseEvent('mouseover'))
+Q39. Does Actions work with RemoteWebDriver?
+A: Yes — all Actions commands are sent via W3C WebDriver protocol
+Q40. Release without clickAndHold?
+A: Throws no error but has no effect — release is a no-op if nothing is held
+
+===== PAGE 8 =====
+PART 3 — PRACTICE TESTS
+ Green Level | 5 Tests with Full Code | Based on Your Framework
+Test 1: Hover and Click Sub-Menu
+Scenario: Hover on a parent menu, wait for sub-menu to appear, click the sub-menu item, and verify
+navigation.
+Site: https://the-internet.herokuapp.com/hovers
+package week2.seleniumcore;
+import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.*;
+import org.testng.Assert;
+import org.testng.annotations.Test;
+import java.time.Duration;
+public class ActionsHoverTest extends BaseTest {
+@Test
+public void testHoverRevealsUserProfile() {
+driver.get("https://the-internet.herokuapp.com/hovers");
+Actions actions = new Actions(driver);
+WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+// Locate the first figure (user avatar)
+WebElement figure = driver.findElement(
+By.cssSelector(".figure:nth-child(3)"));
+// Hover to reveal hidden profile info
+actions.moveToElement(figure).perform();
+// Wait for the caption to become visible
+WebElement caption = wait.until(
+ExpectedConditions.visibilityOfElementLocated(
+By.cssSelector(".figure:nth-child(3) .figcaption")));
+// Verify profile name is displayed
+String profileName = caption.findElement(By.tagName("h5")).getText();
+Assert.assertTrue(profileName.contains("user"),
+"Profile name should be visible after hover");
+// Click the profile link
+WebElement profileLink = caption.findElement(By.tagName("a"));
+profileLink.click();
+// Verify navigation
+Assert.assertTrue(driver.getCurrentUrl().contains("/users/"),
+"Should navigate to user profile page");
+}
+}
+
+===== PAGE 9 =====
+Test 2: Drag and Drop
+Scenario: Drag element A onto element B and verify the drop was successful. Tests both built-in
+dragAndDrop() and manual fallback.
+Site: https://the-internet.herokuapp.com/drag_and_drop
+package week2.seleniumcore;
+import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.Actions;
+import org.testng.Assert;
+import org.testng.annotations.Test;
+public class ActionsDragDropTest extends BaseTest {
+@Test
+public void testDragAndDropManualSequence() {
+driver.get("https://the-internet.herokuapp.com/drag_and_drop");
+Actions actions = new Actions(driver);
+WebElement colA = driver.findElement(By.id("column-a"));
+WebElement colB = driver.findElement(By.id("column-b"));
+// Verify initial state
+Assert.assertEquals(colA.getText(), "A");
+Assert.assertEquals(colB.getText(), "B");
+// Manual drag-and-drop (most reliable approach)
+actions.clickAndHold(colA)
+.moveToElement(colB)
+.release()
+.perform();
+// If manual fails on HTML5 DnD, use JS fallback:
+// This site uses HTML5 DnD, so JS is needed
+String jsScript = "function dnd(s,t){var dt=new DataTransfer();"
++ "s.dispatchEvent(new DragEvent('dragstart',{dataTransfer:dt}));"
++ "t.dispatchEvent(new DragEvent('drop',{dataTransfer:dt}));"
++ "s.dispatchEvent(new DragEvent('dragend',{dataTransfer:dt}));}"
++ "dnd(arguments[0],arguments[1]);";
+((JavascriptExecutor) driver).executeScript(jsScript, colA, colB);
+// Verify swap: A should now be in column-b position
+colA = driver.findElement(By.id("column-a"));
+colB = driver.findElement(By.id("column-b"));
+Assert.assertEquals(colA.getText(), "B",
+"Column A should now contain B after drag");
+Assert.assertEquals(colB.getText(), "A",
+"Column B should now contain A after drag");
+}
+}
+
+===== PAGE 10 =====
+Test 3: Context Click (Right-Click)
+Scenario: Right-click on an element, handle the context menu / JS alert that appears.
+Site: https://the-internet.herokuapp.com/context_menu
+package week2.seleniumcore;
+import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.*;
+import org.testng.Assert;
+import org.testng.annotations.Test;
+import java.time.Duration;
+public class ActionsContextClickTest extends BaseTest {
+@Test
+public void testContextClickTriggersAlert() {
+driver.get("https://the-internet.herokuapp.com/context_menu");
+Actions actions = new Actions(driver);
+WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+// Locate the hot-spot area
+WebElement hotSpot = driver.findElement(By.id("hot-spot"));
+// Right-click on it
+actions.contextClick(hotSpot).perform();
+// Handle the JS alert that appears
+Alert alert = wait.until(ExpectedConditions.alertIsPresent());
+String alertText = alert.getText();
+Assert.assertEquals(alertText,
+"You selected a context menu",
+"Alert text should match expected message");
+alert.accept();
+// Verify page is still intact after dismissing alert
+Assert.assertTrue(hotSpot.isDisplayed(),
+"Hot-spot should still be visible");
+}
+}
+
+===== PAGE 11 =====
+Test 4: Slider (dragAndDropBy with Offset)
+Scenario: Drag a horizontal slider to a specific value using pixel offset and verify the displayed value
+changes.
+Site: https://the-internet.herokuapp.com/horizontal_slider
+package week2.seleniumcore;
+import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.*;
+import org.testng.Assert;
+import org.testng.annotations.Test;
+import java.time.Duration;
+public class ActionsSliderTest extends BaseTest {
+@Test
+public void testSliderDragByOffset() {
+driver.get("https://the-internet.herokuapp.com/horizontal_slider");
+Actions actions = new Actions(driver);
+WebElement slider = driver.findElement(
+By.cssSelector("input[type='range']"));
+WebElement output = driver.findElement(By.id("range"));
+// Get initial value
+String initialValue = output.getText();
+Assert.assertEquals(initialValue, "0",
+"Slider should start at 0");
+// Approach 1: Drag by pixel offset
+actions.clickAndHold(slider)
+.moveByOffset(50, 0) // move 50px right
+.release()
+.perform();
+// Verify value changed
+String newValue = output.getText();
+Assert.assertNotEquals(newValue, "0",
+"Slider value should change after drag");
+// Approach 2: Use keyboard arrows for precise control
+slider.click(); // Focus the slider
+for (int i = 0; i < 10; i++) {
+slider.sendKeys(Keys.ARROW_RIGHT);
+}
+// Verify slider reached max value
+String finalValue = output.getText();
+Assert.assertEquals(finalValue, "5",
+"Slider should reach max value 5");
+}
+}
+
+===== PAGE 12 =====
+Test 5: Composite — Keyboard Shortcuts + Double-Click
+Scenario: Use keyboard shortcuts (Ctrl+A, typing) and double-click to interact with key/value editing.
+Site: https://the-internet.herokuapp.com/key_presses + /add_remove_elements
+Test 5a: Keyboard Shortcuts & Key Detection
+
+===== PAGE 13 =====
+package week2.seleniumcore;
+import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.*;
+import org.testng.Assert;
+import org.testng.annotations.Test;
+import java.time.Duration;
+public class ActionsCompositeTest extends BaseTest {
+@Test
+public void testKeyboardShortcutsAndKeyDetection() {
+driver.get("https://the-internet.herokuapp.com/key_presses");
+Actions actions = new Actions(driver);
+WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+WebElement input = driver.findElement(By.id("target"));
+WebElement result = driver.findElement(By.id("result"));
+// Test 1: Type text using Actions sendKeys
+actions.click(input)
+.sendKeys("Hello")
+.perform();
+Assert.assertTrue(result.getText().contains("You entered"),
+"Should detect key press");
+// Test 2: Select All (Ctrl+A)
+actions.keyDown(Keys.CONTROL)
+.sendKeys("a")
+.keyUp(Keys.CONTROL)
+.perform();
+// Test 3: Type replacement text (overwrites selection)
+actions.sendKeys(input, "Banking SDET").perform();
+// Test 4: Press special keys and verify detection
+actions.sendKeys(Keys.ENTER).perform();
+Assert.assertTrue(
+result.getText().contains("ENTER"),
+"Should detect ENTER key");
+actions.sendKeys(Keys.ESCAPE).perform();
+Assert.assertTrue(
+result.getText().contains("ESCAPE"),
+"Should detect ESCAPE key");
+actions.sendKeys(Keys.TAB).perform();
+Assert.assertTrue(
+result.getText().contains("TAB"),
+"Should detect TAB key");
+// Test 5: Arrow keys
+input.click(); // Re-focus
+actions.sendKeys(Keys.ARROW_DOWN).perform();
+Assert.assertTrue(
+result.getText().contains("DOWN"),
+"Should detect ARROW_DOWN key");
+}
+}
+
+===== PAGE 14 =====
+Test 5b: Double-Click Action
+package week2.seleniumcore;
+import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.Actions;
+import org.testng.Assert;
+import org.testng.annotations.Test;
+public class ActionsDoubleClickTest extends BaseTest {
+@Test
+public void testDoubleClickAction() {
+driver.get("https://the-internet.herokuapp.com/add_remove_elements/");
+Actions actions = new Actions(driver);
+// Click "Add Element" button to create a new element
+WebElement addBtn = driver.findElement(
+By.xpath("//button[text()='Add Element']"));
+// Double-click to add two elements at once
+actions.doubleClick(addBtn).perform();
+// Verify two "Delete" buttons appeared
+java.util.List<WebElement> deleteButtons = driver.findElements(
+By.cssSelector(".added-manually"));
+Assert.assertEquals(deleteButtons.size(), 2,
+"Double-click should trigger two add operations");
+// Cleanup: click one delete button
+deleteButtons.get(0).click();
+deleteButtons = driver.findElements(
+By.cssSelector(".added-manually"));
+Assert.assertEquals(deleteButtons.size(), 1,
+"One element should remain after delete");
+}
+}
+ End of Actions Class Interview Q&A — Week 2, SDET Study Plan

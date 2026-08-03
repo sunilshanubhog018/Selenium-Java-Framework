@@ -38,3 +38,18 @@ dependency-reduced-pom.xml
 # Sensitive data - NEVER commit these
 *.env
 credentials.txt
+
+# Local temp downloads / ad-hoc CI extracts (not part of framework)
+ci-artifacts/
+ci-reports-*/
+ci-run*/
+latest-ci-reports/
+ci-*.zip
+docs/preview/
+
+# Excel lock files
+~$*
+
+# Browser drivers (large binaries; keep local — download if missing)
+drivers/*.zip
+drivers/Driver_Notes/
