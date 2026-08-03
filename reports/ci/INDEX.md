@@ -11,8 +11,9 @@ git pull
 
 | Run | Folder | When (UTC) | Commit |
 |-----|--------|------------|--------|
+| #75 | [`run-75`](./run-75/) | 2026-08-03T04:12:56Z | `a72f471` |
 | #74 | [`run-74`](./run-74/) | 2026-08-02T09:09:15Z | `b7bec2e` |
 | #73 | [`run-73`](./run-73/) | 2026-08-02T08:53:54Z | `be19f9d` |
 | #72 | [`run-72`](./run-72/) | — | `70c3199` |
 
-Latest run folder: `reports/ci/run-74/`
+Latest run folder: `reports/ci/run-75/`

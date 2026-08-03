@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Failed suite [ParaBank Banking Test Suite]" guice-stage="DEVELOPMENT" verbose="0">
+  <listeners>
+    <listener class-name="listeners.TestListener"/>
+    <listener class-name="listeners.RetryListener"/>
+  </listeners>
+  <test thread-count="5" name="Smoke Tests(failed)" verbose="0">
+    <classes>
+      <class name="tests.RegisterTest">
+        <methods>
+          <include name="setUp"/>
+          <include name="initializeDatabase"/>
+          <include name="tearDown"/>
+          <include name="testRegisterThenLogin"/>
+          <include name="testRegisterFormDisplayed"/>
+          <include name="testValidRegistration"/>
+          <include name="testEmptyRegistration"/>
+          <include name="navigateToRegisterPage"/>
+          <include name="testDuplicateUsername"/>
+        </methods>
+      </class> <!-- tests.RegisterTest -->
+      <class name="tests.LoginTest">
+        <methods>
+          <include name="initializeDatabase"/>
+          <include name="setUp"/>
+          <include name="testEmptyPassword"/>
+          <include name="testEmptyBothFields"/>
+          <include name="testRegisterLink"/>
+          <include name="testEmptyUsername"/>
+          <include name="testInvalidUsername"/>
+          <include name="testValidLogin"/>
+          <include name="tearDown"/>
+          <include name="navigateToLoginPage"/>
+          <include name="testInvalidLogin"/>
+          <include name="testInvalidPassword"/>
+          <include name="testForgotLoginLink"/>
+          <include name="testLoginFormDisplayed"/>
+        </methods>
+      </class> <!-- tests.LoginTest -->
+    </classes>
+  </test> <!-- Smoke Tests(failed) -->
+  <test thread-count="5" name="Account Tests(failed)" verbose="0">
+    <classes>
+      <class name="tests.AccountsOverviewTest">
+        <methods>
+          <include name="initializeDatabase"/>
+          <include name="setUp"/>
+          <include name="tearDown"/>
+          <include name="testPageTitle"/>
+          <include name="testTotalBalanceDisplayed"/>
+          <include name="testAccountExists"/>
+          <include name="testLogOut"/>
+          <include name="registerSharedUser"/>
+          <include name="testAccountNumberDisplayed"/>
+          <include name="navigateToAccountsOverview"/>
+          <include name="testTransferFundsLink"/>
+          <include name="testAccountsTableDisplayed"/>
+        </methods>
+      </class> <!-- tests.AccountsOverviewTest -->
+    </classes>
+  </test> <!-- Account Tests(failed) -->
+  <test thread-count="5" name="Transaction Tests(failed)" verbose="0">
+    <classes>
+      <class name="tests.BillPayTest">
+        <methods>
+          <include name="setUp"/>
+          <include name="initializeDatabase"/>
+          <include name="tearDown"/>
+          <include name="testMismatchedAccountNumbers"/>
+          <include name="testBillPayPageDisplayed"/>
+          <include name="testValidBillPayment"/>
+          <include name="testPayBillAndVerifyBalance"/>
+          <include name="testPaymentSuccessMessage"/>
+          <include name="navigateToBillPay"/>
+          <include name="testEmptyFormSubmit"/>
+          <include name="registerSharedUser"/>
+          <include name="testBillPayFormDisplayed"/>
+        </methods>
+      </class> <!-- tests.BillPayTest -->
+      <class name="tests.TransferFundsTest">
+        <methods>
+          <include name="testTransferPageDisplayed"/>
+          <include name="registerSharedUser"/>
+          <include name="setUp"/>
+          <include name="initializeDatabase"/>
+          <include name="tearDown"/>
+          <include name="navigateToTransferFunds"/>
+          <include name="testFromAccountHasOptions"/>
+          <include name="testTransferFormDisplayed"/>
+          <include name="testTransferEmptyAmount"/>
+          <include name="testTransferSuccessMessage"/>
+          <include name="testTransferInvalidAmount"/>
+          <include name="testTransferAndVerifyBalance"/>
+        </methods>
+      </class> <!-- tests.TransferFundsTest -->
+    </classes>
+  </test> <!-- Transaction Tests(failed) -->
+  <test thread-count="5" name="Data Driven Tests(failed)" verbose="0">
+    <classes>
+      <class name="tests.DataDrivenLoginTest">
+        <methods>
+          <include name="setUp"/>
+          <include name="initializeDatabase"/>
+          <include name="tearDown"/>
+          <include name="testLoginFromExcel"/>
+          <include name="navigateToLoginPage"/>
+          <include name="registerSharedUser"/>
+        </methods>
+      </class> <!-- tests.DataDrivenLoginTest -->
+    </classes>
+  </test> <!-- Data Driven Tests(failed) -->
+  <test thread-count="5" name="E2E Tests(failed)" verbose="0">
+    <classes>
+      <class name="tests.EndToEndTest">
+        <methods>
+          <include name="initializeDatabase"/>
+          <include name="setUp"/>
+          <include name="tearDown"/>
+          <include name="testNewCustomerOnboarding"/>
+          <include name="testBillPaymentFlow"/>
+          <include name="testCompleteBankingSession"/>
+          <include name="registerSharedUser"/>
+          <include name="testFundTransferFlow"/>
+        </methods>
+      </class> <!-- tests.EndToEndTest -->
+    </classes>
+  </test> <!-- E2E Tests(failed) -->
+  <test thread-count="5" name="E2E Data Driven Tests(failed)" verbose="0">
+    <classes>
+      <class name="tests.EndToEndDataDrivenTest">
+        <methods>
+          <include name="initializeDatabase"/>
+          <include name="setUp"/>
+          <include name="tearDown"/>
+          <include name="navigateToHome"/>
+          <include name="testE2EFromExcel"/>
+          <include name="registerSharedUser"/>
+        </methods>
+      </class> <!-- tests.EndToEndDataDrivenTest -->
+    </classes>
+  </test> <!-- E2E Data Driven Tests(failed) -->
+</suite> <!-- Failed suite [ParaBank Banking Test Suite] -->
