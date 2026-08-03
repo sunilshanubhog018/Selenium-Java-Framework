@@ -1,0 +1,1450 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testng-results ignored="0" total="53" passed="53" failed="0" skipped="0">
+  <reporter-output>
+  </reporter-output>
+  <suite started-at="2026-08-03T04:17:27 UTC" name="ParaBank Banking Test Suite" finished-at="2026-08-03T04:20:47 UTC" duration-ms="200078">
+    <groups>
+      <group name="datadriven">
+        <method signature="DataDrivenLoginTest.testLoginFromExcel(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)[pri:0, instance:tests.DataDrivenLoginTest@23f5b5dc]" name="testLoginFromExcel" class="tests.DataDrivenLoginTest"/>
+        <method signature="EndToEndDataDrivenTest.testE2EFromExcel(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)[pri:0, instance:tests.EndToEndDataDrivenTest@2657d4dd]" name="testE2EFromExcel" class="tests.EndToEndDataDrivenTest"/>
+      </group> <!-- datadriven -->
+      <group name="transfer">
+        <method signature="TransferFundsTest.testTransferPageDisplayed()[pri:1, instance:tests.TransferFundsTest@d554c5f]" name="testTransferPageDisplayed" class="tests.TransferFundsTest"/>
+        <method signature="TransferFundsTest.testTransferFormDisplayed()[pri:2, instance:tests.TransferFundsTest@d554c5f]" name="testTransferFormDisplayed" class="tests.TransferFundsTest"/>
+        <method signature="TransferFundsTest.testFromAccountHasOptions()[pri:3, instance:tests.TransferFundsTest@d554c5f]" name="testFromAccountHasOptions" class="tests.TransferFundsTest"/>
+        <method signature="TransferFundsTest.testTransferEmptyAmount()[pri:4, instance:tests.TransferFundsTest@d554c5f]" name="testTransferEmptyAmount" class="tests.TransferFundsTest"/>
+        <method signature="TransferFundsTest.testTransferInvalidAmount()[pri:5, instance:tests.TransferFundsTest@d554c5f]" name="testTransferInvalidAmount" class="tests.TransferFundsTest"/>
+        <method signature="TransferFundsTest.testTransferSuccessMessage()[pri:7, instance:tests.TransferFundsTest@d554c5f]" name="testTransferSuccessMessage" class="tests.TransferFundsTest"/>
+        <method signature="TransferFundsTest.testTransferAndVerifyBalance()[pri:8, instance:tests.TransferFundsTest@d554c5f]" name="testTransferAndVerifyBalance" class="tests.TransferFundsTest"/>
+      </group> <!-- transfer -->
+      <group name="billpay">
+        <method signature="BillPayTest.testBillPayPageDisplayed()[pri:1, instance:tests.BillPayTest@2dfaea86]" name="testBillPayPageDisplayed" class="tests.BillPayTest"/>
+        <method signature="BillPayTest.testBillPayFormDisplayed()[pri:2, instance:tests.BillPayTest@2dfaea86]" name="testBillPayFormDisplayed" class="tests.BillPayTest"/>
+        <method signature="BillPayTest.testEmptyFormSubmit()[pri:3, instance:tests.BillPayTest@2dfaea86]" name="testEmptyFormSubmit" class="tests.BillPayTest"/>
+        <method signature="BillPayTest.testValidBillPayment()[pri:4, instance:tests.BillPayTest@2dfaea86]" name="testValidBillPayment" class="tests.BillPayTest"/>
+        <method signature="BillPayTest.testPaymentSuccessMessage()[pri:5, instance:tests.BillPayTest@2dfaea86]" name="testPaymentSuccessMessage" class="tests.BillPayTest"/>
+        <method signature="BillPayTest.testPayBillAndVerifyBalance()[pri:6, instance:tests.BillPayTest@2dfaea86]" name="testPayBillAndVerifyBalance" class="tests.BillPayTest"/>
+        <method signature="BillPayTest.testMismatchedAccountNumbers()[pri:7, instance:tests.BillPayTest@2dfaea86]" name="testMismatchedAccountNumbers" class="tests.BillPayTest"/>
+      </group> <!-- billpay -->
+      <group name="regression">
+        <method signature="LoginTest.testLoginFormDisplayed()[pri:1, instance:tests.LoginTest@514646ef]" name="testLoginFormDisplayed" class="tests.LoginTest"/>
+        <method signature="RegisterTest.testRegisterFormDisplayed()[pri:1, instance:tests.RegisterTest@5524cca1]" name="testRegisterFormDisplayed" class="tests.RegisterTest"/>
+        <method signature="LoginTest.testEmptyBothFields()[pri:2, instance:tests.LoginTest@514646ef]" name="testEmptyBothFields" class="tests.LoginTest"/>
+        <method signature="RegisterTest.testEmptyRegistration()[pri:2, instance:tests.RegisterTest@5524cca1]" name="testEmptyRegistration" class="tests.RegisterTest"/>
+        <method signature="LoginTest.testEmptyUsername()[pri:3, instance:tests.LoginTest@514646ef]" name="testEmptyUsername" class="tests.LoginTest"/>
+        <method signature="RegisterTest.testValidRegistration()[pri:3, instance:tests.RegisterTest@5524cca1]" name="testValidRegistration" class="tests.RegisterTest"/>
+        <method signature="LoginTest.testEmptyPassword()[pri:4, instance:tests.LoginTest@514646ef]" name="testEmptyPassword" class="tests.LoginTest"/>
+        <method signature="RegisterTest.testDuplicateUsername()[pri:4, instance:tests.RegisterTest@5524cca1]" name="testDuplicateUsername" class="tests.RegisterTest"/>
+        <method signature="LoginTest.testInvalidLogin()[pri:5, instance:tests.LoginTest@514646ef]" name="testInvalidLogin" class="tests.LoginTest"/>
+        <method signature="RegisterTest.testRegisterThenLogin()[pri:5, instance:tests.RegisterTest@5524cca1]" name="testRegisterThenLogin" class="tests.RegisterTest"/>
+        <method signature="LoginTest.testInvalidUsername()[pri:6, instance:tests.LoginTest@514646ef]" name="testInvalidUsername" class="tests.LoginTest"/>
+        <method signature="LoginTest.testInvalidPassword()[pri:7, instance:tests.LoginTest@514646ef]" name="testInvalidPassword" class="tests.LoginTest"/>
+        <method signature="LoginTest.testRegisterLink()[pri:8, instance:tests.LoginTest@514646ef]" name="testRegisterLink" class="tests.LoginTest"/>
+        <method signature="LoginTest.testForgotLoginLink()[pri:9, instance:tests.LoginTest@514646ef]" name="testForgotLoginLink" class="tests.LoginTest"/>
+        <method signature="LoginTest.testValidLogin()[pri:10, instance:tests.LoginTest@514646ef]" name="testValidLogin" class="tests.LoginTest"/>
+        <method signature="AccountsOverviewTest.testPageTitle()[pri:1, instance:tests.AccountsOverviewTest@4722ef0c]" name="testPageTitle" class="tests.AccountsOverviewTest"/>
+        <method signature="AccountsOverviewTest.testAccountsTableDisplayed()[pri:2, instance:tests.AccountsOverviewTest@4722ef0c]" name="testAccountsTableDisplayed" class="tests.AccountsOverviewTest"/>
+        <method signature="AccountsOverviewTest.testAccountExists()[pri:3, instance:tests.AccountsOverviewTest@4722ef0c]" name="testAccountExists" class="tests.AccountsOverviewTest"/>
+        <method signature="AccountsOverviewTest.testAccountNumberDisplayed()[pri:4, instance:tests.AccountsOverviewTest@4722ef0c]" name="testAccountNumberDisplayed" class="tests.AccountsOverviewTest"/>
+        <method signature="AccountsOverviewTest.testTotalBalanceDisplayed()[pri:5, instance:tests.AccountsOverviewTest@4722ef0c]" name="testTotalBalanceDisplayed" class="tests.AccountsOverviewTest"/>
+        <method signature="AccountsOverviewTest.testTransferFundsLink()[pri:6, instance:tests.AccountsOverviewTest@4722ef0c]" name="testTransferFundsLink" class="tests.AccountsOverviewTest"/>
+        <method signature="AccountsOverviewTest.testLogOut()[pri:7, instance:tests.AccountsOverviewTest@4722ef0c]" name="testLogOut" class="tests.AccountsOverviewTest"/>
+        <method signature="BillPayTest.testBillPayPageDisplayed()[pri:1, instance:tests.BillPayTest@2dfaea86]" name="testBillPayPageDisplayed" class="tests.BillPayTest"/>
+        <method signature="TransferFundsTest.testTransferPageDisplayed()[pri:1, instance:tests.TransferFundsTest@d554c5f]" name="testTransferPageDisplayed" class="tests.TransferFundsTest"/>
+        <method signature="BillPayTest.testBillPayFormDisplayed()[pri:2, instance:tests.BillPayTest@2dfaea86]" name="testBillPayFormDisplayed" class="tests.BillPayTest"/>
+        <method signature="TransferFundsTest.testTransferFormDisplayed()[pri:2, instance:tests.TransferFundsTest@d554c5f]" name="testTransferFormDisplayed" class="tests.TransferFundsTest"/>
+        <method signature="BillPayTest.testEmptyFormSubmit()[pri:3, instance:tests.BillPayTest@2dfaea86]" name="testEmptyFormSubmit" class="tests.BillPayTest"/>
+        <method signature="TransferFundsTest.testFromAccountHasOptions()[pri:3, instance:tests.TransferFundsTest@d554c5f]" name="testFromAccountHasOptions" class="tests.TransferFundsTest"/>
+        <method signature="BillPayTest.testValidBillPayment()[pri:4, instance:tests.BillPayTest@2dfaea86]" name="testValidBillPayment" class="tests.BillPayTest"/>
+        <method signature="TransferFundsTest.testTransferEmptyAmount()[pri:4, instance:tests.TransferFundsTest@d554c5f]" name="testTransferEmptyAmount" class="tests.TransferFundsTest"/>
+        <method signature="BillPayTest.testPaymentSuccessMessage()[pri:5, instance:tests.BillPayTest@2dfaea86]" name="testPaymentSuccessMessage" class="tests.BillPayTest"/>
+        <method signature="TransferFundsTest.testTransferInvalidAmount()[pri:5, instance:tests.TransferFundsTest@d554c5f]" name="testTransferInvalidAmount" class="tests.TransferFundsTest"/>
+        <method signature="BillPayTest.testPayBillAndVerifyBalance()[pri:6, instance:tests.BillPayTest@2dfaea86]" name="testPayBillAndVerifyBalance" class="tests.BillPayTest"/>
+        <method signature="BillPayTest.testMismatchedAccountNumbers()[pri:7, instance:tests.BillPayTest@2dfaea86]" name="testMismatchedAccountNumbers" class="tests.BillPayTest"/>
+        <method signature="TransferFundsTest.testTransferSuccessMessage()[pri:7, instance:tests.TransferFundsTest@d554c5f]" name="testTransferSuccessMessage" class="tests.TransferFundsTest"/>
+        <method signature="TransferFundsTest.testTransferAndVerifyBalance()[pri:8, instance:tests.TransferFundsTest@d554c5f]" name="testTransferAndVerifyBalance" class="tests.TransferFundsTest"/>
+        <method signature="DataDrivenLoginTest.testLoginFromExcel(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)[pri:0, instance:tests.DataDrivenLoginTest@23f5b5dc]" name="testLoginFromExcel" class="tests.DataDrivenLoginTest"/>
+      </group> <!-- regression -->
+      <group name="smoke">
+        <method signature="LoginTest.testLoginFormDisplayed()[pri:1, instance:tests.LoginTest@514646ef]" name="testLoginFormDisplayed" class="tests.LoginTest"/>
+        <method signature="RegisterTest.testRegisterFormDisplayed()[pri:1, instance:tests.RegisterTest@5524cca1]" name="testRegisterFormDisplayed" class="tests.RegisterTest"/>
+        <method signature="RegisterTest.testValidRegistration()[pri:3, instance:tests.RegisterTest@5524cca1]" name="testValidRegistration" class="tests.RegisterTest"/>
+        <method signature="LoginTest.testValidLogin()[pri:10, instance:tests.LoginTest@514646ef]" name="testValidLogin" class="tests.LoginTest"/>
+      </group> <!-- smoke -->
+      <group name="e2e">
+        <method signature="EndToEndTest.testNewCustomerOnboarding()[pri:1, instance:tests.EndToEndTest@7857fe2]" name="testNewCustomerOnboarding" class="tests.EndToEndTest"/>
+        <method signature="EndToEndTest.testFundTransferFlow()[pri:2, instance:tests.EndToEndTest@7857fe2]" name="testFundTransferFlow" class="tests.EndToEndTest"/>
+        <method signature="EndToEndTest.testBillPaymentFlow()[pri:3, instance:tests.EndToEndTest@7857fe2]" name="testBillPaymentFlow" class="tests.EndToEndTest"/>
+        <method signature="EndToEndTest.testCompleteBankingSession()[pri:4, instance:tests.EndToEndTest@7857fe2]" name="testCompleteBankingSession" class="tests.EndToEndTest"/>
+        <method signature="EndToEndDataDrivenTest.testE2EFromExcel(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)[pri:0, instance:tests.EndToEndDataDrivenTest@2657d4dd]" name="testE2EFromExcel" class="tests.EndToEndDataDrivenTest"/>
+      </group> <!-- e2e -->
+      <group name="accounts">
+        <method signature="AccountsOverviewTest.testPageTitle()[pri:1, instance:tests.AccountsOverviewTest@4722ef0c]" name="testPageTitle" class="tests.AccountsOverviewTest"/>
+        <method signature="AccountsOverviewTest.testAccountsTableDisplayed()[pri:2, instance:tests.AccountsOverviewTest@4722ef0c]" name="testAccountsTableDisplayed" class="tests.AccountsOverviewTest"/>
+        <method signature="AccountsOverviewTest.testAccountExists()[pri:3, instance:tests.AccountsOverviewTest@4722ef0c]" name="testAccountExists" class="tests.AccountsOverviewTest"/>
+        <method signature="AccountsOverviewTest.testAccountNumberDisplayed()[pri:4, instance:tests.AccountsOverviewTest@4722ef0c]" name="testAccountNumberDisplayed" class="tests.AccountsOverviewTest"/>
+        <method signature="AccountsOverviewTest.testTotalBalanceDisplayed()[pri:5, instance:tests.AccountsOverviewTest@4722ef0c]" name="testTotalBalanceDisplayed" class="tests.AccountsOverviewTest"/>
+        <method signature="AccountsOverviewTest.testTransferFundsLink()[pri:6, instance:tests.AccountsOverviewTest@4722ef0c]" name="testTransferFundsLink" class="tests.AccountsOverviewTest"/>
+        <method signature="AccountsOverviewTest.testLogOut()[pri:7, instance:tests.AccountsOverviewTest@4722ef0c]" name="testLogOut" class="tests.AccountsOverviewTest"/>
+      </group> <!-- accounts -->
+      <group name="login">
+        <method signature="LoginTest.testLoginFormDisplayed()[pri:1, instance:tests.LoginTest@514646ef]" name="testLoginFormDisplayed" class="tests.LoginTest"/>
+        <method signature="LoginTest.testEmptyBothFields()[pri:2, instance:tests.LoginTest@514646ef]" name="testEmptyBothFields" class="tests.LoginTest"/>
+        <method signature="LoginTest.testEmptyUsername()[pri:3, instance:tests.LoginTest@514646ef]" name="testEmptyUsername" class="tests.LoginTest"/>
+        <method signature="LoginTest.testEmptyPassword()[pri:4, instance:tests.LoginTest@514646ef]" name="testEmptyPassword" class="tests.LoginTest"/>
+        <method signature="LoginTest.testInvalidLogin()[pri:5, instance:tests.LoginTest@514646ef]" name="testInvalidLogin" class="tests.LoginTest"/>
+        <method signature="LoginTest.testInvalidUsername()[pri:6, instance:tests.LoginTest@514646ef]" name="testInvalidUsername" class="tests.LoginTest"/>
+        <method signature="LoginTest.testInvalidPassword()[pri:7, instance:tests.LoginTest@514646ef]" name="testInvalidPassword" class="tests.LoginTest"/>
+        <method signature="LoginTest.testRegisterLink()[pri:8, instance:tests.LoginTest@514646ef]" name="testRegisterLink" class="tests.LoginTest"/>
+        <method signature="LoginTest.testForgotLoginLink()[pri:9, instance:tests.LoginTest@514646ef]" name="testForgotLoginLink" class="tests.LoginTest"/>
+        <method signature="LoginTest.testValidLogin()[pri:10, instance:tests.LoginTest@514646ef]" name="testValidLogin" class="tests.LoginTest"/>
+      </group> <!-- login -->
+      <group name="register">
+        <method signature="RegisterTest.testRegisterFormDisplayed()[pri:1, instance:tests.RegisterTest@5524cca1]" name="testRegisterFormDisplayed" class="tests.RegisterTest"/>
+        <method signature="RegisterTest.testEmptyRegistration()[pri:2, instance:tests.RegisterTest@5524cca1]" name="testEmptyRegistration" class="tests.RegisterTest"/>
+        <method signature="RegisterTest.testValidRegistration()[pri:3, instance:tests.RegisterTest@5524cca1]" name="testValidRegistration" class="tests.RegisterTest"/>
+        <method signature="RegisterTest.testDuplicateUsername()[pri:4, instance:tests.RegisterTest@5524cca1]" name="testDuplicateUsername" class="tests.RegisterTest"/>
+        <method signature="RegisterTest.testRegisterThenLogin()[pri:5, instance:tests.RegisterTest@5524cca1]" name="testRegisterThenLogin" class="tests.RegisterTest"/>
+      </group> <!-- register -->
+    </groups>
+    <test started-at="2026-08-03T04:17:27 UTC" name="Smoke Tests" finished-at="2026-08-03T04:17:51 UTC" duration-ms="23999">
+      <class name="tests.LoginTest">
+        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.LoginTest@514646ef]" started-at="2026-08-03T04:17:39 UTC" name="setUp" finished-at="2026-08-03T04:17:39 UTC" duration-ms="366" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="navigateToLoginPage()[pri:0, instance:tests.LoginTest@514646ef]" started-at="2026-08-03T04:17:39 UTC" name="navigateToLoginPage" finished-at="2026-08-03T04:17:40 UTC" duration-ms="279" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- navigateToLoginPage -->
+        <test-method signature="testLoginFormDisplayed()[pri:1, instance:tests.LoginTest@514646ef]" started-at="2026-08-03T04:17:40 UTC" name="testLoginFormDisplayed" description="Verify login form is visible on homepage" finished-at="2026-08-03T04:17:40 UTC" duration-ms="28" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testLoginFormDisplayed -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:tests.LoginTest@514646ef]" started-at="2026-08-03T04:17:40 UTC" name="tearDown" finished-at="2026-08-03T04:17:40 UTC" duration-ms="68" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.LoginTest@514646ef]" started-at="2026-08-03T04:17:40 UTC" name="setUp" finished-at="2026-08-03T04:17:40 UTC" duration-ms="248" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="navigateToLoginPage()[pri:0, instance:tests.LoginTest@514646ef]" started-at="2026-08-03T04:17:40 UTC" name="navigateToLoginPage" finished-at="2026-08-03T04:17:40 UTC" duration-ms="406" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- navigateToLoginPage -->
+        <test-method signature="testEmptyBothFields()[pri:2, instance:tests.LoginTest@514646ef]" started-at="2026-08-03T04:17:40 UTC" name="testEmptyBothFields" description="Click login without entering anything" finished-at="2026-08-03T04:17:40 UTC" duration-ms="209" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testEmptyBothFields -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:tests.LoginTest@514646ef]" started-at="2026-08-03T04:17:40 UTC" name="tearDown" finished-at="2026-08-03T04:17:41 UTC" duration-ms="67" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.LoginTest@514646ef]" started-at="2026-08-03T04:17:41 UTC" name="setUp" finished-at="2026-08-03T04:17:41 UTC" duration-ms="256" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="navigateToLoginPage()[pri:0, instance:tests.LoginTest@514646ef]" started-at="2026-08-03T04:17:41 UTC" name="navigateToLoginPage" finished-at="2026-08-03T04:17:41 UTC" duration-ms="317" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- navigateToLoginPage -->
+        <test-method signature="testEmptyUsername()[pri:3, instance:tests.LoginTest@514646ef]" started-at="2026-08-03T04:17:41 UTC" name="testEmptyUsername" description="Login with empty username" finished-at="2026-08-03T04:17:41 UTC" duration-ms="253" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testEmptyUsername -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:tests.LoginTest@514646ef]" started-at="2026-08-03T04:17:41 UTC" name="tearDown" finished-at="2026-08-03T04:17:41 UTC" duration-ms="67" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.LoginTest@514646ef]" started-at="2026-08-03T04:17:41 UTC" name="setUp" finished-at="2026-08-03T04:17:42 UTC" duration-ms="268" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="navigateToLoginPage()[pri:0, instance:tests.LoginTest@514646ef]" started-at="2026-08-03T04:17:42 UTC" name="navigateToLoginPage" finished-at="2026-08-03T04:17:42 UTC" duration-ms="399" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- navigateToLoginPage -->
+        <test-method signature="testEmptyPassword()[pri:4, instance:tests.LoginTest@514646ef]" started-at="2026-08-03T04:17:42 UTC" name="testEmptyPassword" description="Login with empty password" finished-at="2026-08-03T04:17:42 UTC" duration-ms="253" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testEmptyPassword -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:tests.LoginTest@514646ef]" started-at="2026-08-03T04:17:42 UTC" name="tearDown" finished-at="2026-08-03T04:17:42 UTC" duration-ms="68" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.LoginTest@514646ef]" started-at="2026-08-03T04:17:42 UTC" name="setUp" finished-at="2026-08-03T04:17:43 UTC" duration-ms="230" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="navigateToLoginPage()[pri:0, instance:tests.LoginTest@514646ef]" started-at="2026-08-03T04:17:43 UTC" name="navigateToLoginPage" finished-at="2026-08-03T04:17:43 UTC" duration-ms="404" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- navigateToLoginPage -->
+        <test-method signature="testInvalidLogin()[pri:5, instance:tests.LoginTest@514646ef]" started-at="2026-08-03T04:17:43 UTC" name="testInvalidLogin" description="Login with wrong username and password" finished-at="2026-08-03T04:17:44 UTC" duration-ms="501" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testInvalidLogin -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:tests.LoginTest@514646ef]" started-at="2026-08-03T04:17:44 UTC" name="tearDown" finished-at="2026-08-03T04:17:44 UTC" duration-ms="66" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.LoginTest@514646ef]" started-at="2026-08-03T04:17:44 UTC" name="setUp" finished-at="2026-08-03T04:17:44 UTC" duration-ms="235" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="navigateToLoginPage()[pri:0, instance:tests.LoginTest@514646ef]" started-at="2026-08-03T04:17:44 UTC" name="navigateToLoginPage" finished-at="2026-08-03T04:17:44 UTC" duration-ms="316" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- navigateToLoginPage -->
+        <test-method signature="testInvalidUsername()[pri:6, instance:tests.LoginTest@514646ef]" started-at="2026-08-03T04:17:44 UTC" name="testInvalidUsername" description="Login with wrong username" finished-at="2026-08-03T04:17:45 UTC" duration-ms="587" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testInvalidUsername -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:tests.LoginTest@514646ef]" started-at="2026-08-03T04:17:45 UTC" name="tearDown" finished-at="2026-08-03T04:17:45 UTC" duration-ms="69" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.LoginTest@514646ef]" started-at="2026-08-03T04:17:45 UTC" name="setUp" finished-at="2026-08-03T04:17:45 UTC" duration-ms="259" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="navigateToLoginPage()[pri:0, instance:tests.LoginTest@514646ef]" started-at="2026-08-03T04:17:45 UTC" name="navigateToLoginPage" finished-at="2026-08-03T04:17:45 UTC" duration-ms="281" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- navigateToLoginPage -->
+        <test-method signature="testInvalidPassword()[pri:7, instance:tests.LoginTest@514646ef]" started-at="2026-08-03T04:17:45 UTC" name="testInvalidPassword" description="Login with wrong password" finished-at="2026-08-03T04:17:46 UTC" duration-ms="559" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testInvalidPassword -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:tests.LoginTest@514646ef]" started-at="2026-08-03T04:17:46 UTC" name="tearDown" finished-at="2026-08-03T04:17:46 UTC" duration-ms="70" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.LoginTest@514646ef]" started-at="2026-08-03T04:17:46 UTC" name="setUp" finished-at="2026-08-03T04:17:46 UTC" duration-ms="242" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="navigateToLoginPage()[pri:0, instance:tests.LoginTest@514646ef]" started-at="2026-08-03T04:17:46 UTC" name="navigateToLoginPage" finished-at="2026-08-03T04:17:47 UTC" duration-ms="422" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- navigateToLoginPage -->
+        <test-method signature="testRegisterLink()[pri:8, instance:tests.LoginTest@514646ef]" started-at="2026-08-03T04:17:47 UTC" name="testRegisterLink" description="Click Register link and verify registration page" finished-at="2026-08-03T04:17:47 UTC" duration-ms="176" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testRegisterLink -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:tests.LoginTest@514646ef]" started-at="2026-08-03T04:17:47 UTC" name="tearDown" finished-at="2026-08-03T04:17:47 UTC" duration-ms="67" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.LoginTest@514646ef]" started-at="2026-08-03T04:17:47 UTC" name="setUp" finished-at="2026-08-03T04:17:47 UTC" duration-ms="236" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="navigateToLoginPage()[pri:0, instance:tests.LoginTest@514646ef]" started-at="2026-08-03T04:17:47 UTC" name="navigateToLoginPage" finished-at="2026-08-03T04:17:47 UTC" duration-ms="341" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- navigateToLoginPage -->
+        <test-method signature="testForgotLoginLink()[pri:9, instance:tests.LoginTest@514646ef]" started-at="2026-08-03T04:17:47 UTC" name="testForgotLoginLink" description="Click Forgot Login and verify lookup page" finished-at="2026-08-03T04:17:48 UTC" duration-ms="186" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testForgotLoginLink -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:tests.LoginTest@514646ef]" started-at="2026-08-03T04:17:48 UTC" name="tearDown" finished-at="2026-08-03T04:17:48 UTC" duration-ms="69" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.LoginTest@514646ef]" started-at="2026-08-03T04:17:48 UTC" name="setUp" finished-at="2026-08-03T04:17:48 UTC" duration-ms="241" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="navigateToLoginPage()[pri:0, instance:tests.LoginTest@514646ef]" started-at="2026-08-03T04:17:48 UTC" name="navigateToLoginPage" finished-at="2026-08-03T04:17:48 UTC" duration-ms="301" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- navigateToLoginPage -->
+        <test-method signature="testValidLogin()[pri:10, instance:tests.LoginTest@514646ef]" started-at="2026-08-03T04:17:48 UTC" name="testValidLogin" description="Login with valid credentials" finished-at="2026-08-03T04:17:50 UTC" duration-ms="2179" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testValidLogin -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:tests.LoginTest@514646ef]" started-at="2026-08-03T04:17:50 UTC" name="tearDown" finished-at="2026-08-03T04:17:51 UTC" duration-ms="67" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+      </class> <!-- tests.LoginTest -->
+      <class name="tests.RegisterTest">
+        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.RegisterTest@5524cca1]" started-at="2026-08-03T04:17:27 UTC" name="setUp" finished-at="2026-08-03T04:17:29 UTC" duration-ms="1920" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="navigateToRegisterPage()[pri:0, instance:tests.RegisterTest@5524cca1]" started-at="2026-08-03T04:17:29 UTC" name="navigateToRegisterPage" finished-at="2026-08-03T04:17:29 UTC" duration-ms="637" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- navigateToRegisterPage -->
+        <test-method signature="testRegisterFormDisplayed()[pri:1, instance:tests.RegisterTest@5524cca1]" started-at="2026-08-03T04:17:29 UTC" name="testRegisterFormDisplayed" description="Verify registration form loads" finished-at="2026-08-03T04:17:29 UTC" duration-ms="140" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testRegisterFormDisplayed -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:tests.RegisterTest@5524cca1]" started-at="2026-08-03T04:17:29 UTC" name="tearDown" finished-at="2026-08-03T04:17:29 UTC" duration-ms="101" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.RegisterTest@5524cca1]" started-at="2026-08-03T04:17:29 UTC" name="setUp" finished-at="2026-08-03T04:17:30 UTC" duration-ms="319" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="navigateToRegisterPage()[pri:0, instance:tests.RegisterTest@5524cca1]" started-at="2026-08-03T04:17:30 UTC" name="navigateToRegisterPage" finished-at="2026-08-03T04:17:31 UTC" duration-ms="927" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- navigateToRegisterPage -->
+        <test-method signature="testEmptyRegistration()[pri:2, instance:tests.RegisterTest@5524cca1]" started-at="2026-08-03T04:17:31 UTC" name="testEmptyRegistration" description="Submit empty registration form" finished-at="2026-08-03T04:17:31 UTC" duration-ms="264" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testEmptyRegistration -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:tests.RegisterTest@5524cca1]" started-at="2026-08-03T04:17:31 UTC" name="tearDown" finished-at="2026-08-03T04:17:31 UTC" duration-ms="71" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.RegisterTest@5524cca1]" started-at="2026-08-03T04:17:31 UTC" name="setUp" finished-at="2026-08-03T04:17:31 UTC" duration-ms="248" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="navigateToRegisterPage()[pri:0, instance:tests.RegisterTest@5524cca1]" started-at="2026-08-03T04:17:31 UTC" name="navigateToRegisterPage" finished-at="2026-08-03T04:17:32 UTC" duration-ms="637" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- navigateToRegisterPage -->
+        <test-method signature="testValidRegistration()[pri:3, instance:tests.RegisterTest@5524cca1]" started-at="2026-08-03T04:17:32 UTC" name="testValidRegistration" description="Register new user with valid data" finished-at="2026-08-03T04:17:33 UTC" duration-ms="915" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testValidRegistration -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:tests.RegisterTest@5524cca1]" started-at="2026-08-03T04:17:33 UTC" name="tearDown" finished-at="2026-08-03T04:17:33 UTC" duration-ms="133" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.RegisterTest@5524cca1]" started-at="2026-08-03T04:17:33 UTC" name="setUp" finished-at="2026-08-03T04:17:33 UTC" duration-ms="231" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="navigateToRegisterPage()[pri:0, instance:tests.RegisterTest@5524cca1]" started-at="2026-08-03T04:17:33 UTC" name="navigateToRegisterPage" finished-at="2026-08-03T04:17:34 UTC" duration-ms="499" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- navigateToRegisterPage -->
+        <test-method signature="testDuplicateUsername()[pri:4, instance:tests.RegisterTest@5524cca1]" started-at="2026-08-03T04:17:34 UTC" name="testDuplicateUsername" description="Register with already existing username" finished-at="2026-08-03T04:17:36 UTC" duration-ms="2223" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testDuplicateUsername -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:tests.RegisterTest@5524cca1]" started-at="2026-08-03T04:17:36 UTC" name="tearDown" finished-at="2026-08-03T04:17:36 UTC" duration-ms="68" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.RegisterTest@5524cca1]" started-at="2026-08-03T04:17:36 UTC" name="setUp" finished-at="2026-08-03T04:17:36 UTC" duration-ms="247" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="navigateToRegisterPage()[pri:0, instance:tests.RegisterTest@5524cca1]" started-at="2026-08-03T04:17:36 UTC" name="navigateToRegisterPage" finished-at="2026-08-03T04:17:37 UTC" duration-ms="481" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- navigateToRegisterPage -->
+        <test-method signature="testRegisterThenLogin()[pri:5, instance:tests.RegisterTest@5524cca1]" started-at="2026-08-03T04:17:37 UTC" name="testRegisterThenLogin" description="Register new user then login with those credentials" finished-at="2026-08-03T04:17:39 UTC" duration-ms="2056" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testRegisterThenLogin -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:tests.RegisterTest@5524cca1]" started-at="2026-08-03T04:17:39 UTC" name="tearDown" finished-at="2026-08-03T04:17:39 UTC" duration-ms="68" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+      </class> <!-- tests.RegisterTest -->
+    </test> <!-- Smoke Tests -->
+    <test started-at="2026-08-03T04:17:51 UTC" name="Account Tests" finished-at="2026-08-03T04:18:14 UTC" duration-ms="23165">
+      <class name="tests.AccountsOverviewTest">
+        <test-method is-config="true" signature="registerSharedUser()[pri:0, instance:tests.AccountsOverviewTest@4722ef0c]" started-at="2026-08-03T04:17:51 UTC" name="registerSharedUser" finished-at="2026-08-03T04:18:03 UTC" duration-ms="12046" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- registerSharedUser -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.AccountsOverviewTest@4722ef0c]" started-at="2026-08-03T04:18:03 UTC" name="setUp" finished-at="2026-08-03T04:18:03 UTC" duration-ms="225" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="navigateToAccountsOverview()[pri:0, instance:tests.AccountsOverviewTest@4722ef0c]" started-at="2026-08-03T04:18:03 UTC" name="navigateToAccountsOverview" finished-at="2026-08-03T04:18:04 UTC" duration-ms="954" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- navigateToAccountsOverview -->
+        <test-method signature="testPageTitle()[pri:1, instance:tests.AccountsOverviewTest@4722ef0c]" started-at="2026-08-03T04:18:04 UTC" name="testPageTitle" description="Verify Accounts Overview page title" finished-at="2026-08-03T04:18:04 UTC" duration-ms="5" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testPageTitle -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:tests.AccountsOverviewTest@4722ef0c]" started-at="2026-08-03T04:18:04 UTC" name="tearDown" finished-at="2026-08-03T04:18:04 UTC" duration-ms="66" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.AccountsOverviewTest@4722ef0c]" started-at="2026-08-03T04:18:04 UTC" name="setUp" finished-at="2026-08-03T04:18:04 UTC" duration-ms="235" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="navigateToAccountsOverview()[pri:0, instance:tests.AccountsOverviewTest@4722ef0c]" started-at="2026-08-03T04:18:04 UTC" name="navigateToAccountsOverview" finished-at="2026-08-03T04:18:06 UTC" duration-ms="1314" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- navigateToAccountsOverview -->
+        <test-method signature="testAccountsTableDisplayed()[pri:2, instance:tests.AccountsOverviewTest@4722ef0c]" started-at="2026-08-03T04:18:06 UTC" name="testAccountsTableDisplayed" description="Verify accounts table is visible" finished-at="2026-08-03T04:18:06 UTC" duration-ms="22" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testAccountsTableDisplayed -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:tests.AccountsOverviewTest@4722ef0c]" started-at="2026-08-03T04:18:06 UTC" name="tearDown" finished-at="2026-08-03T04:18:06 UTC" duration-ms="67" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.AccountsOverviewTest@4722ef0c]" started-at="2026-08-03T04:18:06 UTC" name="setUp" finished-at="2026-08-03T04:18:06 UTC" duration-ms="236" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="navigateToAccountsOverview()[pri:0, instance:tests.AccountsOverviewTest@4722ef0c]" started-at="2026-08-03T04:18:06 UTC" name="navigateToAccountsOverview" finished-at="2026-08-03T04:18:07 UTC" duration-ms="1172" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- navigateToAccountsOverview -->
+        <test-method signature="testAccountExists()[pri:3, instance:tests.AccountsOverviewTest@4722ef0c]" started-at="2026-08-03T04:18:07 UTC" name="testAccountExists" description="Verify new user has at least one account" finished-at="2026-08-03T04:18:07 UTC" duration-ms="116" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testAccountExists -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:tests.AccountsOverviewTest@4722ef0c]" started-at="2026-08-03T04:18:07 UTC" name="tearDown" finished-at="2026-08-03T04:18:07 UTC" duration-ms="67" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.AccountsOverviewTest@4722ef0c]" started-at="2026-08-03T04:18:07 UTC" name="setUp" finished-at="2026-08-03T04:18:08 UTC" duration-ms="248" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="navigateToAccountsOverview()[pri:0, instance:tests.AccountsOverviewTest@4722ef0c]" started-at="2026-08-03T04:18:08 UTC" name="navigateToAccountsOverview" finished-at="2026-08-03T04:18:09 UTC" duration-ms="1182" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- navigateToAccountsOverview -->
+        <test-method signature="testAccountNumberDisplayed()[pri:4, instance:tests.AccountsOverviewTest@4722ef0c]" started-at="2026-08-03T04:18:09 UTC" name="testAccountNumberDisplayed" description="Verify account number is displayed" finished-at="2026-08-03T04:18:09 UTC" duration-ms="127" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testAccountNumberDisplayed -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:tests.AccountsOverviewTest@4722ef0c]" started-at="2026-08-03T04:18:09 UTC" name="tearDown" finished-at="2026-08-03T04:18:09 UTC" duration-ms="67" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.AccountsOverviewTest@4722ef0c]" started-at="2026-08-03T04:18:09 UTC" name="setUp" finished-at="2026-08-03T04:18:09 UTC" duration-ms="239" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="navigateToAccountsOverview()[pri:0, instance:tests.AccountsOverviewTest@4722ef0c]" started-at="2026-08-03T04:18:09 UTC" name="navigateToAccountsOverview" finished-at="2026-08-03T04:18:10 UTC" duration-ms="1194" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- navigateToAccountsOverview -->
+        <test-method signature="testTotalBalanceDisplayed()[pri:5, instance:tests.AccountsOverviewTest@4722ef0c]" started-at="2026-08-03T04:18:10 UTC" name="testTotalBalanceDisplayed" description="Verify total balance is shown" finished-at="2026-08-03T04:18:10 UTC" duration-ms="129" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testTotalBalanceDisplayed -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:tests.AccountsOverviewTest@4722ef0c]" started-at="2026-08-03T04:18:10 UTC" name="tearDown" finished-at="2026-08-03T04:18:11 UTC" duration-ms="67" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.AccountsOverviewTest@4722ef0c]" started-at="2026-08-03T04:18:11 UTC" name="setUp" finished-at="2026-08-03T04:18:11 UTC" duration-ms="231" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="navigateToAccountsOverview()[pri:0, instance:tests.AccountsOverviewTest@4722ef0c]" started-at="2026-08-03T04:18:11 UTC" name="navigateToAccountsOverview" finished-at="2026-08-03T04:18:12 UTC" duration-ms="1307" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- navigateToAccountsOverview -->
+        <test-method signature="testTransferFundsLink()[pri:6, instance:tests.AccountsOverviewTest@4722ef0c]" started-at="2026-08-03T04:18:12 UTC" name="testTransferFundsLink" description="Verify Transfer Funds link navigates correctly" finished-at="2026-08-03T04:18:12 UTC" duration-ms="165" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testTransferFundsLink -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:tests.AccountsOverviewTest@4722ef0c]" started-at="2026-08-03T04:18:12 UTC" name="tearDown" finished-at="2026-08-03T04:18:12 UTC" duration-ms="67" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.AccountsOverviewTest@4722ef0c]" started-at="2026-08-03T04:18:12 UTC" name="setUp" finished-at="2026-08-03T04:18:13 UTC" duration-ms="234" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="navigateToAccountsOverview()[pri:0, instance:tests.AccountsOverviewTest@4722ef0c]" started-at="2026-08-03T04:18:13 UTC" name="navigateToAccountsOverview" finished-at="2026-08-03T04:18:14 UTC" duration-ms="998" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- navigateToAccountsOverview -->
+        <test-method signature="testLogOut()[pri:7, instance:tests.AccountsOverviewTest@4722ef0c]" started-at="2026-08-03T04:18:14 UTC" name="testLogOut" description="Verify logout returns to login page" finished-at="2026-08-03T04:18:14 UTC" duration-ms="289" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testLogOut -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:tests.AccountsOverviewTest@4722ef0c]" started-at="2026-08-03T04:18:14 UTC" name="tearDown" finished-at="2026-08-03T04:18:14 UTC" duration-ms="67" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+      </class> <!-- tests.AccountsOverviewTest -->
+    </test> <!-- Account Tests -->
+    <test started-at="2026-08-03T04:18:14 UTC" name="Transaction Tests" finished-at="2026-08-03T04:19:25 UTC" duration-ms="71525">
+      <class name="tests.TransferFundsTest">
+        <test-method is-config="true" signature="registerSharedUser()[pri:0, instance:tests.TransferFundsTest@d554c5f]" started-at="2026-08-03T04:18:14 UTC" name="registerSharedUser" finished-at="2026-08-03T04:18:26 UTC" duration-ms="11894" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- registerSharedUser -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.TransferFundsTest@d554c5f]" started-at="2026-08-03T04:18:26 UTC" name="setUp" finished-at="2026-08-03T04:18:26 UTC" duration-ms="221" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="navigateToTransferFunds()[pri:0, instance:tests.TransferFundsTest@d554c5f]" started-at="2026-08-03T04:18:26 UTC" name="navigateToTransferFunds" finished-at="2026-08-03T04:18:27 UTC" duration-ms="1334" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- navigateToTransferFunds -->
+        <test-method signature="testTransferPageDisplayed()[pri:1, instance:tests.TransferFundsTest@d554c5f]" started-at="2026-08-03T04:18:27 UTC" name="testTransferPageDisplayed" description="Verify Transfer Funds page is displayed" finished-at="2026-08-03T04:18:27 UTC" duration-ms="25" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testTransferPageDisplayed -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:tests.TransferFundsTest@d554c5f]" started-at="2026-08-03T04:18:27 UTC" name="tearDown" finished-at="2026-08-03T04:18:27 UTC" duration-ms="67" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.TransferFundsTest@d554c5f]" started-at="2026-08-03T04:18:27 UTC" name="setUp" finished-at="2026-08-03T04:18:28 UTC" duration-ms="241" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="navigateToTransferFunds()[pri:0, instance:tests.TransferFundsTest@d554c5f]" started-at="2026-08-03T04:18:28 UTC" name="navigateToTransferFunds" finished-at="2026-08-03T04:18:29 UTC" duration-ms="1308" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- navigateToTransferFunds -->
+        <test-method signature="testTransferFormDisplayed()[pri:2, instance:tests.TransferFundsTest@d554c5f]" started-at="2026-08-03T04:18:29 UTC" name="testTransferFormDisplayed" description="Verify transfer form is displayed" finished-at="2026-08-03T04:18:29 UTC" duration-ms="19" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testTransferFormDisplayed -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:tests.TransferFundsTest@d554c5f]" started-at="2026-08-03T04:18:29 UTC" name="tearDown" finished-at="2026-08-03T04:18:29 UTC" duration-ms="67" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.TransferFundsTest@d554c5f]" started-at="2026-08-03T04:18:29 UTC" name="setUp" finished-at="2026-08-03T04:18:29 UTC" duration-ms="232" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="navigateToTransferFunds()[pri:0, instance:tests.TransferFundsTest@d554c5f]" started-at="2026-08-03T04:18:29 UTC" name="navigateToTransferFunds" finished-at="2026-08-03T04:18:30 UTC" duration-ms="1133" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- navigateToTransferFunds -->
+        <test-method signature="testFromAccountHasOptions()[pri:3, instance:tests.TransferFundsTest@d554c5f]" started-at="2026-08-03T04:18:30 UTC" name="testFromAccountHasOptions" description="Verify From Account dropdown has accounts" finished-at="2026-08-03T04:18:31 UTC" duration-ms="87" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testFromAccountHasOptions -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:tests.TransferFundsTest@d554c5f]" started-at="2026-08-03T04:18:31 UTC" name="tearDown" finished-at="2026-08-03T04:18:31 UTC" duration-ms="66" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.TransferFundsTest@d554c5f]" started-at="2026-08-03T04:18:31 UTC" name="setUp" finished-at="2026-08-03T04:18:31 UTC" duration-ms="229" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="navigateToTransferFunds()[pri:0, instance:tests.TransferFundsTest@d554c5f]" started-at="2026-08-03T04:18:31 UTC" name="navigateToTransferFunds" finished-at="2026-08-03T04:18:32 UTC" duration-ms="1336" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- navigateToTransferFunds -->
+        <test-method signature="testTransferEmptyAmount()[pri:4, instance:tests.TransferFundsTest@d554c5f]" started-at="2026-08-03T04:18:32 UTC" name="testTransferEmptyAmount" description="Transfer with empty amount shows error" finished-at="2026-08-03T04:18:48 UTC" duration-ms="16177" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testTransferEmptyAmount -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:tests.TransferFundsTest@d554c5f]" started-at="2026-08-03T04:18:48 UTC" name="tearDown" finished-at="2026-08-03T04:18:48 UTC" duration-ms="71" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.TransferFundsTest@d554c5f]" started-at="2026-08-03T04:18:48 UTC" name="setUp" finished-at="2026-08-03T04:18:49 UTC" duration-ms="244" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="navigateToTransferFunds()[pri:0, instance:tests.TransferFundsTest@d554c5f]" started-at="2026-08-03T04:18:49 UTC" name="navigateToTransferFunds" finished-at="2026-08-03T04:18:50 UTC" duration-ms="1313" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- navigateToTransferFunds -->
+        <test-method signature="testTransferInvalidAmount()[pri:5, instance:tests.TransferFundsTest@d554c5f]" started-at="2026-08-03T04:18:50 UTC" name="testTransferInvalidAmount" description="Transfer with invalid amount shows error" finished-at="2026-08-03T04:18:51 UTC" duration-ms="892" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testTransferInvalidAmount -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:tests.TransferFundsTest@d554c5f]" started-at="2026-08-03T04:18:51 UTC" name="tearDown" finished-at="2026-08-03T04:18:51 UTC" duration-ms="66" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.TransferFundsTest@d554c5f]" started-at="2026-08-03T04:18:51 UTC" name="setUp" finished-at="2026-08-03T04:18:51 UTC" duration-ms="261" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="navigateToTransferFunds()[pri:0, instance:tests.TransferFundsTest@d554c5f]" started-at="2026-08-03T04:18:51 UTC" name="navigateToTransferFunds" finished-at="2026-08-03T04:18:53 UTC" duration-ms="1530" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- navigateToTransferFunds -->
+        <test-method signature="testTransferSuccessMessage()[pri:7, instance:tests.TransferFundsTest@d554c5f]" started-at="2026-08-03T04:18:53 UTC" name="testTransferSuccessMessage" description="Verify transfer success message" finished-at="2026-08-03T04:18:54 UTC" duration-ms="875" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testTransferSuccessMessage -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:tests.TransferFundsTest@d554c5f]" started-at="2026-08-03T04:18:54 UTC" name="tearDown" finished-at="2026-08-03T04:18:54 UTC" duration-ms="67" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.TransferFundsTest@d554c5f]" started-at="2026-08-03T04:18:54 UTC" name="setUp" finished-at="2026-08-03T04:18:54 UTC" duration-ms="225" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="navigateToTransferFunds()[pri:0, instance:tests.TransferFundsTest@d554c5f]" started-at="2026-08-03T04:18:54 UTC" name="navigateToTransferFunds" finished-at="2026-08-03T04:18:55 UTC" duration-ms="1223" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- navigateToTransferFunds -->
+        <test-method signature="testTransferAndVerifyBalance()[pri:8, instance:tests.TransferFundsTest@d554c5f]" started-at="2026-08-03T04:18:55 UTC" name="testTransferAndVerifyBalance" description="Transfer funds and verify balance" finished-at="2026-08-03T04:18:57 UTC" duration-ms="1578" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testTransferAndVerifyBalance -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:tests.TransferFundsTest@d554c5f]" started-at="2026-08-03T04:18:57 UTC" name="tearDown" finished-at="2026-08-03T04:18:57 UTC" duration-ms="67" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+      </class> <!-- tests.TransferFundsTest -->
+      <class name="tests.BillPayTest">
+        <test-method is-config="true" signature="registerSharedUser()[pri:0, instance:tests.BillPayTest@2dfaea86]" started-at="2026-08-03T04:18:57 UTC" name="registerSharedUser" finished-at="2026-08-03T04:19:09 UTC" duration-ms="11912" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- registerSharedUser -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.BillPayTest@2dfaea86]" started-at="2026-08-03T04:19:09 UTC" name="setUp" finished-at="2026-08-03T04:19:09 UTC" duration-ms="224" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="navigateToBillPay()[pri:0, instance:tests.BillPayTest@2dfaea86]" started-at="2026-08-03T04:19:09 UTC" name="navigateToBillPay" finished-at="2026-08-03T04:19:10 UTC" duration-ms="1409" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- navigateToBillPay -->
+        <test-method signature="testBillPayPageDisplayed()[pri:1, instance:tests.BillPayTest@2dfaea86]" started-at="2026-08-03T04:19:10 UTC" name="testBillPayPageDisplayed" description="Verify Bill Pay page is displayed" finished-at="2026-08-03T04:19:10 UTC" duration-ms="26" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testBillPayPageDisplayed -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:tests.BillPayTest@2dfaea86]" started-at="2026-08-03T04:19:10 UTC" name="tearDown" finished-at="2026-08-03T04:19:10 UTC" duration-ms="66" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.BillPayTest@2dfaea86]" started-at="2026-08-03T04:19:10 UTC" name="setUp" finished-at="2026-08-03T04:19:11 UTC" duration-ms="239" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="navigateToBillPay()[pri:0, instance:tests.BillPayTest@2dfaea86]" started-at="2026-08-03T04:19:11 UTC" name="navigateToBillPay" finished-at="2026-08-03T04:19:12 UTC" duration-ms="1118" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- navigateToBillPay -->
+        <test-method signature="testBillPayFormDisplayed()[pri:2, instance:tests.BillPayTest@2dfaea86]" started-at="2026-08-03T04:19:12 UTC" name="testBillPayFormDisplayed" description="Verify bill pay form is displayed" finished-at="2026-08-03T04:19:12 UTC" duration-ms="21" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testBillPayFormDisplayed -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:tests.BillPayTest@2dfaea86]" started-at="2026-08-03T04:19:12 UTC" name="tearDown" finished-at="2026-08-03T04:19:12 UTC" duration-ms="66" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.BillPayTest@2dfaea86]" started-at="2026-08-03T04:19:12 UTC" name="setUp" finished-at="2026-08-03T04:19:12 UTC" duration-ms="226" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="navigateToBillPay()[pri:0, instance:tests.BillPayTest@2dfaea86]" started-at="2026-08-03T04:19:12 UTC" name="navigateToBillPay" finished-at="2026-08-03T04:19:13 UTC" duration-ms="1297" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- navigateToBillPay -->
+        <test-method signature="testEmptyFormSubmit()[pri:3, instance:tests.BillPayTest@2dfaea86]" started-at="2026-08-03T04:19:13 UTC" name="testEmptyFormSubmit" description="Submit empty bill pay form shows error" finished-at="2026-08-03T04:19:14 UTC" duration-ms="160" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testEmptyFormSubmit -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:tests.BillPayTest@2dfaea86]" started-at="2026-08-03T04:19:14 UTC" name="tearDown" finished-at="2026-08-03T04:19:14 UTC" duration-ms="67" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.BillPayTest@2dfaea86]" started-at="2026-08-03T04:19:14 UTC" name="setUp" finished-at="2026-08-03T04:19:14 UTC" duration-ms="224" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="navigateToBillPay()[pri:0, instance:tests.BillPayTest@2dfaea86]" started-at="2026-08-03T04:19:14 UTC" name="navigateToBillPay" finished-at="2026-08-03T04:19:16 UTC" duration-ms="1701" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- navigateToBillPay -->
+        <test-method signature="testValidBillPayment()[pri:4, instance:tests.BillPayTest@2dfaea86]" started-at="2026-08-03T04:19:16 UTC" name="testValidBillPayment" description="Pay bill with valid data" finished-at="2026-08-03T04:19:17 UTC" duration-ms="1228" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testValidBillPayment -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:tests.BillPayTest@2dfaea86]" started-at="2026-08-03T04:19:17 UTC" name="tearDown" finished-at="2026-08-03T04:19:17 UTC" duration-ms="67" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.BillPayTest@2dfaea86]" started-at="2026-08-03T04:19:17 UTC" name="setUp" finished-at="2026-08-03T04:19:17 UTC" duration-ms="234" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="navigateToBillPay()[pri:0, instance:tests.BillPayTest@2dfaea86]" started-at="2026-08-03T04:19:17 UTC" name="navigateToBillPay" finished-at="2026-08-03T04:19:18 UTC" duration-ms="1251" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- navigateToBillPay -->
+        <test-method signature="testPaymentSuccessMessage()[pri:5, instance:tests.BillPayTest@2dfaea86]" started-at="2026-08-03T04:19:18 UTC" name="testPaymentSuccessMessage" description="Verify payment success message details" finished-at="2026-08-03T04:19:20 UTC" duration-ms="1246" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testPaymentSuccessMessage -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:tests.BillPayTest@2dfaea86]" started-at="2026-08-03T04:19:20 UTC" name="tearDown" finished-at="2026-08-03T04:19:20 UTC" duration-ms="66" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.BillPayTest@2dfaea86]" started-at="2026-08-03T04:19:20 UTC" name="setUp" finished-at="2026-08-03T04:19:20 UTC" duration-ms="221" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="navigateToBillPay()[pri:0, instance:tests.BillPayTest@2dfaea86]" started-at="2026-08-03T04:19:20 UTC" name="navigateToBillPay" finished-at="2026-08-03T04:19:21 UTC" duration-ms="1405" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- navigateToBillPay -->
+        <test-method signature="testPayBillAndVerifyBalance()[pri:6, instance:tests.BillPayTest@2dfaea86]" started-at="2026-08-03T04:19:21 UTC" name="testPayBillAndVerifyBalance" description="Pay bill and verify balance still shown" finished-at="2026-08-03T04:19:23 UTC" duration-ms="1985" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testPayBillAndVerifyBalance -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:tests.BillPayTest@2dfaea86]" started-at="2026-08-03T04:19:23 UTC" name="tearDown" finished-at="2026-08-03T04:19:23 UTC" duration-ms="66" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.BillPayTest@2dfaea86]" started-at="2026-08-03T04:19:23 UTC" name="setUp" finished-at="2026-08-03T04:19:24 UTC" duration-ms="227" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="navigateToBillPay()[pri:0, instance:tests.BillPayTest@2dfaea86]" started-at="2026-08-03T04:19:24 UTC" name="navigateToBillPay" finished-at="2026-08-03T04:19:25 UTC" duration-ms="1105" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- navigateToBillPay -->
+        <test-method signature="testMismatchedAccountNumbers()[pri:7, instance:tests.BillPayTest@2dfaea86]" started-at="2026-08-03T04:19:25 UTC" name="testMismatchedAccountNumbers" description="Pay bill with mismatched account numbers" finished-at="2026-08-03T04:19:25 UTC" duration-ms="713" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testMismatchedAccountNumbers -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:tests.BillPayTest@2dfaea86]" started-at="2026-08-03T04:19:25 UTC" name="tearDown" finished-at="2026-08-03T04:19:25 UTC" duration-ms="68" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+      </class> <!-- tests.BillPayTest -->
+    </test> <!-- Transaction Tests -->
+    <test started-at="2026-08-03T04:19:25 UTC" name="Data Driven Tests" finished-at="2026-08-03T04:19:56 UTC" duration-ms="30028">
+      <class name="tests.DataDrivenLoginTest">
+        <test-method is-config="true" signature="registerSharedUser()[pri:0, instance:tests.DataDrivenLoginTest@23f5b5dc]" started-at="2026-08-03T04:19:25 UTC" name="registerSharedUser" finished-at="2026-08-03T04:19:37 UTC" duration-ms="11964" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- registerSharedUser -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.DataDrivenLoginTest@23f5b5dc]" started-at="2026-08-03T04:19:38 UTC" name="setUp" finished-at="2026-08-03T04:19:38 UTC" duration-ms="231" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="navigateToLoginPage()[pri:0, instance:tests.DataDrivenLoginTest@23f5b5dc]" started-at="2026-08-03T04:19:38 UTC" name="navigateToLoginPage" finished-at="2026-08-03T04:19:39 UTC" duration-ms="416" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- navigateToLoginPage -->
+        <test-method signature="testLoginFromExcel(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)[pri:0, instance:tests.DataDrivenLoginTest@23f5b5dc]" started-at="2026-08-03T04:19:39 UTC" name="testLoginFromExcel" description="Data-driven login test from Excel" data-provider="loginData" finished-at="2026-08-03T04:19:40 UTC" duration-ms="988" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[TC001]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[Positive - E2E]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[Valid login with config credentials]]>
+              </value>
+            </param>
+            <param index="3">
+              <value>
+                <![CDATA[CONFIG_USERNAME]]>
+              </value>
+            </param>
+            <param index="4">
+              <value>
+                <![CDATA[CONFIG_PASSWORD]]>
+              </value>
+            </param>
+            <param index="5">
+              <value>
+                <![CDATA[pass]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testLoginFromExcel -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:tests.DataDrivenLoginTest@23f5b5dc]" started-at="2026-08-03T04:19:40 UTC" name="tearDown" finished-at="2026-08-03T04:19:40 UTC" duration-ms="68" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.DataDrivenLoginTest@23f5b5dc]" started-at="2026-08-03T04:19:40 UTC" name="setUp" finished-at="2026-08-03T04:19:40 UTC" duration-ms="232" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="navigateToLoginPage()[pri:0, instance:tests.DataDrivenLoginTest@23f5b5dc]" started-at="2026-08-03T04:19:40 UTC" name="navigateToLoginPage" finished-at="2026-08-03T04:19:40 UTC" duration-ms="301" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- navigateToLoginPage -->
+        <test-method signature="testLoginFromExcel(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)[pri:0, instance:tests.DataDrivenLoginTest@23f5b5dc]" started-at="2026-08-03T04:19:40 UTC" name="testLoginFromExcel" description="Data-driven login test from Excel" data-provider="loginData" finished-at="2026-08-03T04:19:41 UTC" duration-ms="968" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[TC002]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[Positive - E2E]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[Login with newly registered user]]>
+              </value>
+            </param>
+            <param index="3">
+              <value>
+                <![CDATA[REGISTER_NEW]]>
+              </value>
+            </param>
+            <param index="4">
+              <value>
+                <![CDATA[Test@1234]]>
+              </value>
+            </param>
+            <param index="5">
+              <value>
+                <![CDATA[pass]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testLoginFromExcel -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:tests.DataDrivenLoginTest@23f5b5dc]" started-at="2026-08-03T04:19:41 UTC" name="tearDown" finished-at="2026-08-03T04:19:41 UTC" duration-ms="66" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.DataDrivenLoginTest@23f5b5dc]" started-at="2026-08-03T04:19:41 UTC" name="setUp" finished-at="2026-08-03T04:19:41 UTC" duration-ms="228" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="navigateToLoginPage()[pri:0, instance:tests.DataDrivenLoginTest@23f5b5dc]" started-at="2026-08-03T04:19:41 UTC" name="navigateToLoginPage" finished-at="2026-08-03T04:19:42 UTC" duration-ms="333" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- navigateToLoginPage -->
+        <test-method signature="testLoginFromExcel(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)[pri:0, instance:tests.DataDrivenLoginTest@23f5b5dc]" started-at="2026-08-03T04:19:42 UTC" name="testLoginFromExcel" description="Data-driven login test from Excel" data-provider="loginData" finished-at="2026-08-03T04:19:42 UTC" duration-ms="458" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[TC003]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[Positive - E2E]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[Login then verify accounts page]]>
+              </value>
+            </param>
+            <param index="3">
+              <value>
+                <![CDATA[REGISTER_NEW]]>
+              </value>
+            </param>
+            <param index="4">
+              <value>
+                <![CDATA[Test@1234]]>
+              </value>
+            </param>
+            <param index="5">
+              <value>
+                <![CDATA[pass_verify_accounts]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testLoginFromExcel -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:tests.DataDrivenLoginTest@23f5b5dc]" started-at="2026-08-03T04:19:42 UTC" name="tearDown" finished-at="2026-08-03T04:19:42 UTC" duration-ms="67" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.DataDrivenLoginTest@23f5b5dc]" started-at="2026-08-03T04:19:42 UTC" name="setUp" finished-at="2026-08-03T04:19:43 UTC" duration-ms="246" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="navigateToLoginPage()[pri:0, instance:tests.DataDrivenLoginTest@23f5b5dc]" started-at="2026-08-03T04:19:43 UTC" name="navigateToLoginPage" finished-at="2026-08-03T04:19:43 UTC" duration-ms="321" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- navigateToLoginPage -->
+        <test-method signature="testLoginFromExcel(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)[pri:0, instance:tests.DataDrivenLoginTest@23f5b5dc]" started-at="2026-08-03T04:19:43 UTC" name="testLoginFromExcel" description="Data-driven login test from Excel" data-provider="loginData" finished-at="2026-08-03T04:19:45 UTC" duration-ms="2046" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[TC004]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[Positive - E2E]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[Login then logout then login again]]>
+              </value>
+            </param>
+            <param index="3">
+              <value>
+                <![CDATA[REGISTER_NEW]]>
+              </value>
+            </param>
+            <param index="4">
+              <value>
+                <![CDATA[Test@1234]]>
+              </value>
+            </param>
+            <param index="5">
+              <value>
+                <![CDATA[pass_relogin]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testLoginFromExcel -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:tests.DataDrivenLoginTest@23f5b5dc]" started-at="2026-08-03T04:19:45 UTC" name="tearDown" finished-at="2026-08-03T04:19:45 UTC" duration-ms="67" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.DataDrivenLoginTest@23f5b5dc]" started-at="2026-08-03T04:19:45 UTC" name="setUp" finished-at="2026-08-03T04:19:45 UTC" duration-ms="238" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="navigateToLoginPage()[pri:0, instance:tests.DataDrivenLoginTest@23f5b5dc]" started-at="2026-08-03T04:19:45 UTC" name="navigateToLoginPage" finished-at="2026-08-03T04:19:46 UTC" duration-ms="310" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- navigateToLoginPage -->
+        <test-method signature="testLoginFromExcel(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)[pri:0, instance:tests.DataDrivenLoginTest@23f5b5dc]" started-at="2026-08-03T04:19:46 UTC" name="testLoginFromExcel" description="Data-driven login test from Excel" data-provider="loginData" finished-at="2026-08-03T04:19:48 UTC" duration-ms="1996" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[TC005]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[Positive - E2E]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[Login and navigate to transfer funds]]>
+              </value>
+            </param>
+            <param index="3">
+              <value>
+                <![CDATA[REGISTER_NEW]]>
+              </value>
+            </param>
+            <param index="4">
+              <value>
+                <![CDATA[Test@1234]]>
+              </value>
+            </param>
+            <param index="5">
+              <value>
+                <![CDATA[pass_transfer]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testLoginFromExcel -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:tests.DataDrivenLoginTest@23f5b5dc]" started-at="2026-08-03T04:19:48 UTC" name="tearDown" finished-at="2026-08-03T04:19:48 UTC" duration-ms="66" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.DataDrivenLoginTest@23f5b5dc]" started-at="2026-08-03T04:19:48 UTC" name="setUp" finished-at="2026-08-03T04:19:48 UTC" duration-ms="218" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="navigateToLoginPage()[pri:0, instance:tests.DataDrivenLoginTest@23f5b5dc]" started-at="2026-08-03T04:19:48 UTC" name="navigateToLoginPage" finished-at="2026-08-03T04:19:48 UTC" duration-ms="310" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- navigateToLoginPage -->
+        <test-method signature="testLoginFromExcel(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)[pri:0, instance:tests.DataDrivenLoginTest@23f5b5dc]" started-at="2026-08-03T04:19:48 UTC" name="testLoginFromExcel" description="Data-driven login test from Excel" data-provider="loginData" finished-at="2026-08-03T04:19:50 UTC" duration-ms="1866" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[TC006]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[Positive - E2E]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[Login and navigate to bill pay]]>
+              </value>
+            </param>
+            <param index="3">
+              <value>
+                <![CDATA[REGISTER_NEW]]>
+              </value>
+            </param>
+            <param index="4">
+              <value>
+                <![CDATA[Test@1234]]>
+              </value>
+            </param>
+            <param index="5">
+              <value>
+                <![CDATA[pass_billpay]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testLoginFromExcel -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:tests.DataDrivenLoginTest@23f5b5dc]" started-at="2026-08-03T04:19:50 UTC" name="tearDown" finished-at="2026-08-03T04:19:50 UTC" duration-ms="67" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.DataDrivenLoginTest@23f5b5dc]" started-at="2026-08-03T04:19:50 UTC" name="setUp" finished-at="2026-08-03T04:19:50 UTC" duration-ms="227" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="navigateToLoginPage()[pri:0, instance:tests.DataDrivenLoginTest@23f5b5dc]" started-at="2026-08-03T04:19:50 UTC" name="navigateToLoginPage" finished-at="2026-08-03T04:19:51 UTC" duration-ms="310" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- navigateToLoginPage -->
+        <test-method signature="testLoginFromExcel(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)[pri:0, instance:tests.DataDrivenLoginTest@23f5b5dc]" started-at="2026-08-03T04:19:51 UTC" name="testLoginFromExcel" description="Data-driven login test from Excel" data-provider="loginData" finished-at="2026-08-03T04:19:51 UTC" duration-ms="224" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[TC007]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[Negative - Empty]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[Both fields empty]]>
+              </value>
+            </param>
+            <param index="3">
+              <value>
+                <![CDATA[]]>
+              </value>
+            </param>
+            <param index="4">
+              <value>
+                <![CDATA[]]>
+              </value>
+            </param>
+            <param index="5">
+              <value>
+                <![CDATA[fail]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testLoginFromExcel -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:tests.DataDrivenLoginTest@23f5b5dc]" started-at="2026-08-03T04:19:51 UTC" name="tearDown" finished-at="2026-08-03T04:19:51 UTC" duration-ms="66" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.DataDrivenLoginTest@23f5b5dc]" started-at="2026-08-03T04:19:51 UTC" name="setUp" finished-at="2026-08-03T04:19:51 UTC" duration-ms="224" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="navigateToLoginPage()[pri:0, instance:tests.DataDrivenLoginTest@23f5b5dc]" started-at="2026-08-03T04:19:51 UTC" name="navigateToLoginPage" finished-at="2026-08-03T04:19:51 UTC" duration-ms="322" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- navigateToLoginPage -->
+        <test-method signature="testLoginFromExcel(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)[pri:0, instance:tests.DataDrivenLoginTest@23f5b5dc]" started-at="2026-08-03T04:19:51 UTC" name="testLoginFromExcel" description="Data-driven login test from Excel" data-provider="loginData" finished-at="2026-08-03T04:19:52 UTC" duration-ms="284" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[TC008]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[Negative - Empty]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[Empty username only]]>
+              </value>
+            </param>
+            <param index="3">
+              <value>
+                <![CDATA[]]>
+              </value>
+            </param>
+            <param index="4">
+              <value>
+                <![CDATA[Test@1234]]>
+              </value>
+            </param>
+            <param index="5">
+              <value>
+                <![CDATA[fail]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testLoginFromExcel -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:tests.DataDrivenLoginTest@23f5b5dc]" started-at="2026-08-03T04:19:52 UTC" name="tearDown" finished-at="2026-08-03T04:19:52 UTC" duration-ms="67" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.DataDrivenLoginTest@23f5b5dc]" started-at="2026-08-03T04:19:52 UTC" name="setUp" finished-at="2026-08-03T04:19:52 UTC" duration-ms="221" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="navigateToLoginPage()[pri:0, instance:tests.DataDrivenLoginTest@23f5b5dc]" started-at="2026-08-03T04:19:52 UTC" name="navigateToLoginPage" finished-at="2026-08-03T04:19:52 UTC" duration-ms="360" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- navigateToLoginPage -->
+        <test-method signature="testLoginFromExcel(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)[pri:0, instance:tests.DataDrivenLoginTest@23f5b5dc]" started-at="2026-08-03T04:19:52 UTC" name="testLoginFromExcel" description="Data-driven login test from Excel" data-provider="loginData" finished-at="2026-08-03T04:19:53 UTC" duration-ms="284" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[TC009]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[Negative - Empty]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[Empty password only]]>
+              </value>
+            </param>
+            <param index="3">
+              <value>
+                <![CDATA[testuser123]]>
+              </value>
+            </param>
+            <param index="4">
+              <value>
+                <![CDATA[]]>
+              </value>
+            </param>
+            <param index="5">
+              <value>
+                <![CDATA[fail]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testLoginFromExcel -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:tests.DataDrivenLoginTest@23f5b5dc]" started-at="2026-08-03T04:19:53 UTC" name="tearDown" finished-at="2026-08-03T04:19:53 UTC" duration-ms="67" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.DataDrivenLoginTest@23f5b5dc]" started-at="2026-08-03T04:19:53 UTC" name="setUp" finished-at="2026-08-03T04:19:53 UTC" duration-ms="225" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="navigateToLoginPage()[pri:0, instance:tests.DataDrivenLoginTest@23f5b5dc]" started-at="2026-08-03T04:19:53 UTC" name="navigateToLoginPage" finished-at="2026-08-03T04:19:53 UTC" duration-ms="313" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- navigateToLoginPage -->
+        <test-method signature="testLoginFromExcel(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)[pri:0, instance:tests.DataDrivenLoginTest@23f5b5dc]" started-at="2026-08-03T04:19:53 UTC" name="testLoginFromExcel" description="Data-driven login test from Excel" data-provider="loginData" finished-at="2026-08-03T04:19:54 UTC" duration-ms="293" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[TC010]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[Negative - Empty]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[Username with only spaces]]>
+              </value>
+            </param>
+            <param index="3">
+              <value>
+                <![CDATA[]]>
+              </value>
+            </param>
+            <param index="4">
+              <value>
+                <![CDATA[Test@1234]]>
+              </value>
+            </param>
+            <param index="5">
+              <value>
+                <![CDATA[fail]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testLoginFromExcel -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:tests.DataDrivenLoginTest@23f5b5dc]" started-at="2026-08-03T04:19:54 UTC" name="tearDown" finished-at="2026-08-03T04:19:54 UTC" duration-ms="66" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.DataDrivenLoginTest@23f5b5dc]" started-at="2026-08-03T04:19:54 UTC" name="setUp" finished-at="2026-08-03T04:19:54 UTC" duration-ms="224" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="navigateToLoginPage()[pri:0, instance:tests.DataDrivenLoginTest@23f5b5dc]" started-at="2026-08-03T04:19:54 UTC" name="navigateToLoginPage" finished-at="2026-08-03T04:19:54 UTC" duration-ms="311" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- navigateToLoginPage -->
+        <test-method signature="testLoginFromExcel(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)[pri:0, instance:tests.DataDrivenLoginTest@23f5b5dc]" started-at="2026-08-03T04:19:54 UTC" name="testLoginFromExcel" description="Data-driven login test from Excel" data-provider="loginData" finished-at="2026-08-03T04:19:54 UTC" duration-ms="281" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[TC011]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[Negative - Empty]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[Password with only spaces]]>
+              </value>
+            </param>
+            <param index="3">
+              <value>
+                <![CDATA[testuser123]]>
+              </value>
+            </param>
+            <param index="4">
+              <value>
+                <![CDATA[]]>
+              </value>
+            </param>
+            <param index="5">
+              <value>
+                <![CDATA[fail]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testLoginFromExcel -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:tests.DataDrivenLoginTest@23f5b5dc]" started-at="2026-08-03T04:19:54 UTC" name="tearDown" finished-at="2026-08-03T04:19:55 UTC" duration-ms="68" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.DataDrivenLoginTest@23f5b5dc]" started-at="2026-08-03T04:19:55 UTC" name="setUp" finished-at="2026-08-03T04:19:55 UTC" duration-ms="220" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="navigateToLoginPage()[pri:0, instance:tests.DataDrivenLoginTest@23f5b5dc]" started-at="2026-08-03T04:19:55 UTC" name="navigateToLoginPage" finished-at="2026-08-03T04:19:55 UTC" duration-ms="457" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- navigateToLoginPage -->
+        <test-method signature="testLoginFromExcel(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)[pri:0, instance:tests.DataDrivenLoginTest@23f5b5dc]" started-at="2026-08-03T04:19:55 UTC" name="testLoginFromExcel" description="Data-driven login test from Excel" data-provider="loginData" finished-at="2026-08-03T04:19:55 UTC" duration-ms="220" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[TC012]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[Negative - Empty]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[Both fields with only spaces]]>
+              </value>
+            </param>
+            <param index="3">
+              <value>
+                <![CDATA[]]>
+              </value>
+            </param>
+            <param index="4">
+              <value>
+                <![CDATA[]]>
+              </value>
+            </param>
+            <param index="5">
+              <value>
+                <![CDATA[fail]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testLoginFromExcel -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:tests.DataDrivenLoginTest@23f5b5dc]" started-at="2026-08-03T04:19:55 UTC" name="tearDown" finished-at="2026-08-03T04:19:56 UTC" duration-ms="67" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+      </class> <!-- tests.DataDrivenLoginTest -->
+    </test> <!-- Data Driven Tests -->
+    <test started-at="2026-08-03T04:19:56 UTC" name="E2E Tests" finished-at="2026-08-03T04:20:31 UTC" duration-ms="34976">
+      <class name="tests.EndToEndTest">
+        <test-method is-config="true" signature="registerSharedUser()[pri:0, instance:tests.EndToEndTest@7857fe2]" started-at="2026-08-03T04:19:56 UTC" name="registerSharedUser" finished-at="2026-08-03T04:20:07 UTC" duration-ms="11939" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- registerSharedUser -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.EndToEndTest@7857fe2]" started-at="2026-08-03T04:20:07 UTC" name="setUp" finished-at="2026-08-03T04:20:08 UTC" duration-ms="218" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="testNewCustomerOnboarding()[pri:1, instance:tests.EndToEndTest@7857fe2]" started-at="2026-08-03T04:20:08 UTC" name="testNewCustomerOnboarding" description="E2E: New customer onboarding flow" finished-at="2026-08-03T04:20:19 UTC" duration-ms="11687" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testNewCustomerOnboarding -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:tests.EndToEndTest@7857fe2]" started-at="2026-08-03T04:20:19 UTC" name="tearDown" finished-at="2026-08-03T04:20:19 UTC" duration-ms="69" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.EndToEndTest@7857fe2]" started-at="2026-08-03T04:20:19 UTC" name="setUp" finished-at="2026-08-03T04:20:20 UTC" duration-ms="246" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="testFundTransferFlow()[pri:2, instance:tests.EndToEndTest@7857fe2]" started-at="2026-08-03T04:20:20 UTC" name="testFundTransferFlow" description="E2E: Fund transfer with transaction verification" finished-at="2026-08-03T04:20:22 UTC" duration-ms="2658" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testFundTransferFlow -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:tests.EndToEndTest@7857fe2]" started-at="2026-08-03T04:20:22 UTC" name="tearDown" finished-at="2026-08-03T04:20:22 UTC" duration-ms="67" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.EndToEndTest@7857fe2]" started-at="2026-08-03T04:20:22 UTC" name="setUp" finished-at="2026-08-03T04:20:23 UTC" duration-ms="224" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="testBillPaymentFlow()[pri:3, instance:tests.EndToEndTest@7857fe2]" started-at="2026-08-03T04:20:23 UTC" name="testBillPaymentFlow" description="E2E: Bill payment with transaction verification" finished-at="2026-08-03T04:20:26 UTC" duration-ms="3142" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testBillPaymentFlow -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:tests.EndToEndTest@7857fe2]" started-at="2026-08-03T04:20:26 UTC" name="tearDown" finished-at="2026-08-03T04:20:26 UTC" duration-ms="66" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.EndToEndTest@7857fe2]" started-at="2026-08-03T04:20:26 UTC" name="setUp" finished-at="2026-08-03T04:20:26 UTC" duration-ms="218" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="testCompleteBankingSession()[pri:4, instance:tests.EndToEndTest@7857fe2]" started-at="2026-08-03T04:20:26 UTC" name="testCompleteBankingSession" description="E2E: Complete banking session with full verification" finished-at="2026-08-03T04:20:30 UTC" duration-ms="4366" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testCompleteBankingSession -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:tests.EndToEndTest@7857fe2]" started-at="2026-08-03T04:20:30 UTC" name="tearDown" finished-at="2026-08-03T04:20:31 UTC" duration-ms="66" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+      </class> <!-- tests.EndToEndTest -->
+    </test> <!-- E2E Tests -->
+    <test started-at="2026-08-03T04:20:31 UTC" name="E2E Data Driven Tests" finished-at="2026-08-03T04:20:47 UTC" duration-ms="16115">
+      <class name="tests.EndToEndDataDrivenTest">
+        <test-method is-config="true" signature="initializeDatabase()[pri:0, instance:tests.EndToEndDataDrivenTest@2657d4dd]" started-at="2026-08-03T04:17:27 UTC" name="initializeDatabase" finished-at="2026-08-03T04:17:27 UTC" duration-ms="15" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- initializeDatabase -->
+        <test-method is-config="true" signature="registerSharedUser()[pri:0, instance:tests.EndToEndDataDrivenTest@2657d4dd]" started-at="2026-08-03T04:20:31 UTC" name="registerSharedUser" finished-at="2026-08-03T04:20:42 UTC" duration-ms="11928" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- registerSharedUser -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.EndToEndDataDrivenTest@2657d4dd]" started-at="2026-08-03T04:20:42 UTC" name="setUp" finished-at="2026-08-03T04:20:43 UTC" duration-ms="221" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="navigateToHome()[pri:0, instance:tests.EndToEndDataDrivenTest@2657d4dd]" started-at="2026-08-03T04:20:43 UTC" name="navigateToHome" finished-at="2026-08-03T04:20:43 UTC" duration-ms="332" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- navigateToHome -->
+        <test-method signature="testE2EFromExcel(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)[pri:0, instance:tests.EndToEndDataDrivenTest@2657d4dd]" started-at="2026-08-03T04:20:43 UTC" name="testE2EFromExcel" description="Data-driven E2E banking flow from Excel" data-provider="e2eData" finished-at="2026-08-03T04:20:47 UTC" duration-ms="3536" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[E2E004]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[Complete_Banking_Session]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[Register → Transfer $50 → Pay Bill $75 → Verify All Transactions → Logout]]>
+              </value>
+            </param>
+            <param index="3">
+              <value>
+                <![CDATA[50]]>
+              </value>
+            </param>
+            <param index="4">
+              <value>
+                <![CDATA[Airtel Internet]]>
+              </value>
+            </param>
+            <param index="5">
+              <value>
+                <![CDATA[200 Net Street]]>
+              </value>
+            </param>
+            <param index="6">
+              <value>
+                <![CDATA[Bangalore]]>
+              </value>
+            </param>
+            <param index="7">
+              <value>
+                <![CDATA[KA]]>
+              </value>
+            </param>
+            <param index="8">
+              <value>
+                <![CDATA[560001]]>
+              </value>
+            </param>
+            <param index="9">
+              <value>
+                <![CDATA[9876543210]]>
+              </value>
+            </param>
+            <param index="10">
+              <value>
+                <![CDATA[987654]]>
+              </value>
+            </param>
+            <param index="11">
+              <value>
+                <![CDATA[75]]>
+              </value>
+            </param>
+            <param index="12">
+              <value>
+                <![CDATA[1]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testE2EFromExcel -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:tests.EndToEndDataDrivenTest@2657d4dd]" started-at="2026-08-03T04:20:47 UTC" name="tearDown" finished-at="2026-08-03T04:20:47 UTC" duration-ms="66" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+      </class> <!-- tests.EndToEndDataDrivenTest -->
+    </test> <!-- E2E Data Driven Tests -->
+  </suite> <!-- ParaBank Banking Test Suite -->
+</testng-results>
